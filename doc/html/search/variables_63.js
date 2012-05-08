@@ -1,0 +1,23 @@
+var searchData=
+[
+  ['calibrationcycle',['calibrationCycle',['../variables_8c.html#ac084b77bdafd27ce145006c472b27f42',1,'calibrationCycle():&#160;variables.c'],['../variables_8h.html#ac084b77bdafd27ce145006c472b27f42',1,'calibrationCycle():&#160;variables.c']]],
+  ['check',['check',['../ir__remote__control_8c.html#a00f286ba9f1a48026642814f02c994b0',1,'ir_remote_control.c']]],
+  ['checkglitch',['checkGlitch',['../variables_8c.html#aaa8bfff0cb9fc452509ba740424df94f',1,'checkGlitch():&#160;variables.c'],['../variables_8h.html#aaa8bfff0cb9fc452509ba740424df94f',1,'checkGlitch():&#160;variables.c']]],
+  ['chooseperipheral',['choosePeripheral',['../variables_8c.html#a1b9d4294c629fa08659f94b408a5d406',1,'choosePeripheral():&#160;variables.c'],['../variables_8h.html#a1b9d4294c629fa08659f94b408a5d406',1,'choosePeripheral():&#160;variables.c']]],
+  ['cliffavoidanceenabled',['cliffAvoidanceEnabled',['../variables_8c.html#aa832585990dfb07faa7341e02d933d2a',1,'cliffAvoidanceEnabled():&#160;variables.c'],['../variables_8h.html#aa832585990dfb07faa7341e02d933d2a',1,'cliffAvoidanceEnabled():&#160;variables.c']]],
+  ['cliffdetectedflag',['cliffDetectedFlag',['../variables_8c.html#aae8bc9e932ab77b75d3ac9657589540b',1,'cliffDetectedFlag():&#160;variables.c'],['../variables_8h.html#aae8bc9e932ab77b75d3ac9657589540b',1,'cliffDetectedFlag():&#160;variables.c']]],
+  ['clocktick',['clockTick',['../variables_8c.html#ae5b29d64f8a1b67f8e86a9596a4ab2d8',1,'clockTick():&#160;variables.c'],['../variables_8h.html#ae5b29d64f8a1b67f8e86a9596a4ab2d8',1,'clockTick():&#160;variables.c']]],
+  ['colorstate',['colorState',['../variables_8c.html#acda8a999560be754013d18b84ab58ffb',1,'colorState():&#160;variables.c'],['../variables_8h.html#acda8a999560be754013d18b84ab58ffb',1,'colorState():&#160;variables.c']]],
+  ['command_5freceived',['command_received',['../variables_8c.html#a848efaccfa3abf681a7583e2db972b49',1,'command_received():&#160;variables.c'],['../variables_8h.html#a848efaccfa3abf681a7583e2db972b49',1,'command_received():&#160;variables.c']]],
+  ['commerror',['commError',['../variables_8c.html#a5e4a5f87a073607f6dc19c26fcf541a2',1,'commError():&#160;variables.c'],['../variables_8h.html#a5e4a5f87a073607f6dc19c26fcf541a2',1,'commError():&#160;variables.c']]],
+  ['compute_5fleft_5fvel',['compute_left_vel',['../variables_8c.html#abe99fe40e406484cd5f1f56d5fa69c00',1,'compute_left_vel():&#160;variables.c'],['../variables_8h.html#abe99fe40e406484cd5f1f56d5fa69c00',1,'compute_left_vel():&#160;variables.c']]],
+  ['compute_5fright_5fvel',['compute_right_vel',['../variables_8c.html#afe4784af211451fa26d96622df44b4c6',1,'compute_right_vel():&#160;variables.c'],['../variables_8h.html#afe4784af211451fa26d96622df44b4c6',1,'compute_right_vel():&#160;variables.c']]],
+  ['currbyteindex',['currByteIndex',['../variables_8c.html#aab278300880021140e975ac64e77d423',1,'currByteIndex():&#160;variables.c'],['../variables_8h.html#aab278300880021140e975ac64e77d423',1,'currByteIndex():&#160;variables.c']]],
+  ['currentadchannel',['currentAdChannel',['../variables_8c.html#a9c8b5a045fd0286bd5fef2dc11a90dba',1,'currentAdChannel():&#160;variables.c'],['../variables_8h.html#a9c8b5a045fd0286bd5fef2dc11a90dba',1,'currentAdChannel():&#160;variables.c']]],
+  ['currentangle',['currentAngle',['../variables_8c.html#ac4c2e6d13443211b5646e5bee53de1d4',1,'currentAngle():&#160;variables.c'],['../variables_8h.html#ac4c2e6d13443211b5646e5bee53de1d4',1,'currentAngle():&#160;variables.c']]],
+  ['currentmotleftchannel',['currentMotLeftChannel',['../variables_8c.html#aaa21a0ff3fa05d60554fd3084e86d635',1,'currentMotLeftChannel():&#160;variables.c'],['../variables_8h.html#aaa21a0ff3fa05d60554fd3084e86d635',1,'currentMotLeftChannel():&#160;variables.c']]],
+  ['currentmotrightchannel',['currentMotRightChannel',['../variables_8c.html#a842ad40680e488aa758505d6f413596c',1,'currentMotRightChannel():&#160;variables.c'],['../variables_8h.html#a842ad40680e488aa758505d6f413596c',1,'currentMotRightChannel():&#160;variables.c']]],
+  ['currentprox',['currentProx',['../variables_8c.html#a5657a0c04631319bc146354b470e4fc6',1,'currentProx():&#160;variables.c'],['../variables_8h.html#a5657a0c04631319bc146354b470e4fc6',1,'currentProx():&#160;variables.c']]],
+  ['currentselector',['currentSelector',['../variables_8c.html#a28b51d82160ec9f6d8957c4da43a31bb',1,'currentSelector():&#160;variables.c'],['../variables_8h.html#a28b51d82160ec9f6d8957c4da43a31bb',1,'currentSelector():&#160;variables.c']]],
+  ['currposition',['currPosition',['../variables_8c.html#a59ee96a5b3342309a959a1966f4c8ad7',1,'currPosition():&#160;variables.c'],['../variables_8h.html#a59ee96a5b3342309a959a1966f4c8ad7',1,'currPosition():&#160;variables.c']]]
+];
