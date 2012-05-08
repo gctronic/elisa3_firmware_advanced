@@ -15,13 +15,22 @@
 #define PAUSE_1_MSEC 9						// they are not perfectly precise
 #define PAUSE_10_MSEC 96
 #define PAUSE_100_MSEC 961
+#define PAUSE_750_MSEC 7211
 #define PAUSE_1_SEC 9615
 #define PAUSE_2_SEC 19230
+#define PAUSE_10_SEC 96154
+#define PAUSE_20_SEC 192307
+#define PAUSE_30_SEC 288461
+#define PAUSE_40_SEC 384615
+#define PAUSE_60_SEC 576923
 #endif
 
 #ifndef UART_BUFF_SIZE
 #define UART_BUFF_SIZE 256
 #endif
+
+#define LINE_IN_THR 400
+#define LINE_OUT_THR 450
 
 /***********/
 /*** NRF ***/

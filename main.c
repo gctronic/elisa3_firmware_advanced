@@ -38,7 +38,7 @@ int main(void) {
 		if((endTime-startTime) >= (PAUSE_2_SEC)) {
 			readBatteryLevel();				// the battery level is updated every two seconds
              		
-			if(currentSelector==4 || currentSelector==5) {
+			if(currentSelector==4 || currentSelector==5 || currentSelector==7) {
 				pwm_red = rand() % 255;
 				pwm_green = rand() % 255;
 				pwm_blue = rand() % 255;
@@ -181,6 +181,197 @@ int main(void) {
 							}
 							break;
 					}
+					break;
+			
+			case 7:
+					switch(demoState) {
+						case 0:	// move around
+							turnOnGreenLeds();
+							lineFound = 0;
+							enableObstacleAvoidance();
+							setRightSpeed(20);
+							setLeftSpeed(20);
+							demoEndTime = getTime100MicroSec();
+							if((demoEndTime-demoStartTime) >= (PAUSE_20_SEC)) {
+								demoState = 1;
+							}
+							//pwm_red = 0;
+							//pwm_green = 255;
+							//pwm_blue = 255;
+							break;
+
+						case 1:	// search for a line
+							turnOffGreenLeds();
+							outOfLine = 0;
+							enableObstacleAvoidance();
+							setRightSpeed(20);
+							setLeftSpeed(20);
+							if(proximityResult[9]<LINE_IN_THR || proximityResult[10]<LINE_IN_THR) {
+								lineFound++;
+								if(lineFound > 10) {
+									outOfLine = 0;
+									chargeContact = 0;
+									demoStartTime = getTime100MicroSec();
+									demoState = 2;
+									break;
+								}
+							} else {
+								lineFound = 0;
+							}
+							/*
+							if(CHARGE_ON) {
+								chargeContact++;
+								if(chargeContact > 20) {
+									setLeftSpeed(0);
+									setRightSpeed(0);
+									demoStartTime = getTime100MicroSec();
+									chargeContact = 0;
+									demoState = 3;
+								}
+							} else {
+								chargeContact = 0;
+							}
+							*/
+							//pwm_red = 255;
+							//pwm_green = 0;
+							//pwm_blue = 255;
+							break;
+
+						case 2:	// line found, follow it
+							turnOnGreenLeds();
+							disableObstacleAvoidance();
+
+							demoEndTime = getTime100MicroSec();
+							if((demoEndTime-demoStartTime) >= (PAUSE_20_SEC)) {	// the robot seems to be blocked somehow
+								// go back for a while
+								setRightSpeed(-20);
+								setLeftSpeed(-20);
+								demoStartTime = getTime100MicroSec();
+								demoState = 4;
+								break;
+							}
+
+							if(CHARGE_ON) {
+								outOfLine = 0;
+								chargeContact++;
+								if(chargeContact > 20) {
+									setLeftSpeed(0);
+									setRightSpeed(0);
+									demoStartTime = getTime100MicroSec();
+									demoState = 3;
+									break;
+								}
+							} else {
+								chargeContact = 0;
+
+								if(proximityResult[9]>LINE_OUT_THR && proximityResult[10]>LINE_OUT_THR) {
+									outOfLine++;
+									if(outOfLine > 250) {
+										chargeContact = 0;
+										demoState = 1;
+										break;
+									}
+								} else {
+									outOfLine = 0;
+								}
+							}
+	
+							if(proximityResult[9]>LINE_OUT_THR) {	// center left is leaving the line => turn right
+								setLeftSpeed(20);
+								setRightSpeed(-10);
+								//outOfLine++;
+								//if(outOfLine > 250) {
+								//	demoState = 1;
+								//}
+							} else if(proximityResult[10]>LINE_OUT_THR) {	// center right is leaving the lnie => turn left
+								setLeftSpeed(-10);
+								setRightSpeed(20);
+								//outOfLine++;
+								//if(outOfLine > 250) {
+								//	demoState = 1;
+								//}
+							} else {
+								setRightSpeed(20);
+								setLeftSpeed(20);
+								//outOfLine = 0;
+								/*
+								if(CHARGE_ON) {
+									outOfLine = 0;
+									chargeContact++;
+									if(chargeContact > 20) {
+										setLeftSpeed(0);
+										setRightSpeed(0);
+										demoStartTime = getTime100MicroSec();
+										demoState = 3;
+									}
+								} else {
+									chargeContact = 0;
+								}
+								*/
+							}
+							//pwm_red = 255;
+							//pwm_green = 255;
+							//pwm_blue = 0;
+							break;
+
+						case 3:	// charge for some time
+							turnOffGreenLeds();
+							demoEndTime = getTime100MicroSec();
+							if((demoEndTime-demoStartTime) >= (PAUSE_30_SEC)) {
+								if(batteryLevel<800) {	// stay in charge if too much discharged
+									demoStartTime = getTime100MicroSec();
+									break;
+								} else {
+									setRightSpeed(-20);
+									setLeftSpeed(-20);
+									demoStartTime = getTime100MicroSec();
+									demoState = 4;
+									break;
+								}
+							}
+							if(!CHARGE_ON) {
+								chargeContact = 0;
+								outOfLine = 0;
+								demoState = 2;
+								demoStartTime = getTime100MicroSec();
+								break;						
+							}	
+							//pwm_red = 0;
+							//pwm_green = 255;
+							//pwm_blue = 0;
+							break;
+						
+						case 4: // go back from charger
+							turnOnGreenLeds();
+							demoEndTime = getTime100MicroSec();
+							if((demoEndTime-demoStartTime) >= (PAUSE_1_SEC)) {
+								setRightSpeed(20);
+								setLeftSpeed(-20);								
+								demoStartTime = getTime100MicroSec();
+								demoState = 5;							
+							}	
+							//pwm_red = 0;
+							//pwm_green = 0;
+							//pwm_blue = 255;													
+							break;
+
+						case 5:	// turn around
+							turnOffGreenLeds();
+							demoEndTime = getTime100MicroSec();
+							if((demoEndTime-demoStartTime) >= (PAUSE_750_MSEC)) {
+								demoStartTime = getTime100MicroSec();
+								demoState = 0;							
+							}	
+							//pwm_red = 255;
+							//pwm_green = 0;
+							//pwm_blue = 0;													
+							break;							
+					}
+
+					updateRedLed(pwm_red);
+					updateGreenLed(pwm_green);
+					updateBlueLed(pwm_blue);
+
 					break;
   
 		}

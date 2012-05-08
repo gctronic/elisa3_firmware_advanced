@@ -138,6 +138,12 @@ extern unsigned char currentSelector;
 extern signed int calibrationCycle;
 extern unsigned char startCalibration;
 extern unsigned char hardwareRevision;
+extern unsigned char demoState;
+extern unsigned char lineFound;
+extern unsigned char outOfLine;
+extern unsigned char chargeContact;
+extern unsigned long int demoStartTime;
+extern unsigned long int demoEndTime;
 
 /**************************/
 /*** OBSTACLE AVOIDANCE ***/

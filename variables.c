@@ -152,6 +152,13 @@ unsigned char currentSelector = 0;					// current selector position
 signed int calibrationCycle = 0;					// indicate how many samples are currently taken for calibration
 unsigned char startCalibration;						// flag indicating when a calibration is in progress
 unsigned char hardwareRevision = HW_REV_3_0;		// hardware revision based on the address saved in eeprom
+unsigned char demoState = 0;
+unsigned char lineFound = 0;
+unsigned char outOfLine = 0;
+unsigned char chargeContact = 0;
+unsigned long int demoStartTime = 0;
+unsigned long int demoEndTime = 0;
+
 
 /**************************/
 /*** OBSTACLE AVOIDANCE ***/
