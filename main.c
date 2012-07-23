@@ -374,6 +374,60 @@ int main(void) {
 
 					break;
   
+			case 8:	if(leftMotSteps <= 2000) {
+						setLeftSpeed(40);
+						setRightSpeed(40);
+					} else {
+						setLeftSpeed(0);
+						setRightSpeed(0);
+					}
+					break;
+
+			case 9:	if(leftMotSteps <= 3000) {
+						setLeftSpeed(40);
+						setRightSpeed(40);
+					} else {
+						setLeftSpeed(0);
+						setRightSpeed(0);
+					}
+					break;
+
+			case 10:if(leftMotSteps <= 4000) {
+						setLeftSpeed(40);
+						setRightSpeed(40);
+					} else {
+						setLeftSpeed(0);
+						setRightSpeed(0);
+					}
+					break;
+
+			case 11:if(leftMotSteps <= 5000) {
+						setLeftSpeed(40);
+						setRightSpeed(40);
+					} else {
+						setLeftSpeed(0);
+						setRightSpeed(0);
+					}
+					break;
+
+			case 12:if(leftMotSteps <= 6000) {
+						setLeftSpeed(40);
+						setRightSpeed(40);
+					} else {
+						setLeftSpeed(0);
+						setRightSpeed(0);
+					}
+					break;
+
+			case 13:if(leftMotSteps <= 7000) {
+						setLeftSpeed(40);
+						setRightSpeed(40);
+					} else {
+						setLeftSpeed(0);
+						setRightSpeed(0);
+					}
+					break;
+
 		}
 
 		if(currentSelector != 0) {

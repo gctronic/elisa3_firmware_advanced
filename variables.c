@@ -31,6 +31,8 @@ unsigned int batteryLevel = 0;						// level of the battery sampled
 unsigned char measBattery = 0;						// flag indicating when the battery is sampled (once every 2 second at the moment)
 unsigned char proxUpdated = 0;						// flag indicating that all the sensors (proximity and ground) got a new value
 int proximityResultLinear[8] = {0};					// array containing the linearized values for the proximity senosrs (used in obstacle avoidance)
+signed long int rightMotSteps = 0;
+signed long int leftMotSteps = 0;
 
 /******************************/
 /*** CONSUMPTION CONTROLLER ***/
