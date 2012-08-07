@@ -1,4 +1,4 @@
-
+#include <avr/eeprom.h>
 #include "usart.h"
 #include "leds.h"
 
@@ -110,32 +110,62 @@ ISR(USART0_RX_vect) {
 
 	char receivedByte = UDR0;
 
-	if(chooseMenu) {
-		chooseMenu = 0;
-		menuChoice = receivedByte;
-	} else {
-		switch(menuChoice) {
-			case 1: // send sensors data and activate actuators
-				if(receivedByte == 0xAA) {
-					getDataNow = 1;
-				} else if(receivedByte == 0x55) {
-					chooseMenu = 1;
-					menuChoice = 0;
-				}
-				break;
+	if(currentSelector==15) {
 
-			case 2:	// address writing in eeprom
-				if(menuState == 0) { // receive rf address LSB:
-					rfAddress = (unsigned int)receivedByte&0x00FF;
-					menuState = 1;
-				} else if(menuState == 1) { // receive rf address MSB
-					rfAddress |= ((unsigned int)receivedByte<<8);
-					addressReceived = 1;
-					menuState = 0;
-					chooseMenu = 1;
-				}
-				break;
+		if(receivedByte == '+') {
+			if(currentOsccal<255) {
+				currentOsccal++;
+			}
+			OSCCAL = currentOsccal;
 		}
+
+		if(receivedByte == '-') {
+			if(currentOsccal>0) {
+				currentOsccal--;	
+			}
+			OSCCAL = currentOsccal;;
+		}
+
+		if(receivedByte == 'g') {
+			usart0Transmit(irCommand,1);
+			currentOsccal = OSCCAL;
+			usart0Transmit(currentOsccal,1);
+		}
+
+		if(receivedByte == 's') {
+			eeprom_write_byte((uint8_t*) 4093, currentOsccal); 
+		}
+
+	} else {
+
+		if(chooseMenu) {
+			chooseMenu = 0;
+			menuChoice = receivedByte;
+		} else {
+			switch(menuChoice) {
+				case 1: // send sensors data and activate actuators
+					if(receivedByte == 0xAA) {
+						getDataNow = 1;
+					} else if(receivedByte == 0x55) {
+						chooseMenu = 1;
+						menuChoice = 0;
+					}
+					break;
+
+				case 2:	// address writing in eeprom
+					if(menuState == 0) { // receive rf address LSB:
+						rfAddress = (unsigned int)receivedByte&0x00FF;
+						menuState = 1;
+					} else if(menuState == 1) { // receive rf address MSB
+						rfAddress |= ((unsigned int)receivedByte<<8);
+						addressReceived = 1;
+						menuState = 0;
+						chooseMenu = 1;
+					}
+					break;
+			}
+		}
+
 	}
 
 }

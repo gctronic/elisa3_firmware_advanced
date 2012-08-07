@@ -160,7 +160,7 @@ unsigned char outOfLine = 0;
 unsigned char chargeContact = 0;
 unsigned long int demoStartTime = 0;
 unsigned long int demoEndTime = 0;
-
+unsigned char currentOsccal;
 
 /**************************/
 /*** OBSTACLE AVOIDANCE ***/

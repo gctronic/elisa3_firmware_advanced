@@ -146,6 +146,7 @@ extern unsigned char outOfLine;
 extern unsigned char chargeContact;
 extern unsigned long int demoStartTime;
 extern unsigned long int demoEndTime;
+extern unsigned char currentOsccal;
 
 /**************************/
 /*** OBSTACLE AVOIDANCE ***/

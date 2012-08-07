@@ -72,7 +72,7 @@ int main(void) {
 
 		handleRFCommands();
 
-		if(currentSelector != 6) {
+		if(currentSelector!=6 && currentSelector!=15) {
 			usart0Transmit(currentSelector,0);		// send the current selector position through uart as debug info
 		}
 
@@ -426,6 +426,12 @@ int main(void) {
 						setLeftSpeed(0);
 						setRightSpeed(0);
 					}
+					break;
+
+			case 15:// clock calibration
+					//usart0Transmit(irCommand,1);
+					//currentOsccal = OSCCAL;
+					//usart0Transmit(currentOsccal,1);
 					break;
 
 		}
