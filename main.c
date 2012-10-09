@@ -13,9 +13,10 @@
 
 int main(void) {
 
-	unsigned long int startTime = 0, endTime = 0;
+	unsigned long int startTime = 0, endTime = 0, turnOffLedsTime = 0;
 	unsigned char prevSelector=0;
 	unsigned int i=0;
+	unsigned int currRand=0, currRand2=0;
 
 	initPeripherals();
 
@@ -33,15 +34,86 @@ int main(void) {
 		readAccelXYZ();						// update accelerometer values to compute the angle
 
 		computeAngle();
-	
+
+		// turn off the rgb leds after one half second in the "charger demo"
+		if(currentSelector==7) {
+			if((getTime100MicroSec()-turnOffLedsTime) > PAUSE_500_MSEC) {
+				pwm_red = 255;
+				pwm_green = 255;
+				pwm_blue = 255;			
+			}
+		}
+
 		endTime = getTime100MicroSec();
 		if((endTime-startTime) >= (PAUSE_2_SEC)) {
 			readBatteryLevel();				// the battery level is updated every two seconds
              		
-			if(currentSelector==4 || currentSelector==5 || currentSelector==7) {
-				pwm_red = rand() % 255;
-				pwm_green = rand() % 255;
-				pwm_blue = rand() % 255;
+			if(currentSelector==4 || currentSelector==5) {
+				currRand = (currRand + rand()%30) % 128;	// 0 to 255 is the maximum, we use 128 to 255 to reduce consumption
+
+				switch(rgbState) {
+					case 0:
+						pwm_red = 255 - currRand;	
+						rgbState = 1;
+						break;
+
+					case 1:
+						pwm_green = 255 - currRand;
+						rgbState = 2;
+						break;
+
+					case 2:
+						pwm_blue = 255 - currRand;
+						rgbState = 0;
+						break;
+				}
+				
+				if(currRand<32) {
+					if(pwm_green!=255 && pwm_blue!=255) {	// do not turn off all leds
+						pwm_red = 255;
+					}
+				} else if(currRand<64) {
+					if(pwm_red!=255 && pwm_blue!=255) {
+						pwm_green = 255;
+					}
+				} else if (currRand<96) {
+					if(pwm_red!=255 && pwm_green!=255) {
+						pwm_blue = 255;
+					}
+				} else {	// do nothing => all 3 leds turned on
+
+				}
+
+			} else if(currentSelector==7) {
+
+				srand(TCNT3);
+				currRand = (currRand + rand()%30) % 128;	// 0 to 255 is the maximum, we use 128 to 255 to reduce consumption
+
+				pwm_red = 255 - currRand;
+				
+				srand(TCNT3);
+				currRand = (currRand + rand()%30) % 128;	
+				pwm_green = 255 - currRand;
+
+				srand(TCNT3);
+				currRand = (currRand + rand()%30) % 128;
+				pwm_blue = 255 - currRand;
+
+			
+				srand(TCNT3);
+				currRand2 = rand()%128;
+				if(currRand2<32) {
+					pwm_red = 255;
+				} else if(currRand2<64) {
+					pwm_green = 255;
+				} else if (currRand2<96) {
+					pwm_blue = 255;
+				} else {	// do nothing => all 3 leds turned on
+
+				}
+
+				turnOffLedsTime = getTime100MicroSec();
+
 			} else if(currentSelector==6) {
 				if(menuChoice==1 && rfFlags<=1) {
 					if(rgbState == 0) {
@@ -186,7 +258,9 @@ int main(void) {
 			case 7:
 					switch(demoState) {
 						case 0:	// move around
-							turnOnGreenLeds();
+							turnOffGreenLeds();
+							GREEN_LED0_ON;
+							//GREEN_LED1_ON;
 							lineFound = 0;
 							enableObstacleAvoidance();
 							setRightSpeed(20);
@@ -202,11 +276,13 @@ int main(void) {
 
 						case 1:	// search for a line
 							turnOffGreenLeds();
+							GREEN_LED2_ON;
+							//GREEN_LED3_ON;
 							outOfLine = 0;
 							enableObstacleAvoidance();
 							setRightSpeed(20);
 							setLeftSpeed(20);
-							if(proximityResult[9]<LINE_IN_THR || proximityResult[10]<LINE_IN_THR) {
+							if(proximityResult[9]<LINE_IN_THR || proximityResult[10]<LINE_IN_THR || proximityResult[8]<LINE_IN_THR || proximityResult[11]<LINE_IN_THR) {
 								lineFound++;
 								if(lineFound > 10) {
 									outOfLine = 0;
@@ -238,7 +314,9 @@ int main(void) {
 							break;
 
 						case 2:	// line found, follow it
-							turnOnGreenLeds();
+							turnOffGreenLeds();
+							GREEN_LED4_ON;
+							//GREEN_LED5_ON;
 							disableObstacleAvoidance();
 
 							demoEndTime = getTime100MicroSec();
@@ -275,8 +353,14 @@ int main(void) {
 									outOfLine = 0;
 								}
 							}
-	
-							if(proximityResult[9]>LINE_OUT_THR) {	// center left is leaving the line => turn right
+							
+							if(proximityResult[8]<LINE_OUT_THR && proximityResult[9]>LINE_OUT_THR && proximityResult[10]>LINE_OUT_THR && proximityResult[11]>LINE_OUT_THR) {	// left ground is the only within the black line => turn left
+								setLeftSpeed(-15);
+								setRightSpeed(20);
+							} else if(proximityResult[11]<LINE_OUT_THR && proximityResult[8]>LINE_OUT_THR && proximityResult[9]>LINE_OUT_THR && proximityResult[10]>LINE_OUT_THR) {	// right ground is the only within the black line => turn right
+								setLeftSpeed(20);
+								setRightSpeed(-15);
+							} else if(proximityResult[9]>LINE_OUT_THR) {	// center left is leaving the line => turn right
 								setLeftSpeed(20);
 								setRightSpeed(-10);
 								//outOfLine++;
@@ -316,9 +400,12 @@ int main(void) {
 
 						case 3:	// charge for some time
 							turnOffGreenLeds();
+							GREEN_LED6_ON;
+							//GREEN_LED7_ON;
 							demoEndTime = getTime100MicroSec();
 							if((demoEndTime-demoStartTime) >= (PAUSE_30_SEC)) {
-								if(batteryLevel<800) {	// stay in charge if too much discharged
+								if(batteryLevel<890) {//860) {	// stay in charge if too much discharged (consider the fact that the robot
+														// is still in charge thus the battery value measured is higher)
 									demoStartTime = getTime100MicroSec();
 									break;
 								} else {
@@ -342,7 +429,9 @@ int main(void) {
 							break;
 						
 						case 4: // go back from charger
-							turnOnGreenLeds();
+							turnOffGreenLeds();
+							GREEN_LED6_ON;
+							GREEN_LED7_ON;
 							demoEndTime = getTime100MicroSec();
 							if((demoEndTime-demoStartTime) >= (PAUSE_1_SEC)) {
 								setRightSpeed(20);
@@ -357,6 +446,8 @@ int main(void) {
 
 						case 5:	// turn around
 							turnOffGreenLeds();
+							GREEN_LED6_ON;
+							GREEN_LED7_ON;
 							demoEndTime = getTime100MicroSec();
 							if((demoEndTime-demoStartTime) >= (PAUSE_750_MSEC)) {
 								demoStartTime = getTime100MicroSec();
@@ -459,6 +550,7 @@ int main(void) {
 			updateBlueLed(pwm_blue);
 			setRightSpeed(0);
 			setLeftSpeed(0);
+			rgbState = 0;
 		}
 		prevSelector = currentSelector;
 

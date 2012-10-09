@@ -55,17 +55,17 @@ void obstacleAvoidance(signed int *pwmLeft, signed int *pwmRight) {
 
 	// modify the velocity components based on sensor values
 	if(desL >= 0) {
-		res = (signed long int)desL + (((signed long int)desL * ((signed long int)sumSensorsX - (signed long int)sumSensorsY))>>7);
+		res = (signed long int)desL + (((signed long int)desL * ((signed long int)sumSensorsX - (signed long int)sumSensorsY))>>6); //7);
 		*pwmLeft = (signed int)res;
 	} else {
-		res = (signed long int)desR - (((signed long int)desR * ((signed long int)sumSensorsX + (signed long int)sumSensorsY))>>7);
+		res = (signed long int)desR - (((signed long int)desR * ((signed long int)sumSensorsX + (signed long int)sumSensorsY))>>6); //7);
 		*pwmLeft = (signed int)res;
 	}
 	if(desR >=0) {
-		res = (signed long int)desR + (((signed long int)desR * ((signed long int)sumSensorsX + (signed long int)sumSensorsY))>>7);
+		res = (signed long int)desR + (((signed long int)desR * ((signed long int)sumSensorsX + (signed long int)sumSensorsY))>>6); //7);
 		*pwmRight = (signed int)res;
 	} else {
-		res = (signed long int)desL - (((signed long int)desL * ((signed long int)sumSensorsX - (signed long int)sumSensorsY))>>7);
+		res = (signed long int)desL - (((signed long int)desL * ((signed long int)sumSensorsX - (signed long int)sumSensorsY))>>6); //7);
 		*pwmRight = (signed int)res;
 	}
 		

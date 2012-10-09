@@ -12,9 +12,10 @@
 #endif
 
 #ifndef PAUSES								// pauses based on adc base time counter "delayCounter"
-#define PAUSE_1_MSEC 9						// they are not perfectly precise
+#define PAUSE_1_MSEC 9						// they are not perfectly precise (based on 104 us)
 #define PAUSE_10_MSEC 96
 #define PAUSE_100_MSEC 961
+#define PAUSE_500_MSEC 4807
 #define PAUSE_750_MSEC 7211
 #define PAUSE_1_SEC 9615
 #define PAUSE_2_SEC 19230
@@ -73,11 +74,11 @@
 
 // vertical speed controller
 #ifndef P_VERTICAL
-#define P_VERTICAL 10
+#define P_VERTICAL 25 //10
 #endif
 
 #ifndef I_VERTICAL
-#define I_VERTICAL 3
+#define I_VERTICAL 3 //3
 #endif
 
 #ifndef D_VERTICAL
