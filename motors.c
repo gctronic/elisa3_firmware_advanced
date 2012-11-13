@@ -74,8 +74,10 @@ void handleMotorsWithNoController() {
 	}
 
 
-	pwm_right_working = pwm_right_desired;	// pwm in the range 0..MAX_PWM_MOTORS
-	pwm_left_working = pwm_left_desired;
+	//pwm_right_working = pwm_right_desired;	// pwm in the range 0..MAX_PWM_MOTORS
+	//pwm_left_working = pwm_left_desired;
+	pwm_right_working = pwm_intermediate_right_desired;	// pwm in the range 0..MAX_PWM_MOTORS
+	pwm_left_working = pwm_intermediate_left_desired;	
 	if(obstacleAvoidanceEnabled) {
 		obstacleAvoidance(&pwm_left_working, &pwm_right_working);
 	}
@@ -106,8 +108,10 @@ void handleMotorsWithNoController() {
 
 void handleMotorsWithSpeedController() {
 
-	pwm_left_working = pwm_left_desired;
-	pwm_right_working = pwm_right_desired;
+	//pwm_left_working = pwm_left_desired;
+	//pwm_right_working = pwm_right_desired;
+	pwm_right_working = pwm_intermediate_right_desired;	// pwm in the range 0..MAX_PWM_MOTORS
+	pwm_left_working = pwm_intermediate_left_desired;
 	if(obstacleAvoidanceEnabled) {
 		obstacleAvoidance(&pwm_left_working, &pwm_right_working);
 	}

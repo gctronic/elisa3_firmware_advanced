@@ -56,6 +56,8 @@ signed int pwm_right = 0;							// value to set to the pwm register; this value 
 signed int pwm_left = 0;
 signed int pwm_right_desired = 0;					// the pwm given by a command through IR or RF
 signed int pwm_left_desired = 0;					// this pwm is expressed in the range 0..MAX_MOTORS_PWM (1023 corresponds to 100% duty cycle)
+signed int pwm_intermediate_right_desired = 0;
+signed int pwm_intermediate_left_desired = 0;
 //signed int p_speed_control = 25;					// PID parameters used during debugging to change dynamically these parameters
 //unsigned int d_speed_control;
 //signed int i_speed_control = 2;
@@ -148,7 +150,7 @@ signed char accBuff[6] = {0};
 /***************/
 /*** VARIOUS ***/
 /***************/
-unsigned long int clockTick = 0;					// this is the base time, each tick corresponds to 104 us (incremented inside adc isr);
+unsigned long long int clockTick = 0;					// this is the base time, each tick corresponds to 104 us (incremented inside adc isr);
 													// beware that this variable is never reset (4294967295/10000/60/60/24 = about 5 days before overflow)
 unsigned char currentSelector = 0;					// current selector position
 signed int calibrationCycle = 0;					// indicate how many samples are currently taken for calibration
@@ -161,6 +163,9 @@ unsigned char chargeContact = 0;
 unsigned long int demoStartTime = 0;
 unsigned long int demoEndTime = 0;
 unsigned char currentOsccal;
+unsigned long long int speedStepCounter=0;
+unsigned char speedStep=4;
+unsigned char softAccEnabled = 0;
 
 /**************************/
 /*** OBSTACLE AVOIDANCE ***/

@@ -26,6 +26,7 @@ int main(void) {
 
 	startTime = getTime100MicroSec();
 
+	speedStepCounter = getTime100MicroSec();
 
 	while(1) {
 
@@ -143,6 +144,48 @@ int main(void) {
 
 
 		handleRFCommands();
+		
+		if((getTime100MicroSec()-speedStepCounter) >= SPEED_STEP_DELAY) {
+			speedStepCounter = getTime100MicroSec();
+
+			if(softAccEnabled) {
+				if(pwm_right_desired == 0) {
+					pwm_intermediate_right_desired = 0;
+				} else if((pwm_right_desired*pwm_intermediate_right_desired) < 0) {
+					pwm_intermediate_right_desired = 0;
+				} else if(pwm_right_desired > pwm_intermediate_right_desired) {
+					pwm_intermediate_right_desired += speedStep;
+					if(pwm_intermediate_right_desired > pwm_right_desired) {
+						pwm_intermediate_right_desired = pwm_right_desired;
+					}
+				} else if(pwm_right_desired < pwm_intermediate_right_desired) {
+					pwm_intermediate_right_desired -= speedStep;
+					if(pwm_intermediate_right_desired < pwm_right_desired) {
+						pwm_intermediate_right_desired = pwm_right_desired;
+					}					
+				}
+	
+				if(pwm_left_desired == 0) {
+					pwm_intermediate_left_desired = 0;
+				} else if((pwm_left_desired*pwm_intermediate_left_desired) < 0) {
+					pwm_intermediate_left_desired = 0;
+				} else if(pwm_left_desired > pwm_intermediate_left_desired) {
+					pwm_intermediate_left_desired += speedStep;
+					if(pwm_intermediate_left_desired > pwm_left_desired) {
+						pwm_intermediate_left_desired = pwm_left_desired;
+					}
+				} else if(pwm_left_desired < pwm_intermediate_left_desired) {
+					pwm_intermediate_left_desired -= speedStep;
+					if(pwm_intermediate_left_desired < pwm_left_desired) {
+						pwm_intermediate_left_desired = pwm_left_desired;
+					}					
+				}
+			} else {
+				pwm_intermediate_right_desired = pwm_right_desired;
+				pwm_intermediate_left_desired = pwm_left_desired;
+			}
+
+		}
 
 		if(currentSelector!=6 && currentSelector!=15) {
 			usart0Transmit(currentSelector,0);		// send the current selector position through uart as debug info

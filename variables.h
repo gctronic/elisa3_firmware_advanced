@@ -45,6 +45,8 @@ extern signed int pwm_right;
 extern signed int pwm_left;
 extern signed int pwm_right_desired;
 extern signed int pwm_left_desired;
+extern signed int pwm_intermediate_right_desired;
+extern signed int pwm_intermediate_left_desired;
 extern signed int k_ff_speed_control_left;
 extern signed int k_ff_speed_control_right;
 extern signed int pwm_right_speed_controller;
@@ -135,7 +137,7 @@ extern signed char accBuff[6];
 /***************/
 /*** VARIOUS ***/
 /***************/
-extern unsigned long int clockTick;
+extern unsigned long long int clockTick;
 extern unsigned char currentSelector;
 extern signed int calibrationCycle;
 extern unsigned char startCalibration;
@@ -147,6 +149,9 @@ extern unsigned char chargeContact;
 extern unsigned long int demoStartTime;
 extern unsigned long int demoEndTime;
 extern unsigned char currentOsccal;
+extern unsigned long long int speedStepCounter;
+extern unsigned char speedStep;
+extern unsigned char softAccEnabled;
 
 /**************************/
 /*** OBSTACLE AVOIDANCE ***/
