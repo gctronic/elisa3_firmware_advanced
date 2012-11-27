@@ -353,5 +353,10 @@
 #define NOISE_THR 5
 #endif
 
-
+/****************/
+/*** ODOMETRY ***/
+/****************/
+#define LEFT_ENC2MM 0.0715		// thess values are obtained from field test
+#define RIGHT_ENC2MM 0.0694
+#define WHEEL_DIST 39.5 		// mm
 

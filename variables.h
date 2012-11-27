@@ -23,6 +23,8 @@ extern unsigned char proxUpdated;
 extern int proximityResultLinear[8];
 extern signed long int rightMotSteps;
 extern signed long int leftMotSteps;
+extern signed long int rightMotStepsOld;
+extern signed long int leftMotStepsOld;
 
 /******************************/
 /*** CONSUMPTION CONTROLLER ***/
@@ -163,4 +165,12 @@ extern unsigned char obstacleAvoidanceEnabled;
 /***********************/
 extern unsigned char cliffAvoidanceEnabled;
 extern unsigned char cliffDetectedFlag;
+
+/****************/
+/*** ODOMETRY ***/
+/****************/
+extern float theta, xPos, yPos;
+extern unsigned char computeOdometry;
+extern float deltaDist;
+extern float sinTemp;
 

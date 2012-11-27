@@ -517,12 +517,12 @@ void handleRFCommands() {
 				ackPayload[6] = rightMotSteps>>8;
 				ackPayload[7] = rightMotSteps>>16;
 				ackPayload[8] = rightMotSteps>>24;
-				ackPayload[9] = 0;
-				ackPayload[10] = 0;
-				ackPayload[11] = 0;
-				ackPayload[12] = 0;
-				ackPayload[13] = 0;
-				ackPayload[14] = 0;
+				ackPayload[9] = ((unsigned int)(theta*573.0))&0xFF;	// radians to degrees => 573 = 1800/PI
+				ackPayload[10] = ((unsigned int)(theta*573.0))>>8;
+				ackPayload[11] = ((unsigned int)xPos)&0xFF;
+				ackPayload[12] = ((unsigned int)xPos)>>8;
+				ackPayload[13] = ((unsigned int)yPos)&0xFF;
+				ackPayload[14] = ((unsigned int)yPos)>>8;
 				ackPayload[15] = 0;
 				packetId = 3;
 				break;

@@ -124,6 +124,7 @@ void handleMotorsWithSpeedController() {
 		compute_left_vel = 0;
 		left_vel_sum = 0;
 
+		leftMotStepsOld=leftMotSteps;
 		if(pwm_left_desired_to_control >= 0) {
 			leftMotSteps += (last_left_vel>>3);
 		} else {
@@ -151,6 +152,8 @@ void handleMotorsWithSpeedController() {
 			OCR4B = 0;
 		}
 
+		computeOdometry++;
+
 	}
 
 	if(compute_right_vel) {
@@ -159,6 +162,7 @@ void handleMotorsWithSpeedController() {
 		compute_right_vel = 0;
 		right_vel_sum = 0;
 
+		rightMotStepsOld = rightMotSteps;
 		if(pwm_right_desired_to_control >= 0) {
 			rightMotSteps += (last_right_vel>>3);
 		} else {
@@ -185,6 +189,23 @@ void handleMotorsWithSpeedController() {
 			OCR3A = 0;
 			OCR3B = 0;
 		}
+
+		computeOdometry++;
+
+	}
+
+	if(computeOdometry>=2) {	// compute odometry when we get the last encoders values for both wheels
+
+		// the odometry computation takes about 1 ms
+
+		computeOdometry = 0;
+
+		theta = (((float)rightMotSteps)*RIGHT_ENC2MM - ((float)leftMotSteps)*LEFT_ENC2MM)/WHEEL_DIST;
+
+		deltaDist = (((float)(rightMotSteps-rightMotStepsOld))*RIGHT_ENC2MM+((float)(leftMotSteps-leftMotStepsOld))*LEFT_ENC2MM)/2.0;
+
+		xPos = xPos + cos(theta)*deltaDist;				
+		yPos = yPos + sin(theta)*deltaDist;
 
 	}
 
