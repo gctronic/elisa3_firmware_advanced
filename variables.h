@@ -21,10 +21,10 @@ extern unsigned int batteryLevel;
 extern unsigned char measBattery;
 extern unsigned char proxUpdated;
 extern int proximityResultLinear[8];
-extern signed long int rightMotSteps;
-extern signed long int leftMotSteps;
-extern signed long int rightMotStepsOld;
-extern signed long int leftMotStepsOld;
+float rightMotSteps;
+float leftMotSteps;
+float rightMotStepsOld;
+float leftMotStepsOld;
 
 /******************************/
 /*** CONSUMPTION CONTROLLER ***/
@@ -172,5 +172,5 @@ extern unsigned char cliffDetectedFlag;
 extern float theta, xPos, yPos;
 extern unsigned char computeOdometry;
 extern float deltaDist;
-extern float sinTemp;
+extern float thetaAcc;
 

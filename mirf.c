@@ -509,14 +509,14 @@ void handleRFCommands() {
 
 
 			case 7:
-				ackPayload[1] = leftMotSteps&0xFF;
-				ackPayload[2] = leftMotSteps>>8;
-				ackPayload[3] = leftMotSteps>>16;
-				ackPayload[4] = leftMotSteps>>24;
-				ackPayload[5] = rightMotSteps&0xFF;
-				ackPayload[6] = rightMotSteps>>8;
-				ackPayload[7] = rightMotSteps>>16;
-				ackPayload[8] = rightMotSteps>>24;
+				ackPayload[1] = ((signed long int)leftMotSteps)&0xFF;
+				ackPayload[2] = ((signed long int)leftMotSteps)>>8;
+				ackPayload[3] = ((signed long int)leftMotSteps)>>16;
+				ackPayload[4] = ((signed long int)leftMotSteps)>>24;
+				ackPayload[5] = ((signed long int)rightMotSteps)&0xFF;
+				ackPayload[6] = ((signed long int)rightMotSteps)>>8;
+				ackPayload[7] = ((signed long int)rightMotSteps)>>16;
+				ackPayload[8] = ((signed long int)rightMotSteps)>>24;
 				ackPayload[9] = ((unsigned int)(theta*573.0))&0xFF;	// radians to degrees => 573 = 1800/PI
 				ackPayload[10] = ((unsigned int)(theta*573.0))>>8;
 				ackPayload[11] = ((unsigned int)xPos)&0xFF;

@@ -126,9 +126,20 @@ void handleMotorsWithSpeedController() {
 
 		leftMotStepsOld=leftMotSteps;
 		if(pwm_left_desired_to_control >= 0) {
-			leftMotSteps += (last_left_vel>>3);
+			// During field tests we noticed that the measured motors encoders steps (based on measured speed) aren't perfectly proportional
+			// with speed, this means that if the robot runs at speed=25 and we get "a" as the encoder value then if the robot runs at
+			// speed=50 the related encoder value isn't "2*a".
+			// Thus we need to apply a factor to the resulting encoders values based on desired speed: 
+			// before => enc = enc + meas_speed*k, where k = 1/8
+			// now => enc = enc + meas_speed*k, where k = function(desired_speed)
+			// From the tests we extracted the "k" calibration value for a certain robot to be:
+			// left => k = 80.8 - 0.384 * desired_speed
+			// right => k = 78.6 - 0.384 * desired_speed
+			// before => leftMotSteps += (last_left_vel>>3);
+			// now:
+			leftMotSteps += ((float)(last_left_vel>>3))*(LEFT_ENC_OFFSET-ENC_SLOPE*((float)(last_left_vel>>2)))/1000.0;	// the result is directly in mm (divided by 1000 to get mm range)
 		} else {
-			leftMotSteps -= (last_left_vel>>3);
+			leftMotSteps -= ((float)(last_left_vel>>3))*(LEFT_ENC_OFFSET-ENC_SLOPE*((float)(last_left_vel>>2)))/1000.0;
 		}
 
 		if(robotPosition == HORIZONTAL_POS) {
@@ -164,9 +175,9 @@ void handleMotorsWithSpeedController() {
 
 		rightMotStepsOld = rightMotSteps;
 		if(pwm_right_desired_to_control >= 0) {
-			rightMotSteps += (last_right_vel>>3);
+			rightMotSteps += ((float)(last_right_vel>>3))*(RIGHT_ENC_OFFSET-ENC_SLOPE*((float)(last_right_vel>>2)))/1000.0;
 		} else {
-			rightMotSteps -= (last_right_vel>>3);
+			rightMotSteps -= ((float)(last_right_vel>>3))*(RIGHT_ENC_OFFSET-ENC_SLOPE*((float)(last_right_vel>>2)))/1000.0;
 		}
 
 		if(robotPosition == HORIZONTAL_POS) {
@@ -200,9 +211,13 @@ void handleMotorsWithSpeedController() {
 
 		computeOdometry = 0;
 
-		theta = (((float)rightMotSteps)*RIGHT_ENC2MM - ((float)leftMotSteps)*LEFT_ENC2MM)/WHEEL_DIST;
+		if(robotPosition == HORIZONTAL_POS) {
+			theta = (rightMotSteps - leftMotSteps)/WHEEL_DIST;	// radians
+		} else {
+			theta = thetaAcc;
+		}
 
-		deltaDist = (((float)(rightMotSteps-rightMotStepsOld))*RIGHT_ENC2MM+((float)(leftMotSteps-leftMotStepsOld))*LEFT_ENC2MM)/2.0;
+		deltaDist = ((rightMotSteps-rightMotStepsOld)+(leftMotSteps-leftMotStepsOld))/2.0;
 
 		xPos = xPos + cos(theta)*deltaDist;				
 		yPos = yPos + sin(theta)*deltaDist;

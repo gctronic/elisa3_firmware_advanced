@@ -356,7 +356,10 @@
 /****************/
 /*** ODOMETRY ***/
 /****************/
-#define LEFT_ENC2MM 0.0715		// thess values are obtained from field test
-#define RIGHT_ENC2MM 0.0694
 #define WHEEL_DIST 39.5 		// mm
+// the encoders values depends on desired speed: enc = enc + meas_speed*k, where k=function(desired_speed)= a*desired_speed + b
+// the following values represent the "b" (offset) and "a" (slope) of the function 
+#define LEFT_ENC_OFFSET 80.8	// these values are obtained from field test
+#define RIGHT_ENC_OFFSET 78.6
+#define ENC_SLOPE 0.384
 

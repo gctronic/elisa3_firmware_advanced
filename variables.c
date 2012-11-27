@@ -31,10 +31,10 @@ unsigned int batteryLevel = 0;						// level of the battery sampled
 unsigned char measBattery = 0;						// flag indicating when the battery is sampled (once every 2 second at the moment)
 unsigned char proxUpdated = 0;						// flag indicating that all the sensors (proximity and ground) got a new value
 int proximityResultLinear[8] = {0};					// array containing the linearized values for the proximity senosrs (used in obstacle avoidance)
-signed long int rightMotSteps = 0;
-signed long int leftMotSteps = 0;
-signed long int rightMotStepsOld = 0;
-signed long int leftMotStepsOld = 0;
+float rightMotSteps = 0;
+float leftMotSteps = 0;
+float rightMotStepsOld = 0;
+float leftMotStepsOld = 0;
 
 /******************************/
 /*** CONSUMPTION CONTROLLER ***/
@@ -186,6 +186,6 @@ unsigned char cliffDetectedFlag = 0;				// flag indicating a cliff is detected =
 float theta=0.0, xPos=0.0, yPos=0.0;
 unsigned char computeOdometry = 0;
 float deltaDist = 0.0;
-float sinTemp = 0.0;
+float thetaAcc = 0.0;
 
 
