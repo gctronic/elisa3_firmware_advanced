@@ -156,7 +156,9 @@ ISR(ADC_vect) {
 				}
 				firstSampleRight++;
 				if(firstSampleRight > 4) {				// to skip undesired samples (3 samples skipped) in which there could be glitches
-					right_vel_sum += value;
+					if(pwm_right != 0) {
+						right_vel_sum += value;
+					}
 					if(firstSampleRight==8) {			// number of samples to take for the speed computation (average of 4 samples)
 						firstSampleRight = 0;
 						compute_right_vel = 1;
@@ -178,7 +180,9 @@ ISR(ADC_vect) {
 				}
 				firstSampleLeft++;
 				if(firstSampleLeft > 4) {
-					left_vel_sum += value;
+					if(pwm_left != 0) {
+						left_vel_sum += value;
+					}
 					if(firstSampleLeft==8) {
 						firstSampleLeft = 0;
 						compute_left_vel = 1;

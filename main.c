@@ -281,6 +281,23 @@ int main(void) {
 								usart0Transmit(currentSelector,1);
 								usart0Transmit(BUTTON0,1);
 								usart0Transmit(rfFlags,1);
+								usart0Transmit(((unsigned int)(theta*573.0))&0xFF,1);	// radians to degrees => 573 = 1800/PI
+								usart0Transmit(((unsigned int)(theta*573.0))>>8,1);
+								usart0Transmit(((unsigned int)xPos)&0xFF,1);
+								usart0Transmit(((unsigned int)xPos)>>8,1);
+								usart0Transmit(((unsigned int)yPos)&0xFF,1);
+								usart0Transmit(((unsigned int)yPos)>>8,1);
+								usart0Transmit(((signed long int)leftMotSteps)&0xFF,1);
+								usart0Transmit(((signed long int)leftMotSteps)>>8,1);
+								usart0Transmit(((signed long int)leftMotSteps)>>16,1);
+								usart0Transmit(((signed long int)leftMotSteps)>>24,1);
+								usart0Transmit(((signed long int)rightMotSteps)&0xFF,1);
+								usart0Transmit(((signed long int)rightMotSteps)>>8,1);
+								usart0Transmit(((signed long int)rightMotSteps)>>16,1);
+								usart0Transmit(((signed long int)rightMotSteps)>>24,1);
+								usart0Transmit(pwm_left_desired>>2, 1);
+								usart0Transmit(pwm_right_desired>>2, 1);
+
 							}
 
 							break;
