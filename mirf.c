@@ -354,6 +354,7 @@ void handleRFCommands() {
 
 		if((rfData[3]&0b00010000)==0b00010000) {	// check the 5th bit to start calibration of all sensors
 			calibrateSensors();
+			resetOdometry();
 		}
 
 		if((rfData[3]&0b01000000)==0b01000000) {	// check the seventh bit to enable/disable obstacle avoidance

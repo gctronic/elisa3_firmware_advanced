@@ -68,6 +68,8 @@ unsigned long int getTime100MicroSec();
  */
 void readBatteryLevel();
 
+void resetOdometry();
+
 #ifdef __cplusplus
 } // extern "C"
 #endif

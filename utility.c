@@ -150,3 +150,13 @@ void readBatteryLevel() {
 	measBattery = 1;
 }
 
+void resetOdometry() {
+	leftMotSteps = 0;
+	rightMotSteps = 0;
+	theta = 0;
+	xPos = 0;
+	yPos = 0;
+}
+
+
+
