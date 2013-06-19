@@ -70,7 +70,7 @@ int main(void) {
 				}
 				
 				if(currRand<32) {
-					if(pwm_green!=255 && pwm_blue!=255) {	// do not turn off all leds
+					if(pwm_green!=255 && pwm_blue!=255) {	// do not turn on all leds
 						pwm_red = 255;
 					}
 				} else if(currRand<64) {
@@ -144,7 +144,8 @@ int main(void) {
 
 
 		handleRFCommands();
-		
+
+
 		if((getTime100MicroSec()-speedStepCounter) >= SPEED_STEP_DELAY) {
 			speedStepCounter = getTime100MicroSec();
 
@@ -469,8 +470,8 @@ int main(void) {
 									demoStartTime = getTime100MicroSec();
 									break;
 								} else {
-									setRightSpeed(-20);
-									setLeftSpeed(-20);
+									setRightSpeed(-13);
+									setLeftSpeed(-13);
 									demoStartTime = getTime100MicroSec();
 									demoState = 4;
 									break;

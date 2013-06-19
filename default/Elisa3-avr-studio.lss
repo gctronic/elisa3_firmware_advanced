@@ -385,7 +385,8 @@ int main(void) {
 
 		handleRFCommands();
      294:	0e 94 40 0c 	call	0x1880	; 0x1880 <handleRFCommands>
-		
+
+
 		if((getTime100MicroSec()-speedStepCounter) >= SPEED_STEP_DELAY) {
      298:	0e 94 26 1b 	call	0x364c	; 0x364c <getTime100MicroSec>
      29c:	9b 01       	movw	r18, r22
@@ -647,11 +648,11 @@ int main(void) {
      484:	97 cf       	rjmp	.-210    	; 0x3b4 <main+0x1d8>
      486:	80 e0       	ldi	r24, 0x00	; 0
      488:	99 cf       	rjmp	.-206    	; 0x3bc <main+0x1e0>
-		handleIRRemoteCommands();
 
 
 		handleRFCommands();
-		
+
+
 		if((getTime100MicroSec()-speedStepCounter) >= SPEED_STEP_DELAY) {
      48a:	b0 39       	cpi	r27, 0x90	; 144
      48c:	08 f4       	brcc	.+2      	; 0x490 <main+0x2b4>
@@ -1388,7 +1389,7 @@ int main(void) {
      944:	b1 04       	cpc	r11, r1
      946:	08 f0       	brcs	.+2      	; 0x94a <main+0x76e>
      948:	ec c0       	rjmp	.+472    	; 0xb22 <main+0x946>
-					if(pwm_green!=255 && pwm_blue!=255) {	// do not turn off all leds
+					if(pwm_green!=255 && pwm_blue!=255) {	// do not turn on all leds
      94a:	80 91 0d 02 	lds	r24, 0x020D
      94e:	8f 3f       	cpi	r24, 0xFF	; 255
      950:	09 f4       	brne	.+2      	; 0x954 <main+0x778>
@@ -1645,7 +1646,7 @@ int main(void) {
      b20:	af cc       	rjmp	.-1698   	; 0x480 <main+0x2a4>
 				
 				if(currRand<32) {
-					if(pwm_green!=255 && pwm_blue!=255) {	// do not turn off all leds
+					if(pwm_green!=255 && pwm_blue!=255) {	// do not turn on all leds
 						pwm_red = 255;
 					}
 				} else if(currRand<64) {
@@ -2481,11 +2482,11 @@ int main(void) {
 									demoStartTime = getTime100MicroSec();
 									break;
 								} else {
-									setRightSpeed(-20);
-    121a:	8c ee       	ldi	r24, 0xEC	; 236
+									setRightSpeed(-13);
+    121a:	83 ef       	ldi	r24, 0xF3	; 243
     121c:	0e 94 27 23 	call	0x464e	; 0x464e <setRightSpeed>
-									setLeftSpeed(-20);
-    1220:	8c ee       	ldi	r24, 0xEC	; 236
+									setLeftSpeed(-13);
+    1220:	83 ef       	ldi	r24, 0xF3	; 243
     1222:	0e 94 ed 22 	call	0x45da	; 0x45da <setLeftSpeed>
 									demoStartTime = getTime100MicroSec();
     1226:	0e 94 26 1b 	call	0x364c	; 0x364c <getTime100MicroSec>
