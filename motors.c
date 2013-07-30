@@ -46,6 +46,15 @@ void initMotors() {
 
 }
 
+signed int cast_speed(signed int vel) {
+    if(vel > MAX_MOTORS_PWM/2) {
+        vel = MAX_MOTORS_PWM/2;
+    } else if(vel < -(MAX_MOTORS_PWM/2)) {
+        vel = -(MAX_MOTORS_PWM/2);
+    }
+    return vel;
+}
+
 void handleMotorsWithNoController() {
 
 	// compute velocities even if they aren't used
@@ -73,16 +82,13 @@ void handleMotorsWithNoController() {
 		}
 	}
 
-
-	//pwm_right_working = pwm_right_desired;	// pwm in the range 0..MAX_PWM_MOTORS
-	//pwm_left_working = pwm_left_desired;
-	pwm_right_working = pwm_intermediate_right_desired;	// pwm in the range 0..MAX_PWM_MOTORS
-	pwm_left_working = pwm_intermediate_left_desired;	
+	pwm_right_working = pwm_intermediate_right_desired*BYTE_TO_MM_S;	// pwm in the range -635..635 (127*BYTE_TO_MM_S)
+	pwm_left_working = pwm_intermediate_left_desired*BYTE_TO_MM_S;	
 	if(obstacleAvoidanceEnabled) {
-		obstacleAvoidance(&pwm_left_working, &pwm_right_working);
+		obstacleAvoidance(&pwm_left_working, &pwm_right_working);		// out is in the range -MAX_MOTORS_PWM/2..MAX_MOTORS_PWM/2
 	}
-	pwm_left_desired_to_control = pwm_left_working;
-	pwm_right_desired_to_control = pwm_right_working;
+	//pwm_left_desired_to_control = cast_speed(pwm_left_working);		// pwm in the range -MAX_MOTORS_PWM/2..MAX_MOTORS_PWM/2
+	//pwm_right_desired_to_control = cast_speed(pwm_right_working);
 
 	pwm_left = pwm_left_working;
 	pwm_right = pwm_right_working;
@@ -108,10 +114,22 @@ void handleMotorsWithNoController() {
 
 void handleMotorsWithSpeedController() {
 
-	//pwm_left_working = pwm_left_desired;
-	//pwm_right_working = pwm_right_desired;
-	pwm_right_working = pwm_intermediate_right_desired;	// pwm in the range 0..MAX_PWM_MOTORS
-	pwm_left_working = pwm_intermediate_left_desired;
+	if(calibrateOdomFlag==1) {
+		pwm_right_working = pwm_intermediate_right_desired;
+		pwm_left_working = pwm_intermediate_left_desired;
+	} else {
+		if(pwm_intermediate_right_desired >= 0) {		// pwm in the range -127..127
+			pwm_right_working = getInputFromSpeed(pwm_intermediate_right_desired, RIGHT_WHEEL_FW_SC);
+		} else {
+			pwm_right_working = getInputFromSpeed(pwm_intermediate_right_desired, RIGHT_WHEEL_BW_SC);
+		}
+		if(pwm_intermediate_left_desired >= 0) {		// pwm in the range -127..127
+			pwm_left_working = getInputFromSpeed(pwm_intermediate_left_desired, LEFT_WHEEL_FW_SC);
+		} else {
+			pwm_left_working = getInputFromSpeed(pwm_intermediate_left_desired, LEFT_WHEEL_BW_SC);
+		}
+	}
+
 	if(obstacleAvoidanceEnabled) {
 		obstacleAvoidance(&pwm_left_working, &pwm_right_working);
 	}
@@ -123,7 +141,19 @@ void handleMotorsWithSpeedController() {
 		last_left_vel = left_vel_sum>>2;
 		compute_left_vel = 0;
 		left_vel_sum = 0;
+		
+		if(calibrateOdomFlag==1) {
+			leftSpeedSumOdom += last_left_vel;
+			leftSumCount++;
+		}
 
+		getLeftSpeedFromInput();	// get speed in mm/s
+		leftDistPrev = leftDist;
+		//timeOdometry = getTime100MicroSec()-timeLeftOdom;
+		leftDist += ((float)speedLeftFromEnc*((float)(getTime100MicroSec()-timeLeftOdom)*104.0))/1000000.0;	// distance in mm				
+		timeLeftOdom = getTime100MicroSec();
+
+/*
 		leftMotStepsOld=leftMotSteps;
 		if(pwm_left_desired_to_control >= 0) {
 			// During field tests we noticed that the measured motors encoders steps (based on measured speed) aren't perfectly proportional
@@ -142,6 +172,7 @@ void handleMotorsWithSpeedController() {
 			leftMotSteps -= ((float)(last_left_vel>>3))*(LEFT_ENC_OFFSET-ENC_SLOPE*((float)(last_left_vel>>2)))/1000.0;
 		}
 
+*/
 		if(robotPosition == HORIZONTAL_POS) {
 			//PORTB &= ~(1 << 5);
 			start_horizontal_speed_control_left(&pwm_left_working);
@@ -173,12 +204,24 @@ void handleMotorsWithSpeedController() {
 		compute_right_vel = 0;
 		right_vel_sum = 0;
 
+		if(calibrateOdomFlag==1) {
+			rightSpeedSumOdom += last_right_vel;
+			rightSumCount++;
+		}
+
+		getRightSpeedFromInput();
+		rightDistPrev = rightDist;
+		rightDist += ((float)speedRightFromEnc*((float)(getTime100MicroSec()-timeRightOdom)*104.0))/1000000.0;	// distance in mm				
+		timeRightOdom = getTime100MicroSec();
+
+/*
 		rightMotStepsOld = rightMotSteps;
 		if(pwm_right_desired_to_control >= 0) {
 			rightMotSteps += ((float)(last_right_vel>>3))*(RIGHT_ENC_OFFSET-ENC_SLOPE*((float)(last_right_vel>>2)))/1000.0;
 		} else {
 			rightMotSteps -= ((float)(last_right_vel>>3))*(RIGHT_ENC_OFFSET-ENC_SLOPE*((float)(last_right_vel>>2)))/1000.0;
 		}
+*/
 
 		if(robotPosition == HORIZONTAL_POS) {
 			//PORTB &= ~(1 << 5);
@@ -211,29 +254,37 @@ void handleMotorsWithSpeedController() {
 
 		computeOdometry = 0;
 
+		deltaDist = ((rightDist-rightDistPrev)+(leftDist-leftDistPrev))/2.0;
+
 		if(robotPosition == HORIZONTAL_POS) {
-			theta = (rightMotSteps - leftMotSteps)/WHEEL_DIST;	// radians
+			//thetaOld = (rightMotSteps - leftMotSteps)/WHEEL_DIST;	// radians
+			theta = (rightDist-leftDist)/WHEEL_DIST;
 		} else {
+			//thetaOld = thetaAcc;
 			theta = thetaAcc;
 		}
 
-		deltaDist = ((rightMotSteps-rightMotStepsOld)+(leftMotSteps-leftMotStepsOld))/2.0;
+		//deltaDistOld = ((rightMotSteps-rightMotStepsOld)+(leftMotSteps-leftMotStepsOld))/2.0;
 
 		xPos = xPos + cos(theta)*deltaDist;				
 		yPos = yPos + sin(theta)*deltaDist;
+
+		//xPosOld = xPosOld + cos(thetaOld)*deltaDistOld;				
+		//yPosOld = yPosOld + sin(thetaOld)*deltaDistOld;
 
 	}
 
 }
 
+// vel expressed in 1/5 of mm/s
 void setLeftSpeed(signed char vel) {
 
 	speedl = abs(vel);
 
     if(vel >= 0) {
-        pwm_left_desired = speedl<<2;
+        pwm_left_desired = speedl;
     } else {
-        pwm_left_desired = -(speedl<<2);
+        pwm_left_desired = -(speedl);
     }
 
 	if (pwm_left_desired>(MAX_MOTORS_PWM/2)) pwm_left_desired=(MAX_MOTORS_PWM/2);
@@ -246,13 +297,464 @@ void setRightSpeed(signed char vel) {
 	speedr = abs(vel);
 
     if(vel >= 0) {
-        pwm_right_desired = speedr<<2;
+        pwm_right_desired = speedr;
     } else {
-        pwm_right_desired = -(speedr<<2);
+        pwm_right_desired = -(speedr);
     }
 
 	if (pwm_right_desired>(MAX_MOTORS_PWM/2)) pwm_right_desired=(MAX_MOTORS_PWM/2);
 	if (pwm_right_desired<-(MAX_MOTORS_PWM/2)) pwm_right_desired=-(MAX_MOTORS_PWM/2);
+
+}
+
+void handleCalibration() {
+
+	switch(calibState) {
+
+    	case 0: // set speed
+        	if(calibWheel == LEFT_WHEEL_FW_SC) {
+				pwm_intermediate_right_desired = 0;
+				pwm_intermediate_left_desired = (INDEX_STEP*calibVelIndex)<<2;
+        	} else if(calibWheel == RIGHT_WHEEL_FW_SC) {
+				pwm_intermediate_right_desired = (INDEX_STEP*calibVelIndex)<<2;
+				pwm_intermediate_left_desired = 0;
+			} else if(calibWheel == LEFT_WHEEL_BW_SC) {
+				pwm_intermediate_right_desired = 0;
+				pwm_intermediate_left_desired = -((INDEX_STEP*calibVelIndex)<<2);
+        	} else if(calibWheel == RIGHT_WHEEL_BW_SC) {
+				pwm_intermediate_right_desired = -((INDEX_STEP*calibVelIndex)<<2);
+				pwm_intermediate_left_desired = 0;
+			}               
+            calibState = 1;
+            timeoutOdometry = getTime100MicroSec();
+            break;
+
+		case 1: // look for black line, start time measure
+        	if(calibWheel==LEFT_WHEEL_FW_SC || calibWheel==LEFT_WHEEL_BW_SC) {
+            	if(proximityResult[8]<480) {
+				//if((proximityResult[8])<(proximityOffset[8]>>1)) {				
+                	leftSumCount = 0;
+                    leftSpeedSumOdom = 0;
+                    timeOdometry = getTime100MicroSec();;
+                    calibState = 2;
+                    timeoutOdometry = getTime100MicroSec();;
+				}
+			} else {
+            	if(proximityResult[11]<480) {
+				//if((proximityResult[11])<(proximityOffset[11]>>1)) {	
+					rightSumCount = 0;
+					rightSpeedSumOdom = 0;
+                    timeOdometry = getTime100MicroSec();;
+                    calibState = 2;
+                    timeoutOdometry = getTime100MicroSec();;
+				}
+			}
+			if((getTime100MicroSec() - timeoutOdometry)>PAUSE_60_SEC) {    // the robot seems to be still, go to next velcoity
+            	tempVel = 0;
+				avgLeftSpeed = 0;
+				avgRightSpeed = 0;
+                updateOdomData();
+                calibState = 5;
+			}
+			break;
+
+		case 2: // exit from black line
+        	if(calibWheel==LEFT_WHEEL_FW_SC || calibWheel==LEFT_WHEEL_BW_SC) {
+            	if(proximityResult[8]>480) {
+				//if((proximityResult[8])>(proximityOffset[8]>>1)) {	
+                	calibState = 3;
+                    timeoutOdometry = getTime100MicroSec();;
+				}
+			} else {
+            	if(proximityResult[11]>480) {
+				//if((proximityResult[11])>(proximityOffset[11]>>1)) {	
+                	calibState = 3;
+                    timeoutOdometry = getTime100MicroSec();;
+				}
+			}
+            if((getTime100MicroSec() - timeoutOdometry)>PAUSE_60_SEC) {    // the robot seems to be still, go to next velcoity
+            	tempVel = 0;
+				avgLeftSpeed = 0;
+				avgRightSpeed = 0;
+                updateOdomData();
+                calibState = 5;
+			}
+            break;
+
+		case 3: // look for black line again, stop time measure
+        	if(calibWheel==LEFT_WHEEL_FW_SC || calibWheel==LEFT_WHEEL_BW_SC) {
+            	if(proximityResult[8]<480) {
+				//if((proximityResult[8])<(proximityOffset[8]>>1)) {	
+                	timeOdometry = getTime100MicroSec() - timeOdometry;
+                    tempVel = (unsigned int)(DISTANCE_MM/((float)timeOdometry*104.0/1000000.0));
+					avgLeftSpeed = leftSpeedSumOdom/leftSumCount;
+                    updateOdomData();
+                    calibState = 4;
+                    timeoutOdometry = getTime100MicroSec();;
+				}
+			} else {
+            	if(proximityResult[11]<480) {
+				//if((proximityResult[11])<(proximityOffset[11]>>1)) {	
+                	timeOdometry = getTime100MicroSec() - timeOdometry;
+                    tempVel = (unsigned int)(DISTANCE_MM/((float)timeOdometry*104.0/1000000.0));
+                    avgRightSpeed = rightSpeedSumOdom/rightSumCount;
+					updateOdomData();
+                    calibState = 4;
+                    timeoutOdometry = getTime100MicroSec();;
+				}
+			}
+			if((getTime100MicroSec() - timeoutOdometry)>PAUSE_60_SEC) {    // the robot seems to be still, go to next velcoity
+            	tempVel = 0;
+				avgLeftSpeed = 0;
+				avgRightSpeed = 0;
+                updateOdomData();
+                calibState = 5;
+			}
+            break;
+
+		case 4: // exit from black line again
+        	if(calibWheel==LEFT_WHEEL_FW_SC || calibWheel==LEFT_WHEEL_BW_SC) {
+            	if(proximityResult[8]>480) {
+				//if((proximityResult[8])>(proximityOffset[8]>>1)) {	
+                	calibState = 5;
+				}
+			} else {
+            	if(proximityResult[11]>480) {
+				//if((proximityResult[11])>(proximityOffset[11]>>1)) {	
+					calibState = 5;
+				}
+			}
+            if((getTime100MicroSec() - timeoutOdometry)>PAUSE_60_SEC) {    // the robot seems to be still, go to next velocity
+            	tempVel = 0;
+                //updateOdomData();
+                calibState = 5;
+			}
+            break;
+
+		case 5:
+        	calibVelIndex++;
+            if(calibVelIndex == 10) {
+            	calibVelIndex = 1;
+                if(calibWheel == LEFT_WHEEL_FW_SC) {
+                	calibWheel = LEFT_WHEEL_BW_SC;
+				} else if(calibWheel == RIGHT_WHEEL_FW_SC) {
+                	calibWheel = RIGHT_WHEEL_BW_SC;
+				} else if(calibWheel == LEFT_WHEEL_BW_SC) {
+                	calibWheel = RIGHT_WHEEL_FW_SC;
+					calibrateOdomFlag = 0;
+					// red on
+				} else if(calibWheel == RIGHT_WHEEL_BW_SC) {
+                	calibWheel = LEFT_WHEEL_FW_SC;					
+					// red off
+					writeCalibrationToFlash();
+					calibrateOdomFlag = 0;
+				}
+			}
+			calibState = 0;
+			break;
+
+		default:
+        	break;
+
+	}
+
+
+}
+
+
+void updateOdomData() {
+
+    if(calibWheel == LEFT_WHEEL_FW_SC) {
+        if(calibVelIndex>1) {
+            if(calibration[calibVelIndex-2][1] >= tempVel) {  // check that we have always increasing values of speed, otherwise there
+                tempVel = calibration[calibVelIndex-2][1]+1; // will be problems when getting data from the lookup table
+            }
+        }
+        calibration[calibVelIndex-1][0] = avgLeftSpeed;
+        calibration[calibVelIndex-1][1] = tempVel;
+    } else if(calibWheel == RIGHT_WHEEL_FW_SC) {
+        if(calibVelIndex>1) {
+            if(calibration[calibVelIndex-2][3] >= tempVel) {
+                tempVel = calibration[calibVelIndex-2][3]+1;
+            }
+        }
+		calibration[calibVelIndex-1][2] = avgRightSpeed;
+        calibration[calibVelIndex-1][3] = tempVel;
+    } else if(calibWheel == LEFT_WHEEL_BW_SC) {
+        if(calibVelIndex>1) {
+            if(calibration[calibVelIndex-2][5] >= tempVel) {
+                tempVel = calibration[calibVelIndex-2][5]+1;
+            }
+        }
+		calibration[calibVelIndex-1][4] = avgLeftSpeed;
+        calibration[calibVelIndex-1][5] = tempVel;
+    } else if(calibWheel == RIGHT_WHEEL_BW_SC) {
+        if(calibVelIndex>1) {
+            if(calibration[calibVelIndex-2][7] >= tempVel) {
+                tempVel = calibration[calibVelIndex-2][7]+1;
+            }
+        }
+		calibration[calibVelIndex-1][6] = avgRightSpeed;
+        calibration[calibVelIndex-1][7] = tempVel;
+    }
+
+}
+
+// extract data to pass to speed controller given a desired speed in mm/s
+// mode => return a measured speed 0..1023
+signed int getInputFromSpeed(signed int s, unsigned char mode) {
+    
+    int i = 0;
+    signed int currVel = s*BYTE_TO_MM_S;
+    signed int temp = 0;
+
+    if(currVel == 0) {
+        return 0;
+    }
+
+    if(mode==LEFT_WHEEL_BW_SC || mode==RIGHT_WHEEL_BW_SC) {
+        currVel = -currVel; // consider only positive values
+    }
+
+    for(i=0; i<CALIBRATION_SAMPLES; i++) {
+        if(mode==LEFT_WHEEL_FW_SC) {
+            if(calibration[i][1] >= currVel) {
+                break;
+            }
+        } else if(mode==RIGHT_WHEEL_FW_SC) {
+            if(calibration[i][3] >= currVel) {
+                break;
+            }
+        } else if(mode==LEFT_WHEEL_BW_SC) {
+            if(calibration[i][5] >= currVel) {
+                break;
+            }
+        } else if(mode==RIGHT_WHEEL_BW_SC) {
+            if(calibration[i][7] >= currVel) {
+                break;
+            }
+        } 
+    }
+
+    if(i==0) {  // the velocity is lower than first saved in the matrix
+        if(mode==LEFT_WHEEL_FW_SC) {
+            temp = (currVel*calibration[0][0])/calibration[0][1];
+        } else if(mode==RIGHT_WHEEL_FW_SC) {
+            temp = (currVel*calibration[0][2])/calibration[0][3];
+        } else if(mode==LEFT_WHEEL_BW_SC) {
+            temp = currVel*calibration[0][4]/calibration[0][5];
+            temp = -temp;
+        } else if(mode==RIGHT_WHEEL_BW_SC) {
+            temp = currVel*calibration[0][6]/calibration[0][7];
+            temp = -temp;
+        }        
+    } else if(i==CALIBRATION_SAMPLES) {   // the velocity is greater than all the ones saved in the matrix
+        if(mode==LEFT_WHEEL_FW_SC) {
+            temp = (signed int)((float)currVel*(float)calibration[CALIBRATION_SAMPLES-1][0]/(float)calibration[CALIBRATION_SAMPLES-1][1]);
+	    } else if(mode==RIGHT_WHEEL_FW_SC) {
+            temp = (signed int)((float)currVel*(float)calibration[CALIBRATION_SAMPLES-1][2]/(float)calibration[CALIBRATION_SAMPLES-1][3]);
+        } else if(mode==LEFT_WHEEL_BW_SC) {
+            temp = (signed int)((float)currVel*(float)calibration[CALIBRATION_SAMPLES-1][4]/(float)calibration[CALIBRATION_SAMPLES-1][5]);
+            temp = -temp;
+        } else if(mode==RIGHT_WHEEL_BW_SC) {
+            temp = (signed int)((float)currVel*(float)calibration[CALIBRATION_SAMPLES-1][6]/(float)calibration[CALIBRATION_SAMPLES-1][7]);
+            temp = -temp;
+        }
+    } else {
+        if(mode==LEFT_WHEEL_FW_SC) {
+            temp = calibration[i-1][0] + (signed int)(((float)(currVel-calibration[i-1][1])*(float)(calibration[i][0]-calibration[i-1][0]))/(float)(calibration[i][1]-calibration[i-1][1]));
+        } else if(mode==RIGHT_WHEEL_FW_SC) {
+            temp = calibration[i-1][2] + (signed int)(((float)(currVel-calibration[i-1][3])*(float)(calibration[i][2]-calibration[i-1][2]))/(float)(calibration[i][3]-calibration[i-1][3]));
+        } else if(mode==LEFT_WHEEL_BW_SC) {
+            temp = calibration[i-1][4] + (signed int)(((float)(currVel-calibration[i-1][5])*(float)(calibration[i][4]-calibration[i-1][4]))/(float)(calibration[i][5]-calibration[i-1][5]));
+            temp = -temp;
+        } else if(mode==RIGHT_WHEEL_BW_SC) {
+            temp = calibration[i-1][6] + (signed int)(((float)(currVel-calibration[i-1][7])*(float)(calibration[i][6]-calibration[i-1][6]))/(float)(calibration[i][7]-calibration[i-1][7]));
+            temp = -temp;
+        }        
+    }
+    
+    return temp;
+}
+
+// extract the speed of the motors in mm/s given a measured speed (adc)
+void getRightSpeedFromInput() {
+
+    signed int i=0, indFwR=-1, indBwR=-1;
+    
+    for(i=0; i<CALIBRATION_SAMPLES; i++) {
+		if(pwm_right >= 0) {
+			if(calibration[i][2]>=last_right_vel && indFwR<0) {	// forward right
+				indFwR = i;
+			}
+		} else {
+			if(calibration[i][6]>=last_right_vel && indBwR<0) {	// backward right
+				indBwR = i;
+			}
+		}        
+    }
+
+    if(pwm_right >= 0) {
+        if(last_right_vel == 0) {
+            speedRightFromEnc = 0;
+        } else {
+            if(indFwR==0) {  // the velocity is lower than first saved in the matrix
+                speedRightFromEnc = (last_right_vel*calibration[0][3])/calibration[0][2];
+            } else if(indFwR==-1) { //CALIBRATION_SAMPLES) {   // the velocity is greater than all the ones saved in the matrix
+                speedRightFromEnc = (signed int)(((float)calibration[CALIBRATION_SAMPLES-1][3]*(float)last_right_vel)/(float)calibration[CALIBRATION_SAMPLES-1][2]);  // take the max
+            } else {
+                speedRightFromEnc = calibration[indFwR-1][3] + (signed int)(((float)(last_right_vel-calibration[indFwR-1][2])*(float)(calibration[indFwR][3]-calibration[indFwR-1][3]))/(float)(calibration[indFwR][2]-calibration[indFwR-1][2]));
+            }
+        }
+    } else {
+		if(indBwR==0) {  // the velocity is lower than first saved in the matrix
+        	speedRightFromEnc = (last_right_vel*calibration[0][7])/calibration[0][6];
+		} else if(indBwR==-1) { //CALIBRATION_SAMPLES) {   // the velocity is greater than all the ones saved in the matrix
+        	speedRightFromEnc = (signed int)(((float)calibration[CALIBRATION_SAMPLES-1][7]*(float)last_right_vel)/(float)calibration[CALIBRATION_SAMPLES-1][6]);  // take the max
+		} else {
+        	speedRightFromEnc = calibration[indBwR-1][7] + (signed int)(((float)(last_right_vel-calibration[indBwR-1][6])*(float)(calibration[indBwR][7]-calibration[indBwR-1][7]))/(float)(calibration[indBwR][6]-calibration[indBwR-1][6]));
+		}
+		speedRightFromEnc = -speedRightFromEnc;
+    }
+    
+}
+
+// extract the speed of the motors in mm/s given a measured speed (adc)
+void getLeftSpeedFromInput() {
+
+    signed int i=0, indFwL=-1, indBwL=-1;
+    
+    for(i=0; i<CALIBRATION_SAMPLES; i++) {
+		if(pwm_left >= 0) {
+			if(calibration[i][0]>=last_left_vel && indFwL<0) {	// forward left
+				indFwL = i;
+			}
+		} else {
+			if(calibration[i][4]>=last_left_vel && indBwL<0) {	// backward left
+				indBwL = i;
+			}
+		}     
+    }
+
+    if(pwm_left >= 0) {
+        if(last_left_vel == 0) {
+            speedLeftFromEnc = 0;
+        } else {
+            if(indFwL==0) {  // the velocity is lower than first saved in the matrix
+                speedLeftFromEnc = (last_left_vel*calibration[0][1])/calibration[0][0];
+            } else if(indFwL==-1) { //CALIBRATION_SAMPLES) {   // the velocity is greater than all the ones saved in the matrix
+                speedLeftFromEnc = (signed int)(((float)calibration[CALIBRATION_SAMPLES-1][1]*(float)last_left_vel)/(float)calibration[CALIBRATION_SAMPLES-1][0]);  // take the max
+            } else {
+                speedLeftFromEnc = calibration[indFwL-1][1] + (signed int)(((float)(last_left_vel-calibration[indFwL-1][0])*(float)(calibration[indFwL][1]-calibration[indFwL-1][1]))/(float)(calibration[indFwL][0]-calibration[indFwL-1][0]));
+            }
+        }
+    } else {
+		if(indBwL==0) {  // the velocity is lower than first saved in the matrix
+        	speedLeftFromEnc = (last_left_vel*calibration[0][5])/calibration[0][4];
+		} else if(indBwL==-1) { //CALIBRATION_SAMPLES) {   // the velocity is greater than all the ones saved in the matrix
+        	speedLeftFromEnc = (signed int)(((float)calibration[CALIBRATION_SAMPLES-1][5]*(float)last_left_vel)/(float)calibration[CALIBRATION_SAMPLES-1][4]);  // take the max
+		} else {
+        	speedLeftFromEnc = calibration[indBwL-1][5] + (signed int)(((float)(last_left_vel-calibration[indBwL-1][4])*(float)(calibration[indBwL][5]-calibration[indBwL-1][5]))/(float)(calibration[indBwL][4]-calibration[indBwL-1][4]));
+		}
+		speedLeftFromEnc = -speedLeftFromEnc;
+    }
+    
+}
+
+void initCalibration() {
+
+    unsigned int temp=0;
+    unsigned int i=0;
+
+	temp = eeprom_read_word((uint16_t*)CALIB_CHECK_ADDRESS);
+
+    if(temp==0xAA55) {   // valid odometry data saved in flash, read them
+        readCalibrationFromFlash();
+    } else {
+        for(i=0; i<CALIBRATION_SAMPLES; i++) {
+            calibration[i][0] = i+1;
+        }
+        // the following values are taken from a field test
+        // forward left, speed control enabled
+        calibration[0][0] = 56;		// measured speed with back EMF (adc 0..1023)
+        calibration[1][0] = 112;
+        calibration[2][0] = 168;
+        calibration[3][0] = 223;
+        calibration[4][0] = 280;
+        calibration[5][0] = 336;
+        calibration[6][0] = 391;
+        calibration[7][0] = 448;
+		calibration[8][0] = 503;
+        calibration[0][1] = 53;    	// real speed measured in mm/s
+        calibration[1][1] = 100;
+        calibration[2][1] = 140;
+        calibration[3][1] = 176;
+        calibration[4][1] = 213;
+        calibration[5][1] = 248;
+        calibration[6][1] = 288;
+        calibration[7][1] = 321;
+		calibration[8][1] = 354;
+        // forward right, speed control enabled
+        calibration[0][2] = 56;		// measured speed with back EMF (adc 0..1023)
+        calibration[1][2] = 112;
+        calibration[2][2] = 168;
+        calibration[3][2] = 223;
+        calibration[4][2] = 279;
+        calibration[5][2] = 336;
+        calibration[6][2] = 392;
+        calibration[7][2] = 448;
+		calibration[8][2] = 503;
+        calibration[0][3] = 58;    	// real speed measured in mm/s
+        calibration[1][3] = 105;
+        calibration[2][3] = 146;
+        calibration[3][3] = 185;
+        calibration[4][3] = 228;
+        calibration[5][3] = 264;
+        calibration[6][3] = 301;
+        calibration[7][3] = 343;
+		calibration[8][3] = 382;
+        // backward left, speed control enabled
+        calibration[0][4] = 56;		// measured speed with back EMF (adc 0..1023)
+        calibration[1][4] = 112;
+        calibration[2][4] = 168;
+        calibration[3][4] = 224;
+        calibration[4][4] = 280;
+        calibration[5][4] = 335;
+        calibration[6][4] = 392;
+        calibration[7][4] = 447;
+		calibration[8][4] = 503;
+        calibration[0][5] = 51;    	// real speed measured in mm/s
+        calibration[1][5] = 98;
+        calibration[2][5] = 137;
+        calibration[3][5] = 175;
+        calibration[4][5] = 213;
+        calibration[5][5] = 248;
+        calibration[6][5] = 283;
+        calibration[7][5] = 315;
+		calibration[8][5] = 354;
+        // backward right, speed control enabled
+        calibration[0][6] = 56;		// measured speed with back EMF (adc 0..1023)
+        calibration[1][6] = 112;
+        calibration[2][6] = 167;
+        calibration[3][6] = 223;
+        calibration[4][6] = 280;
+        calibration[5][6] = 336;
+        calibration[6][6] = 391;
+        calibration[7][6] = 448;
+		calibration[8][6] = 504;
+        calibration[0][7] = 63;    	// real speed measured in mm/s
+        calibration[1][7] = 111;
+        calibration[2][7] = 154;
+        calibration[3][7] = 195;
+        calibration[4][7] = 236;
+        calibration[5][7] = 276;
+        calibration[6][7] = 305;
+        calibration[7][7] = 342;
+		calibration[8][7] = 382;
+
+        writeCalibrationToFlash();
+
+    }
 
 }
 

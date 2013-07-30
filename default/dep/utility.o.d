@@ -19,7 +19,7 @@ utility.o: ../utility.c ../utility.h ../variables.h ../constants.h \
  ../ports_io.h ../adc.h ../motors.h ../behaviors.h \
  c:\program\ files\ (x86)\atmel\avr\ tools\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/math.h \
  c:\program\ files\ (x86)\atmel\avr\ tools\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/stdlib.h \
- ../speed_control.h ../leds.h ../spi.h \
+ ../speed_control.h ../eepromIO.h ../leds.h ../spi.h \
  c:\program\ files\ (x86)\atmel\avr\ tools\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/stdio.h \
  c:\program\ files\ (x86)\atmel\avr\ tools\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/include/stdarg.h \
  ../mirf.h ../sensors.h ../twimaster.h ../usart.h ../ir_remote_control.h
@@ -77,6 +77,8 @@ c:\program\ files\ (x86)\atmel\avr\ tools\avr\ toolchain\bin\../lib/gcc/avr/4.5.
 c:\program\ files\ (x86)\atmel\avr\ tools\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/stdlib.h:
 
 ../speed_control.h:
+
+../eepromIO.h:
 
 ../leds.h:
 

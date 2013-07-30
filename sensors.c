@@ -70,7 +70,12 @@ void calibrateSensors() {
 			accOffsetY = accOffsetYSum>>4;
 			accOffsetZ = accOffsetZSum>>4;
 
-			startCalibration = 0;
+			//proxUpdated = 0;
+			//if(proxUpdated) {	
+				startCalibration = 0;					
+			//} else { // wait for the sensors to be updated => it will block here...why??
+			//	continue;
+			//}
 
 		}
 

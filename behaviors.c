@@ -82,6 +82,7 @@ char cliffDetected() {
 
 	// tell whether a cliff is detected or not
 	if(proximityResult[8]<CLIFF_THR || proximityResult[9]<CLIFF_THR || proximityResult[10]<CLIFF_THR || proximityResult[11]<CLIFF_THR) {
+	//if(proximityResult[8]<(proximityOffset[8]>>1) || proximityResult[9]<(proximityOffset[9]>>1) || proximityResult[10]<(proximityOffset[10]>>1) || proximityResult[11]<(proximityOffset[11]>>1)) {
 		return 1;
 	} else {
 		return 0;

@@ -66,7 +66,7 @@ signed int pwm_intermediate_left_desired = 0;
 //unsigned int i_limit_speed_control;
 signed int k_ff_speed_control_left=INIT_KFF;		// feed forward term for the vertical speed controller
 signed int k_ff_speed_control_right=INIT_KFF;
-signed int pwm_right_speed_controller = 0;			// the pwm values after the speed controller adaptation
+signed long int pwm_right_speed_controller = 0;			// the pwm values after the speed controller adaptation
 signed int pwm_left_speed_controller = 0;			
 signed int delta_left_speed_current;				// current error between desired and measured speed
 signed int delta_right_speed_current;
@@ -183,9 +183,30 @@ unsigned char cliffDetectedFlag = 0;				// flag indicating a cliff is detected =
 /****************/
 /*** ODOMETRY ***/
 /****************/
-float theta=0.0, xPos=0.0, yPos=0.0;
+float theta=0.0, xPos=0.0, yPos=0.0, deltaDist=0.0;
+float thetaOld=0.0, xPosOld=0.0, yPosOld=0.0, deltaDistOld=0.0;
+float leftDist = 0, rightDist = 0, leftDistPrev = 0, rightDistPrev = 0;
 unsigned char computeOdometry = 0;
-float deltaDist = 0.0;
 float thetaAcc = 0.0;
+unsigned char calibState;
+unsigned char calibVelIndex;
+unsigned char calibWheel;
+signed int tempVel;
+signed int calibration[CALIBRATION_SAMPLES][8];
+unsigned long int timeoutOdometry;
+unsigned long timeOdometry;
+unsigned char calibrateOdomFlag;
+signed long int leftSpeedSumOdom = 0;
+signed long int rightSpeedSumOdom = 0;
+unsigned int leftSumCount = 0;
+unsigned int rightSumCount = 0;
+signed int avgLeftSpeed = 0;
+signed int avgRightSpeed = 0;
+signed int speedLeftFromEnc = 0;
+signed int speedRightFromEnc = 0;
+unsigned long timeLeftOdom = 0;
+unsigned long timeRightOdom = 0;
+
+
 
 

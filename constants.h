@@ -20,6 +20,7 @@
 #define PAUSE_1_SEC 9615
 #define PAUSE_2_SEC 19230
 #define PAUSE_10_SEC 96154
+#define PAUSE_15_SEC 144230
 #define PAUSE_20_SEC 192307
 #define PAUSE_30_SEC 288461
 #define PAUSE_40_SEC 384615
@@ -61,7 +62,7 @@
 
 // horizontal speed controller
 #ifndef P_HORIZONTAL
-#define P_HORIZONTAL 25						// P parameter of the PID speed controller
+#define P_HORIZONTAL 15 //25						// P parameter of the PID speed controller
 #endif
 
 #ifndef I_HORIZONTAL
@@ -362,4 +363,15 @@
 #define LEFT_ENC_OFFSET 80.8	// these values are obtained from field test
 #define RIGHT_ENC_OFFSET 78.6
 #define ENC_SLOPE 0.384
+
+#define LEFT_WHEEL_FW_SC 0                  // forward, speed control enabled
+#define RIGHT_WHEEL_FW_SC 1
+#define LEFT_WHEEL_BW_SC 2					// backward, speed control enabled
+#define RIGHT_WHEEL_BW_SC 3
+#define DISTANCE_MM 248.18					// distance traveled during calibration => WHEEL_DIST*2*PI
+#define INDEX_STEP 5 //14
+#define BYTE_TO_MM_S 5
+#define CALIBRATION_SAMPLES 9
+#define CALIB_CHECK_ADDRESS 3946
+#define CALIB_DATA_START_ADDR 3948
 

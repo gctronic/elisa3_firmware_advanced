@@ -28,6 +28,16 @@ int main(void) {
 
 	speedStepCounter = getTime100MicroSec();
 
+/*
+	unsigned int j=0;
+	for(i=0; i<9; i++) {
+		for(j=0; j<8; j++) {
+			calibration[i][j]=0xFF;
+		}
+	}
+	eeprom_update_block(calibration, (uint8_t*) CALIB_DATA_START_ADDR, 144);
+*/
+
 	while(1) {
 
 		currentSelector = getSelector();	// update selector position
@@ -139,53 +149,59 @@ int main(void) {
 			startTime = getTime100MicroSec();
 		}
 
+		
+		//if(calibrateOdomFlag==0) {
+			handleIRRemoteCommands();
+		//}
 
-		handleIRRemoteCommands();
+
+		//if(calibrateOdomFlag==0) {
+			handleRFCommands();
+		//}
 
 
-		handleRFCommands();
+		if(calibrateOdomFlag==0) {
+			if((getTime100MicroSec()-speedStepCounter) >= SPEED_STEP_DELAY) {
+				speedStepCounter = getTime100MicroSec();
 
-
-		if((getTime100MicroSec()-speedStepCounter) >= SPEED_STEP_DELAY) {
-			speedStepCounter = getTime100MicroSec();
-
-			if(softAccEnabled) {
-				if(pwm_right_desired == 0) {
-					pwm_intermediate_right_desired = 0;
-				} else if((pwm_right_desired*pwm_intermediate_right_desired) < 0) {
-					pwm_intermediate_right_desired = 0;
-				} else if(pwm_right_desired > pwm_intermediate_right_desired) {
-					pwm_intermediate_right_desired += speedStep;
-					if(pwm_intermediate_right_desired > pwm_right_desired) {
-						pwm_intermediate_right_desired = pwm_right_desired;
+				if(softAccEnabled) {
+					if(pwm_right_desired == 0) {
+						pwm_intermediate_right_desired = 0;
+					} else if((pwm_right_desired*pwm_intermediate_right_desired) < 0) {
+						pwm_intermediate_right_desired = 0;
+					} else if(pwm_right_desired > pwm_intermediate_right_desired) {
+						pwm_intermediate_right_desired += speedStep;
+						if(pwm_intermediate_right_desired > pwm_right_desired) {
+							pwm_intermediate_right_desired = pwm_right_desired;
+						}
+					} else if(pwm_right_desired < pwm_intermediate_right_desired) {
+						pwm_intermediate_right_desired -= speedStep;
+						if(pwm_intermediate_right_desired < pwm_right_desired) {
+							pwm_intermediate_right_desired = pwm_right_desired;
+						}					
 					}
-				} else if(pwm_right_desired < pwm_intermediate_right_desired) {
-					pwm_intermediate_right_desired -= speedStep;
-					if(pwm_intermediate_right_desired < pwm_right_desired) {
-						pwm_intermediate_right_desired = pwm_right_desired;
-					}					
-				}
 	
-				if(pwm_left_desired == 0) {
-					pwm_intermediate_left_desired = 0;
-				} else if((pwm_left_desired*pwm_intermediate_left_desired) < 0) {
-					pwm_intermediate_left_desired = 0;
-				} else if(pwm_left_desired > pwm_intermediate_left_desired) {
-					pwm_intermediate_left_desired += speedStep;
-					if(pwm_intermediate_left_desired > pwm_left_desired) {
-						pwm_intermediate_left_desired = pwm_left_desired;
+					if(pwm_left_desired == 0) {
+						pwm_intermediate_left_desired = 0;
+					} else if((pwm_left_desired*pwm_intermediate_left_desired) < 0) {
+						pwm_intermediate_left_desired = 0;
+					} else if(pwm_left_desired > pwm_intermediate_left_desired) {
+						pwm_intermediate_left_desired += speedStep;
+						if(pwm_intermediate_left_desired > pwm_left_desired) {
+							pwm_intermediate_left_desired = pwm_left_desired;
+						}
+					} else if(pwm_left_desired < pwm_intermediate_left_desired) {
+						pwm_intermediate_left_desired -= speedStep;
+						if(pwm_intermediate_left_desired < pwm_left_desired) {
+							pwm_intermediate_left_desired = pwm_left_desired;
+						}					
 					}
-				} else if(pwm_left_desired < pwm_intermediate_left_desired) {
-					pwm_intermediate_left_desired -= speedStep;
-					if(pwm_intermediate_left_desired < pwm_left_desired) {
-						pwm_intermediate_left_desired = pwm_left_desired;
-					}					
+				} else {
+					pwm_intermediate_right_desired = pwm_right_desired;
+					pwm_intermediate_left_desired = pwm_left_desired;
 				}
-			} else {
-				pwm_intermediate_right_desired = pwm_right_desired;
-				pwm_intermediate_left_desired = pwm_left_desired;
-			}
 
+			}
 		}
 
 		if(currentSelector!=6 && currentSelector!=15) {
@@ -526,12 +542,10 @@ int main(void) {
 
 					break;
   
-			case 8:	if(leftMotSteps <= 2000) {
-						setLeftSpeed(40);
-						setRightSpeed(40);
-					} else {
-						setLeftSpeed(0);
-						setRightSpeed(0);
+			case 8:	// motors calibration
+					irEnabled = 1;
+					if(calibrateOdomFlag==1) {
+						handleCalibration();
 					}
 					break;
 
@@ -588,7 +602,7 @@ int main(void) {
 
 		}
 
-		if(currentSelector != 0) {
+		if(currentSelector!=0) {
 			handleMotorsWithSpeedController();  
 		}
 

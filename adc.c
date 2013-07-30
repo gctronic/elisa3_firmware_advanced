@@ -68,7 +68,11 @@ ISR(ADC_vect) {
 			}
 
 			if(currentProx & 0x01) {
-				proximityResult[currentProx>>1] = proximityValue[currentProx-1] - proximityValue[currentProx] - proximityOffset[currentProx>>1];	// ambient - (ambient+reflected) - offset
+				//if(currentProx < 16) {	// prox
+					proximityResult[currentProx>>1] = proximityValue[currentProx-1] - proximityValue[currentProx] - proximityOffset[currentProx>>1];	// ambient - (ambient+reflected) - offset
+				//} else {	// ground
+				//	proximityResult[currentProx>>1] = proximityValue[currentProx-1] - proximityValue[currentProx];
+				//}
 				if(proximityResult[currentProx>>1] < 0) {
 					proximityResult[currentProx>>1] = 0;
 				}
@@ -111,6 +115,7 @@ ISR(ADC_vect) {
 				// (apart from black ones) after calibration.
 				if(cliffAvoidanceEnabled) {
 					if(proximityResult[8]<CLIFF_THR || proximityResult[9]<CLIFF_THR || proximityResult[10]<CLIFF_THR || proximityResult[11]<CLIFF_THR) {
+					//if(proximityResult[8]<(proximityOffset[8]>>1) || proximityResult[9]<(proximityOffset[9]>>1) || proximityResult[10]<(proximityOffset[10]>>1) || proximityResult[11]<(proximityOffset[11]>>1)) {
 						cliffDetectedFlag = 1;
 						//LED_RED_ON;			
 						// set resulting velocity to 0 and change the pwm registers directly to be able

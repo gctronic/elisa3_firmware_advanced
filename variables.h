@@ -51,7 +51,7 @@ extern signed int pwm_intermediate_right_desired;
 extern signed int pwm_intermediate_left_desired;
 extern signed int k_ff_speed_control_left;
 extern signed int k_ff_speed_control_right;
-extern signed int pwm_right_speed_controller;
+extern signed long int pwm_right_speed_controller;
 extern signed int pwm_left_speed_controller;
 extern signed int delta_left_speed_current;
 extern signed int delta_right_speed_current;
@@ -169,8 +169,30 @@ extern unsigned char cliffDetectedFlag;
 /****************/
 /*** ODOMETRY ***/
 /****************/
-extern float theta, xPos, yPos;
+extern float theta, xPos, yPos, deltaDist;
+extern float thetaOld, xPosOld, yPosOld, deltaDistOld;
+extern float leftDist, rightDist, leftDistPrev, rightDistPrev;
 extern unsigned char computeOdometry;
-extern float deltaDist;
 extern float thetaAcc;
+extern unsigned char calibState;
+extern unsigned char calibVelIndex;
+extern unsigned char calibWheel;
+extern signed int tempVel;
+extern signed int calibration[CALIBRATION_SAMPLES][8];
+extern unsigned long int timeoutOdometry;
+extern unsigned long timeOdometry;
+extern unsigned char calibrateOdomFlag;
+extern signed long int leftSpeedSumOdom;
+extern signed long int rightSpeedSumOdom;
+extern unsigned int leftSumCount;
+extern unsigned int rightSumCount;
+extern signed int avgLeftSpeed;
+extern signed int avgRightSpeed;
+extern signed int speedLeftFromEnc;
+extern signed int speedRightFromEnc;
+extern unsigned long timeLeftOdom;
+extern unsigned long timeRightOdom;
+
+
+
 

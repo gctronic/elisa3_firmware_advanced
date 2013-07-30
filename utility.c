@@ -39,6 +39,7 @@ void initPeripherals(void) {
 		hardwareRevision = HW_REV_3_1;
 	}
 
+	initCalibration();
 	initPortsIO();
 	initAdc();
 	initMotors();

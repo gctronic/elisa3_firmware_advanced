@@ -68,7 +68,7 @@ void start_vertical_speed_control_left(signed int *pwm_left) {
 	// pwm out = feed forward * desired speed + P * current error - D * (current error - previous error) + I * error sum
 	pwm_left_speed_controller = (signed int)(k_ff_speed_control_left*(*pwm_left));
 	pwm_left_speed_controller += (signed int)(P_VERTICAL * delta_left_speed_current);
-	pwm_left_speed_controller -= (signed int)((delta_left_speed_current-delta_left_speed_prev)*D_VERTICAL);
+	pwm_left_speed_controller += (signed int)((delta_left_speed_current-delta_left_speed_prev)*D_VERTICAL);
 	pwm_left_speed_controller += (signed int)(I_VERTICAL*delta_left_speed_sum);
 
 	// avoid to change motion direction
@@ -85,6 +85,13 @@ void start_vertical_speed_control_left(signed int *pwm_left) {
 	// since the pwm_left_speed_controller goes from -24000 to 24000 then the pwm_left 
 	// has to be scaled to remain in the range -512..512
 	*pwm_left = ((signed int)pwm_left_speed_controller)>>4;
+
+	// avoid stopping the motors if desired speed is different from zero
+	if(pwm_left_desired_to_control > 0) {
+		*pwm_left += 1;
+	} else {
+		*pwm_left -= 1;
+	}
 
 	if (*pwm_left>(MAX_MOTORS_PWM/2)) *pwm_left=(MAX_MOTORS_PWM/2);
     if (*pwm_left<-(MAX_MOTORS_PWM/2)) *pwm_left=-(MAX_MOTORS_PWM/2);
@@ -150,7 +157,7 @@ void start_vertical_speed_control_right(signed int *pwm_right) {
 	// pwm out = feed forward * desired speed + P * current error - D * (current error - previous error) + I * error sum
 	pwm_right_speed_controller = (signed int)(k_ff_speed_control_right*(*pwm_right)); //(signed int)((*pwm_right) << 3); //<< 5);
 	pwm_right_speed_controller += (signed int)(P_VERTICAL * delta_right_speed_current);
-	pwm_right_speed_controller -= (signed int)((delta_right_speed_current-delta_right_speed_prev)*D_VERTICAL);
+	pwm_right_speed_controller += (signed int)((delta_right_speed_current-delta_right_speed_prev)*D_VERTICAL);
 	pwm_right_speed_controller += (signed int)(I_VERTICAL*delta_right_speed_sum);
 
 	// avoid changing motion direction
@@ -167,6 +174,13 @@ void start_vertical_speed_control_right(signed int *pwm_right) {
 	// since the pwm_left_speed_controller goes from -24000 to 24000 then the pwm_left 
 	// has to be scaled to remain in the range -512..512
 	*pwm_right = ((signed int)pwm_right_speed_controller)>>4;
+
+	// avoid stopping the motors if desired speed is different from zero
+	if(pwm_right_desired_to_control > 0) {
+		*pwm_right += 1;
+	} else {
+		*pwm_right -= 1;
+	}
 
 	if (*pwm_right>(MAX_MOTORS_PWM/2)) *pwm_right=(MAX_MOTORS_PWM/2);
     if (*pwm_right<-(MAX_MOTORS_PWM/2)) *pwm_right=-(MAX_MOTORS_PWM/2);
@@ -191,6 +205,7 @@ void start_horizontal_speed_control_right(signed int *pwm_right) {
 	} else {
 		delta_right_speed_current = (*pwm_right) + last_right_vel;
 	}
+
 	// sum the errors
 	delta_right_speed_sum += delta_right_speed_current;
 
@@ -198,13 +213,13 @@ void start_horizontal_speed_control_right(signed int *pwm_right) {
 		delta_right_speed_sum = I_LIMIT_HORIZONTAL;
 	}else if(delta_right_speed_sum < -I_LIMIT_HORIZONTAL) {
 		delta_right_speed_sum = -I_LIMIT_HORIZONTAL;
-	}
+	}		
 
 	// pwm out = feed forward * desired speed + P * current error - D * (current error - previous error) + I * error sum
 	// in this case feed forward = 8
 	pwm_right_speed_controller = (signed int)((*pwm_right) << 3);
 	pwm_right_speed_controller += (signed int)(delta_right_speed_current*P_HORIZONTAL);
-	pwm_right_speed_controller -= (signed int)((delta_right_speed_current-delta_right_speed_prev)*D_HORIZONTAL);
+	pwm_right_speed_controller += (signed int)((delta_right_speed_current-delta_right_speed_prev)*D_HORIZONTAL);
 	pwm_right_speed_controller += (signed int)(delta_right_speed_sum*I_HORIZONTAL);
 
 	// avoid changing motion direction
@@ -221,6 +236,13 @@ void start_horizontal_speed_control_right(signed int *pwm_right) {
 	// since the pwm_left_speed_controller goes from -24000 to 24000 then the pwm_left 
 	// has to be scaled to remain in the range -512..512
 	*pwm_right = ((signed int)pwm_right_speed_controller)>>4;
+
+	// avoid stopping the motors if desired speed is different from zero
+	if(pwm_right_desired_to_control > 0) {
+		*pwm_right += 1;
+	} else {
+		*pwm_right -= 1;
+	}
 
 	// the feed forward is composed by the previous scale factor (x8) and by an offset
 	if(*pwm_right > 0) {
@@ -265,7 +287,7 @@ void start_horizontal_speed_control_left(signed int *pwm_left) {
 	// in this case feed forward = 8
 	pwm_left_speed_controller = (signed int)((*pwm_left) << 3);
 	pwm_left_speed_controller += (signed int)(delta_left_speed_current*P_HORIZONTAL);
-	pwm_left_speed_controller -= (signed int)((delta_left_speed_current-delta_left_speed_prev)*D_HORIZONTAL);
+	pwm_left_speed_controller += (signed int)((delta_left_speed_current-delta_left_speed_prev)*D_HORIZONTAL);
 	pwm_left_speed_controller += (signed int)(delta_left_speed_sum*I_HORIZONTAL);
 
 	// avoid changing motion direction
@@ -282,6 +304,13 @@ void start_horizontal_speed_control_left(signed int *pwm_left) {
 	// since the pwm_left_speed_controller goes from -24000 to 24000 then the pwm_left 
 	// has to be scaled to remain in the range -512..512
 	*pwm_left = ((signed int)pwm_left_speed_controller)>>4;
+
+	// avoid stopping the motors if desired speed is different from zero
+	if(pwm_left_desired_to_control > 0) {
+		*pwm_left += 1;
+	} else {
+		*pwm_left -= 1;
+	}
 
 	// the feed forward is composed by the previous scale factor (x8) and by an offset
 	if(*pwm_left > 0) {

@@ -187,6 +187,15 @@ void handleIRRemoteCommands() {
 				case 51:
 					pwm_right_desired = 0;
 					pwm_left_desired = 0;
+					if(currentSelector == 8) {
+						calibrateSensors();
+						proximityResult[8] = 1023;	// because the first time this value could be low after calibration
+						proximityResult[11] = 1023;	// and in that case a false black line will be detected
+						calibState = 0;
+						calibVelIndex = 1;
+						calibrateOdomFlag = 1;
+
+					}
 					break;
 
 				case 2:	// both motors forward
@@ -333,14 +342,14 @@ void handleIRRemoteCommands() {
 
 			// convert pwm deisred in absolute speed (0 to 100)
 			if(pwm_right_desired >= 0) {
-				speedr = pwm_right_desired >> 2;
+				speedr = pwm_right_desired;
 			} else {
-				speedr = (-pwm_right_desired) >> 2;
+				speedr = (-pwm_right_desired);
 			}
 			if(pwm_left_desired >= 0) {
-				speedl = pwm_left_desired >> 2;
+				speedl = pwm_left_desired;
 			} else {
-				speedl = (-pwm_left_desired) >> 2;
+				speedl = (-pwm_left_desired);
 			}
 
 		}	// ir command received

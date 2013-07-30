@@ -29,6 +29,7 @@
 #include "spi.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <string.h>
 
 // Defines for setting the MiRF registers for transmitting or receiving mode
 #define TX_POWERUP mirf_config_register(CONFIG, mirf_CONFIG | ( (1<<PWR_UP) | (0<<PRIM_RX) ) )
@@ -298,29 +299,31 @@ void handleRFCommands() {
 
 		}
 
-		speedr = (rfData[4]&0x7F);	// cast the speed to be at most 127, thus the received speed are in the range 0..127 (usually 0..100),
-		speedl = (rfData[5]&0x7F);	// the received speed is then shifted by 3 (x8) in order to have a speed more or less
-									// in the same range of the measured speed that is 0..800.
-									// In order to have greater resolution at lower speed we shift the speed only by 2 (x4),
-									// this means that the range is more or less 0..400.
+		if(calibrateOdomFlag==0) { 
+			speedr = (rfData[4]&0x7F);	// cast the speed to be at most 127, thus the received speed are in the range 0..127 (usually 0..100),
+			speedl = (rfData[5]&0x7F);	// the received speed is then shifted by 3 (x8) in order to have a speed more or less
+										// in the same range of the measured speed that is 0..800.
+										// In order to have greater resolution at lower speed we shift the speed only by 2 (x4),
+										// this means that the range is more or less 0..400.
 
 
-		if((rfData[4]&0x80)==0x80) {			// motor right forward
-			pwm_right_desired = speedr<<2;				// scale the speed received (0..100) to be in the range 0..400
-		} else {								// backward
-			pwm_right_desired = -(speedr<<2);
+			if((rfData[4]&0x80)==0x80) {			// motor right forward
+				pwm_right_desired = speedr; 		// speed received (0..127) is expressed in 1/5 of mm/s (0..635 mm/s)
+			} else {								// backward
+				pwm_right_desired = -(speedr);
+			}
+
+			if((rfData[5]&0x80)==0x80) {			// motor left forward
+				pwm_left_desired = speedl;
+			} else {								// backward
+				pwm_left_desired = -(speedl);
+			}
+
+			if (pwm_right_desired>(MAX_MOTORS_PWM/2)) pwm_right_desired=(MAX_MOTORS_PWM/2);
+			if (pwm_left_desired>(MAX_MOTORS_PWM/2)) pwm_left_desired=(MAX_MOTORS_PWM/2);
+			if (pwm_right_desired<-(MAX_MOTORS_PWM/2)) pwm_right_desired=-(MAX_MOTORS_PWM/2);
+			if (pwm_left_desired<-(MAX_MOTORS_PWM/2)) pwm_left_desired=-(MAX_MOTORS_PWM/2);
 		}
-
-		if((rfData[5]&0x80)==0x80) {			// motor left forward
-			pwm_left_desired = speedl<<2;
-		} else {								// backward
-			pwm_left_desired = -(speedl<<2);
-		}
-
-		if (pwm_right_desired>(MAX_MOTORS_PWM/2)) pwm_right_desired=(MAX_MOTORS_PWM/2);
-		if (pwm_left_desired>(MAX_MOTORS_PWM/2)) pwm_left_desired=(MAX_MOTORS_PWM/2);
-		if (pwm_right_desired<-(MAX_MOTORS_PWM/2)) pwm_right_desired=-(MAX_MOTORS_PWM/2);
-		if (pwm_left_desired<-(MAX_MOTORS_PWM/2)) pwm_left_desired=-(MAX_MOTORS_PWM/2);
 
 
 		for(i=0; i<3; i++) {
@@ -421,6 +424,17 @@ void handleRFCommands() {
 			}
 
 		#endif
+		
+		if(calibrateOdomFlag==0) {
+			if((rfData[7]&0b00000001)==0b00000001) {
+				calibrateSensors();
+				proximityResult[8] = 1023;	// because the first time this value could be low after calibration
+				proximityResult[11] = 1023;	// and in that case a false black line will be detected
+				calibState = 0;
+				calibVelIndex = 1;
+				calibrateOdomFlag = 1;
+			}
+		}
 
 		// read and handle the remaining bytes of the payload (at the moment not used)
 
@@ -462,7 +476,7 @@ void handleRFCommands() {
 				ackPayload[8] = proximityResult[10]>>8;
 				ackPayload[9] = proximityResult[11]&0xFF;
 				ackPayload[10] = proximityResult[11]>>8;
-				ackPayload[11] = accX&0xFF;	//((-accOffsetY)&0x03FF)
+				ackPayload[11] = accX&0xFF;
 				ackPayload[12] = accX>>8;
 				ackPayload[13] = accY&0xFF;
 				ackPayload[14] = accY>>8;
@@ -501,7 +515,7 @@ void handleRFCommands() {
 				ackPayload[9] = proximityValue[22]&0xFF;
 				ackPayload[10] = proximityValue[22]>>8;
 				ackPayload[11] = accZ&0xFF;
-				ackPayload[12] = accZ>>8;
+				ackPayload[12] = accZ>>8;	
 				ackPayload[13] = batteryLevel&0xFF;
 				ackPayload[14] = batteryLevel>>8;
 				ackPayload[15] = 0;
@@ -524,6 +538,12 @@ void handleRFCommands() {
 				ackPayload[12] = ((unsigned int)xPos)>>8;
 				ackPayload[13] = ((unsigned int)yPos)&0xFF;
 				ackPayload[14] = ((unsigned int)yPos)>>8;
+				//ackPayload[9] = ((unsigned int)(thetaOld*573.0))&0xFF;	// radians to degrees => 573 = 1800/PI
+				//ackPayload[10] = ((unsigned int)(thetaOld*573.0))>>8;
+				//ackPayload[11] = ((unsigned int)xPosOld)&0xFF;
+				//ackPayload[12] = ((unsigned int)xPosOld)>>8;
+				//ackPayload[13] = ((unsigned int)yPosOld)&0xFF;
+				//ackPayload[14] = ((unsigned int)yPosOld)>>8;
 				ackPayload[15] = 0;
 				packetId = 3;
 				break;

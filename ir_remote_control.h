@@ -22,6 +22,7 @@ it uses directly the Timer2 for timing the reading of the signal.
 #include <avr\interrupt.h>
 #include "variables.h"
 #include "leds.h"
+#include "sensors.h"
 
 
 #ifdef __cplusplus
