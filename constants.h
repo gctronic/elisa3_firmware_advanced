@@ -109,8 +109,10 @@
 /*** IR REMOTE CONTROL ***/
 /*************************/
 #ifndef STEP_MOTORS
-#define STEP_MOTORS 30						// step used to increase/decrease the pwm of the motors when 
-#endif										// receiving a command through TV remote (30/1024 = 2.9%)
+#define STEP_MOTORS 2						// step used to increase/decrease the motors speed when 
+#endif										// receiving a command through TV remote.
+											// speed (0..127) is expressed in 1/5 of mm/s (0..635 mm/s), thus 
+											// 2 means steps of 10 mm/s
 
 /*********************/
 /*** ACCELEROMETER ***/
