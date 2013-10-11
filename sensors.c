@@ -63,7 +63,7 @@ void calibrateSensors() {
 			}
 
 			for(i=8; i<12; i++) {
-				proximityOffset[i] -= 512;
+				proximityOffset[i] -= 512;	// move the "0" to 512 (values around 512)
 			}
 
 			accOffsetX = accOffsetXSum>>4;
