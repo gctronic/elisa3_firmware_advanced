@@ -357,8 +357,8 @@ int main(void) {
 							//GREEN_LED3_ON;
 							outOfLine = 0;
 							enableObstacleAvoidance();
-							setRightSpeed(20);
-							setLeftSpeed(20);
+							setRightSpeed(15);
+							setLeftSpeed(15);
 							if(proximityResult[9]<LINE_IN_THR || proximityResult[10]<LINE_IN_THR || proximityResult[8]<LINE_IN_THR || proximityResult[11]<LINE_IN_THR) {
 								lineFound++;
 								if(lineFound > 10) {
@@ -432,28 +432,28 @@ int main(void) {
 							}
 							
 							if(proximityResult[8]<LINE_OUT_THR && proximityResult[9]>LINE_OUT_THR && proximityResult[10]>LINE_OUT_THR && proximityResult[11]>LINE_OUT_THR) {	// left ground is the only within the black line => turn left
-								setLeftSpeed(-15);
-								setRightSpeed(20);
+								setLeftSpeed(-10);
+								setRightSpeed(15);
 							} else if(proximityResult[11]<LINE_OUT_THR && proximityResult[8]>LINE_OUT_THR && proximityResult[9]>LINE_OUT_THR && proximityResult[10]>LINE_OUT_THR) {	// right ground is the only within the black line => turn right
-								setLeftSpeed(20);
-								setRightSpeed(-15);
-							} else if(proximityResult[9]>LINE_OUT_THR) {	// center left is leaving the line => turn right
-								setLeftSpeed(20);
+								setLeftSpeed(15);
 								setRightSpeed(-10);
+							} else if(proximityResult[9]>LINE_OUT_THR) {	// center left is leaving the line => turn right
+								setLeftSpeed(15);
+								setRightSpeed(-5);
 								//outOfLine++;
 								//if(outOfLine > 250) {
 								//	demoState = 1;
 								//}
 							} else if(proximityResult[10]>LINE_OUT_THR) {	// center right is leaving the lnie => turn left
-								setLeftSpeed(-10);
-								setRightSpeed(20);
+								setLeftSpeed(-5);
+								setRightSpeed(15);
 								//outOfLine++;
 								//if(outOfLine > 250) {
 								//	demoState = 1;
 								//}
 							} else {
-								setRightSpeed(20);
-								setLeftSpeed(20);
+								setRightSpeed(15);
+								setLeftSpeed(15);
 								//outOfLine = 0;
 								/*
 								if(CHARGE_ON) {

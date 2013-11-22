@@ -2178,11 +2178,11 @@ int main(void) {
      fdc:	10 92 51 04 	sts	0x0451, r1
 							enableObstacleAvoidance();
      fe0:	0e 94 66 34 	call	0x68cc	; 0x68cc <enableObstacleAvoidance>
-							setRightSpeed(20);
-     fe4:	84 e1       	ldi	r24, 0x14	; 20
+							setRightSpeed(15);
+     fe4:	8f e0       	ldi	r24, 0x0F	; 15
      fe6:	0e 94 d2 20 	call	0x41a4	; 0x41a4 <setRightSpeed>
-							setLeftSpeed(20);
-     fea:	84 e1       	ldi	r24, 0x14	; 20
+							setLeftSpeed(15);
+     fea:	8f e0       	ldi	r24, 0x0F	; 15
      fec:	0e 94 b5 20 	call	0x416a	; 0x416a <setLeftSpeed>
 							if(proximityResult[9]<LINE_IN_THR || proximityResult[10]<LINE_IN_THR || proximityResult[8]<LINE_IN_THR || proximityResult[11]<LINE_IN_THR) {
      ff0:	80 91 6b 02 	lds	r24, 0x026B
@@ -2450,8 +2450,8 @@ int main(void) {
     1206:	5e 07       	cpc	r21, r30
     1208:	0c f0       	brlt	.+2      	; 0x120c <main+0x1030>
     120a:	0d c1       	rjmp	.+538    	; 0x1426 <main+0x124a>
-								setLeftSpeed(-15);
-								setRightSpeed(20);
+								setLeftSpeed(-10);
+								setRightSpeed(15);
 							} else if(proximityResult[11]<LINE_OUT_THR && proximityResult[8]>LINE_OUT_THR && proximityResult[9]>LINE_OUT_THR && proximityResult[10]>LINE_OUT_THR) {	// right ground is the only within the black line => turn right
     120c:	40 91 6f 02 	lds	r20, 0x026F
     1210:	50 91 70 02 	lds	r21, 0x0270
@@ -2477,14 +2477,14 @@ int main(void) {
     123e:	96 07       	cpc	r25, r22
     1240:	0c f0       	brlt	.+2      	; 0x1244 <main+0x1068>
     1242:	f8 c0       	rjmp	.+496    	; 0x1434 <main+0x1258>
-								setLeftSpeed(20);
-								setRightSpeed(-15);
-							} else if(proximityResult[9]>LINE_OUT_THR) {	// center left is leaving the line => turn right
-								setLeftSpeed(20);
-    1244:	84 e1       	ldi	r24, 0x14	; 20
-    1246:	0e 94 b5 20 	call	0x416a	; 0x416a <setLeftSpeed>
+								setLeftSpeed(15);
 								setRightSpeed(-10);
-    124a:	86 ef       	ldi	r24, 0xF6	; 246
+							} else if(proximityResult[9]>LINE_OUT_THR) {	// center left is leaving the line => turn right
+								setLeftSpeed(15);
+    1244:	8f e0       	ldi	r24, 0x0F	; 15
+    1246:	0e 94 b5 20 	call	0x416a	; 0x416a <setLeftSpeed>
+								setRightSpeed(-5);
+    124a:	8b ef       	ldi	r24, 0xFB	; 251
     124c:	0e 94 d2 20 	call	0x41a4	; 0x41a4 <setRightSpeed>
     1250:	6d ca       	rjmp	.-2854   	; 0x72c <main+0x550>
 					}
@@ -2512,8 +2512,8 @@ int main(void) {
     1274:	ac c9       	rjmp	.-3240   	; 0x5ce <main+0x3f2>
 							outOfLine = 0;
 							enableObstacleAvoidance();
-							setRightSpeed(20);
-							setLeftSpeed(20);
+							setRightSpeed(15);
+							setLeftSpeed(15);
 							if(proximityResult[9]<LINE_IN_THR || proximityResult[10]<LINE_IN_THR || proximityResult[8]<LINE_IN_THR || proximityResult[11]<LINE_IN_THR) {
 								lineFound++;
     1276:	80 91 50 04 	lds	r24, 0x0450
@@ -2620,18 +2620,18 @@ int main(void) {
     1328:	90 93 56 04 	sts	0x0456, r25
 								break;						
     132c:	ff c9       	rjmp	.-3074   	; 0x72c <main+0x550>
-								setLeftSpeed(-15);
-								setRightSpeed(20);
+								setLeftSpeed(-10);
+								setRightSpeed(15);
 							} else if(proximityResult[11]<LINE_OUT_THR && proximityResult[8]>LINE_OUT_THR && proximityResult[9]>LINE_OUT_THR && proximityResult[10]>LINE_OUT_THR) {	// right ground is the only within the black line => turn right
-								setLeftSpeed(20);
-								setRightSpeed(-15);
+								setLeftSpeed(15);
+								setRightSpeed(-10);
 							} else if(proximityResult[9]>LINE_OUT_THR) {	// center left is leaving the line => turn right
     132e:	e1 e0       	ldi	r30, 0x01	; 1
     1330:	83 3c       	cpi	r24, 0xC3	; 195
     1332:	9e 07       	cpc	r25, r30
     1334:	0c f0       	brlt	.+2      	; 0x1338 <main+0x115c>
     1336:	86 cf       	rjmp	.-244    	; 0x1244 <main+0x1068>
-								setRightSpeed(-10);
+								setRightSpeed(-5);
 								//outOfLine++;
 								//if(outOfLine > 250) {
 								//	demoState = 1;
@@ -2644,11 +2644,11 @@ int main(void) {
     1344:	9f 07       	cpc	r25, r31
     1346:	0c f4       	brge	.+2      	; 0x134a <main+0x116e>
     1348:	48 c0       	rjmp	.+144    	; 0x13da <main+0x11fe>
-								setLeftSpeed(-10);
-    134a:	86 ef       	ldi	r24, 0xF6	; 246
+								setLeftSpeed(-5);
+    134a:	8b ef       	ldi	r24, 0xFB	; 251
     134c:	0e 94 b5 20 	call	0x416a	; 0x416a <setLeftSpeed>
-								setRightSpeed(20);
-    1350:	84 e1       	ldi	r24, 0x14	; 20
+								setRightSpeed(15);
+    1350:	8f e0       	ldi	r24, 0x0F	; 15
     1352:	0e 94 d2 20 	call	0x41a4	; 0x41a4 <setRightSpeed>
     1356:	ea c9       	rjmp	.-3116   	; 0x72c <main+0x550>
 									demoStartTime = getTime100MicroSec();
@@ -2742,11 +2742,11 @@ int main(void) {
 								//	demoState = 1;
 								//}
 							} else {
-								setRightSpeed(20);
-    13da:	84 e1       	ldi	r24, 0x14	; 20
+								setRightSpeed(15);
+    13da:	8f e0       	ldi	r24, 0x0F	; 15
     13dc:	0e 94 d2 20 	call	0x41a4	; 0x41a4 <setRightSpeed>
-								setLeftSpeed(20);
-    13e0:	84 e1       	ldi	r24, 0x14	; 20
+								setLeftSpeed(15);
+    13e0:	8f e0       	ldi	r24, 0x0F	; 15
     13e2:	0e 94 b5 20 	call	0x416a	; 0x416a <setLeftSpeed>
     13e6:	a2 c9       	rjmp	.-3260   	; 0x72c <main+0x550>
 
@@ -2792,19 +2792,19 @@ int main(void) {
 							}
 							
 							if(proximityResult[8]<LINE_OUT_THR && proximityResult[9]>LINE_OUT_THR && proximityResult[10]>LINE_OUT_THR && proximityResult[11]>LINE_OUT_THR) {	// left ground is the only within the black line => turn left
-								setLeftSpeed(-15);
-    1426:	81 ef       	ldi	r24, 0xF1	; 241
+								setLeftSpeed(-10);
+    1426:	86 ef       	ldi	r24, 0xF6	; 246
     1428:	0e 94 b5 20 	call	0x416a	; 0x416a <setLeftSpeed>
-								setRightSpeed(20);
-    142c:	84 e1       	ldi	r24, 0x14	; 20
+								setRightSpeed(15);
+    142c:	8f e0       	ldi	r24, 0x0F	; 15
     142e:	0e 94 d2 20 	call	0x41a4	; 0x41a4 <setRightSpeed>
     1432:	7c c9       	rjmp	.-3336   	; 0x72c <main+0x550>
 							} else if(proximityResult[11]<LINE_OUT_THR && proximityResult[8]>LINE_OUT_THR && proximityResult[9]>LINE_OUT_THR && proximityResult[10]>LINE_OUT_THR) {	// right ground is the only within the black line => turn right
-								setLeftSpeed(20);
-    1434:	84 e1       	ldi	r24, 0x14	; 20
+								setLeftSpeed(15);
+    1434:	8f e0       	ldi	r24, 0x0F	; 15
     1436:	0e 94 b5 20 	call	0x416a	; 0x416a <setLeftSpeed>
-								setRightSpeed(-15);
-    143a:	81 ef       	ldi	r24, 0xF1	; 241
+								setRightSpeed(-10);
+    143a:	86 ef       	ldi	r24, 0xF6	; 246
     143c:	0e 94 d2 20 	call	0x41a4	; 0x41a4 <setRightSpeed>
     1440:	75 c9       	rjmp	.-3350   	; 0x72c <main+0x550>
 
