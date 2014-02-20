@@ -421,14 +421,16 @@ void handleRFCommands() {
 
 		#endif
 		
-		if(calibrateOdomFlag==0) {
-			if((rfData[7]&0b00000001)==0b00000001) {
-				calibrateSensors();
-				proximityResult[8] = 1023;	// because the first time this value could be low after calibration
-				proximityResult[11] = 1023;	// and in that case a false black line will be detected
-				calibState = 0;
-				calibVelIndex = 1;
-				calibrateOdomFlag = 1;
+		if(currentSelector == 8) {
+			if(calibrateOdomFlag==0) {
+				if((rfData[7]&0b00000001)==0b00000001) {
+					calibrateSensors();
+					proximityResult[8] = 1023;	// because the first time this value could be low after calibration
+					proximityResult[11] = 1023;	// and in that case a false black line will be detected
+					calibState = 0;
+					calibVelIndex = 1;
+					calibrateOdomFlag = 1;
+				}
 			}
 		}
 
@@ -528,12 +530,14 @@ void handleRFCommands() {
 				ackPayload[6] = ((signed long int)rightMotSteps)>>8;
 				ackPayload[7] = ((signed long int)rightMotSteps)>>16;
 				ackPayload[8] = ((signed long int)rightMotSteps)>>24;
-				ackPayload[9] = ((unsigned int)(theta*573.0))&0xFF;	// radians to degrees => 573 = 1800/PI
-				ackPayload[10] = ((unsigned int)(theta*573.0))>>8;
+				lastTheta = theta;
+				ackPayload[9] = ((signed int)(lastTheta*573.0))&0xFF;	// radians to degrees => 573 = 1800/PI
+				ackPayload[10] = ((signed int)(lastTheta*573.0))>>8;				
 				ackPayload[11] = ((unsigned int)xPos)&0xFF;
 				ackPayload[12] = ((unsigned int)xPos)>>8;
 				ackPayload[13] = ((unsigned int)yPos)&0xFF;
 				ackPayload[14] = ((unsigned int)yPos)>>8;
+				
 				//ackPayload[9] = ((unsigned int)(thetaOld*573.0))&0xFF;	// radians to degrees => 573 = 1800/PI
 				//ackPayload[10] = ((unsigned int)(thetaOld*573.0))>>8;
 				//ackPayload[11] = ((unsigned int)xPosOld)&0xFF;

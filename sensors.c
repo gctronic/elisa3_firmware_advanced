@@ -425,9 +425,9 @@ void computeAngle() {
 	if(abs_acc_z <= VERTICAL_THRESHOLD) {
 		currPosition = HORIZONTAL_POS;
 	} else {
-		currPosition = VERTICAL_POS;
+		currPosition = VERTICAL_POS;	
 	}
-	if(prevPosition == currPosition) {			
+	if(currPosition != robotPosition) {			
 		timesInSamePos++;
 		if(timesInSamePos >= SAME_POS_NUM) {	// if the robot maintains its position for a while, then update the robot position;
 			timesInSamePos = 0;					// this check avoid to pass from one position to the other too fast when near the threshold
@@ -436,7 +436,6 @@ void computeAngle() {
 	} else {
 		timesInSamePos = 0;
 	}
-	prevPosition = currPosition;
 
 	// compute the angle using the X and Y axis
 	thetaAcc = atan2((float)accX, (float)accY);

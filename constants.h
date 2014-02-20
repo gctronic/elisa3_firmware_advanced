@@ -118,11 +118,11 @@
 /*** ACCELEROMETER ***/
 /*********************/
 #ifndef VERTICAL_THRESHOLD
-#define VERTICAL_THRESHOLD 15				// threshold value to swtich from horizontal to vertical plane
+#define VERTICAL_THRESHOLD 20				// threshold value to swtich from horizontal to vertical plane
 #endif										// (when Z > threshold then vertical plane)
 
 #ifndef SAME_POS_NUM
-#define SAME_POS_NUM 5						// hysteresis value to pass from horizontal to vertical plane and
+#define SAME_POS_NUM 200						// hysteresis value to pass from horizontal to vertical plane and
 #endif										// viceversa.
 
 #ifndef VERTICAL_POS

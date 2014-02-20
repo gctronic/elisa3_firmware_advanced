@@ -52,7 +52,7 @@ extern signed int pwm_intermediate_left_desired;
 extern signed int k_ff_speed_control_left;
 extern signed int k_ff_speed_control_right;
 extern signed long int pwm_right_speed_controller;
-extern signed int pwm_left_speed_controller;
+extern signed long int pwm_left_speed_controller;
 extern signed int delta_left_speed_current;
 extern signed int delta_right_speed_current;
 extern signed int delta_left_speed_prev;
@@ -130,16 +130,15 @@ extern signed int accOffsetXSum;
 extern signed int accOffsetYSum;
 extern signed int accOffsetZSum;
 extern signed int currentAngle;
-extern unsigned char prevPosition; 
 extern unsigned char currPosition;
-extern unsigned char timesInSamePos;
+extern unsigned int timesInSamePos;
 extern unsigned char robotPosition;
 extern signed char accBuff[6];
 
 /***************/
 /*** VARIOUS ***/
 /***************/
-extern unsigned long long int clockTick;
+extern uint32_t clockTick;
 extern unsigned char currentSelector;
 extern signed int calibrationCycle;
 extern unsigned char startCalibration;
@@ -169,7 +168,7 @@ extern unsigned char cliffDetectedFlag;
 /****************/
 /*** ODOMETRY ***/
 /****************/
-extern float theta, xPos, yPos, deltaDist;
+extern float theta, lastTheta, xPos, yPos, deltaDist;
 extern float thetaOld, xPosOld, yPosOld, deltaDistOld;
 extern float leftDist, rightDist, leftDistPrev, rightDistPrev;
 extern unsigned char computeOdometry;
@@ -190,8 +189,8 @@ extern signed int avgLeftSpeed;
 extern signed int avgRightSpeed;
 extern signed int speedLeftFromEnc;
 extern signed int speedRightFromEnc;
-extern unsigned long timeLeftOdom;
-extern unsigned long timeRightOdom;
+extern uint32_t timeLeftOdom;
+extern uint32_t timeRightOdom;
 
 
 

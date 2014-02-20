@@ -67,7 +67,7 @@ signed int pwm_intermediate_left_desired = 0;
 signed int k_ff_speed_control_left=INIT_KFF;		// feed forward term for the vertical speed controller
 signed int k_ff_speed_control_right=INIT_KFF;
 signed long int pwm_right_speed_controller = 0;			// the pwm values after the speed controller adaptation
-signed int pwm_left_speed_controller = 0;			
+signed long int pwm_left_speed_controller = 0;			
 signed int delta_left_speed_current;				// current error between desired and measured speed
 signed int delta_right_speed_current;
 signed int delta_left_speed_prev;					// previous error between desired and measured speed  (used with the D term)
@@ -142,9 +142,8 @@ signed int accOffsetXSum = 0;						// contains the sum of the accelerometer valu
 signed int accOffsetYSum = 0;						// divided by the number of samples taken to get the calibration offsets)
 signed int accOffsetZSum = 0;
 signed int currentAngle = 0;						// current orientation of the robot (in a vertical wall) extracted from both the x and y axes
-unsigned char prevPosition=HORIZONTAL_POS;			// "prevPosition" and "currPosition" are used to change the "robotPosition" in a smoother way
-unsigned char currPosition=HORIZONTAL_POS;			
-unsigned char timesInSamePos = 0;					// number of cycles in which the new robot position remain stable; after some stability it will 
+unsigned char currPosition=HORIZONTAL_POS;			//  "currPosition" is used to change the "robotPosition" in a smoother way
+unsigned int timesInSamePos = 0;					// number of cycles in which the new robot position remain stable; after some stability it will 
 													// change the current "robotPosition"
 unsigned char robotPosition = 1;					// indicate whether the robot is in vertical (=0) or horizontal (=1) position
 signed char accBuff[6] = {0};
@@ -152,7 +151,7 @@ signed char accBuff[6] = {0};
 /***************/
 /*** VARIOUS ***/
 /***************/
-unsigned long long int clockTick = 0;					// this is the base time, each tick corresponds to 104 us (incremented inside adc isr);
+uint32_t clockTick = 0;					// this is the base time, each tick corresponds to 104 us (incremented inside adc isr);
 													// beware that this variable is never reset (4294967295/10000/60/60/24 = about 5 days before overflow)
 unsigned char currentSelector = 0;					// current selector position
 signed int calibrationCycle = 0;					// indicate how many samples are currently taken for calibration
@@ -183,7 +182,7 @@ unsigned char cliffDetectedFlag = 0;				// flag indicating a cliff is detected =
 /****************/
 /*** ODOMETRY ***/
 /****************/
-float theta=0.0, xPos=0.0, yPos=0.0, deltaDist=0.0;
+float theta=0.0, lastTheta=0.0, xPos=0.0, yPos=0.0, deltaDist=0.0;
 float thetaOld=0.0, xPosOld=0.0, yPosOld=0.0, deltaDistOld=0.0;
 float leftDist = 0, rightDist = 0, leftDistPrev = 0, rightDistPrev = 0;
 unsigned char computeOdometry = 0;
@@ -204,8 +203,8 @@ signed int avgLeftSpeed = 0;
 signed int avgRightSpeed = 0;
 signed int speedLeftFromEnc = 0;
 signed int speedRightFromEnc = 0;
-unsigned long timeLeftOdom = 0;
-unsigned long timeRightOdom = 0;
+uint32_t  timeLeftOdom = 0;
+uint32_t  timeRightOdom = 0;
 
 
 
