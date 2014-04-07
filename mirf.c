@@ -263,6 +263,25 @@ void writeAckPayload(unsigned char *data, unsigned char size) {
 
 }
 
+uint8_t readPayloadWidthFromTopFifo() {
+	uint8_t pWidth = 0;
+
+    mirf_CSN_lo;
+    SPI_Write_Byte(NRF_R_RX_PL_WID);
+	pWidth = SPI_Write_Byte(NOP); 	// not specified in the datasheet but the "NRF_R_RX_PL_WID" has a parameter,
+									// we need to send a NOP to receive the actual payload size
+    mirf_CSN_hi;
+	
+	return pWidth;
+}
+
+uint8_t readPayloadWidthFromPipe0() {
+	uint8_t pWidth = 0;
+
+	mirf_read_register(RX_PW_P0, &pWidth, 1);
+	
+	return pWidth;
+}
 
 void flushTxFifo() {
 
@@ -275,13 +294,48 @@ void flushTxFifo() {
 void handleRFCommands() {
 
 	unsigned int i=0;
+	//uint8_t pWidth = 0;
+	//uint8_t pWidthP0 = 0;
 
 	if(mirf_data_ready()) {
+
+		//if(spiCommError) {
+		//	usart0Transmit(0xFE,1);
+		//	return;
+		//}
 
 		rfFlags |= 0x02;
 
 		// clear irq status
 		mirf_config_register(STATUS, 0x70);
+
+		// Sometimes happens that even if the IRQ for data reception is raised then the actual data
+		// aren't present in the fifo with consequent wrong data read and wrong behavior of the robot.
+		// To avoid this situtation we add this check before actually reading from the fifo to be 
+		// sure there are correct data to be read.
+		// We don't know why the IRQ for data reception is raised, maybe is not correctly reset sometimes
+		// or it is raised when it shouldn't...
+		if(rx_fifo_is_empty()) {
+			return;
+		}
+
+		/*		
+		pWidth = readPayloadWidthFromTopFifo();
+		if(pWidth != 13) {	// discard the data if the expected payload size isn't correct
+			usart0Transmit(pWidth, 1);
+			return;
+		}
+		if(pWidth > 32) {	// from the datasheet if the payload is > 32 then the fifo should be flushed and the packet discarded
+			flush_rx_fifo();
+			return;
+		}
+		//usart0Transmit(pWidth, 1);
+		pWidthP0 = readPayloadWidthFromPipe0();
+		//usart0Transmit(pWidthP0, 1);
+		if(pWidthP0 != 13) {
+			usart0Transmit(pWidthP0, 1);
+		}
+		*/
 
 		mirf_get_data(rfData);
 		flush_rx_fifo();
