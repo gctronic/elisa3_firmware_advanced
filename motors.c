@@ -661,99 +661,102 @@ void getLeftSpeedFromInput() {
     
 }
 
+void writeDefaultCalibration() {
+	int i = 0;
+    for(i=0; i<CALIBRATION_SAMPLES; i++) {
+    	calibration[i][0] = i+1;
+	}
+    // the following values are taken from a field test
+    // forward left, speed control enabled
+    calibration[0][0] = 20;		// measured speed with back EMF (adc 0..1023)
+    calibration[1][0] = 40;
+    calibration[2][0] = 59;
+    calibration[3][0] = 79;
+    calibration[4][0] = 100;
+    calibration[5][0] = 120;
+    calibration[6][0] = 139;
+    calibration[7][0] = 159;
+	calibration[8][0] = 180;
+    calibration[0][1] = 19;    	// real speed measured in mm/s
+    calibration[1][1] = 47;
+    calibration[2][1] = 72;
+    calibration[3][1] = 91;
+    calibration[4][1] = 109;
+    calibration[5][1] = 125;
+    calibration[6][1] = 143;
+    calibration[7][1] = 160;
+	calibration[8][1] = 174;
+    // forward right, speed control enabled
+    calibration[0][2] = 19;		// measured speed with back EMF (adc 0..1023)
+    calibration[1][2] = 39;
+    calibration[2][2] = 60;
+    calibration[3][2] = 80;
+    calibration[4][2] = 99;
+    calibration[5][2] = 119;
+    calibration[6][2] = 140;
+    calibration[7][2] = 160;
+	calibration[8][2] = 180;
+    calibration[0][3] = 23;    	// real speed measured in mm/s
+    calibration[1][3] = 46;
+    calibration[2][3] = 64;
+    calibration[3][3] = 81;
+    calibration[4][3] = 97;
+    calibration[5][3] = 112;
+    calibration[6][3] = 125;
+    calibration[7][3] = 139;
+	calibration[8][3] = 152;
+    // backward left, speed control enabled
+    calibration[0][4] = 20;		// measured speed with back EMF (adc 0..1023)
+    calibration[1][4] = 39;
+    calibration[2][4] = 60;
+    calibration[3][4] = 79;
+    calibration[4][4] = 99;
+    calibration[5][4] = 120;
+    calibration[6][4] = 140;
+    calibration[7][4] = 160;
+	calibration[8][4] = 179;
+    calibration[0][5] = 18;    	// real speed measured in mm/s
+    calibration[1][5] = 45;
+    calibration[2][5] = 68;
+    calibration[3][5] = 87;
+    calibration[4][5] = 105;
+    calibration[5][5] = 119;
+    calibration[6][5] = 137;
+    calibration[7][5] = 151;
+	calibration[8][5] = 168;
+    // backward right, speed control enabled
+    calibration[0][6] = 20;		// measured speed with back EMF (adc 0..1023)
+    calibration[1][6] = 39;
+    calibration[2][6] = 59;
+    calibration[3][6] = 80;
+    calibration[4][6] = 100;
+    calibration[5][6] = 119;
+    calibration[6][6] = 139;
+    calibration[7][6] = 160;
+	calibration[8][6] = 180;
+    calibration[0][7] = 22;    	// real speed measured in mm/s
+    calibration[1][7] = 46;
+    calibration[2][7] = 65;
+    calibration[3][7] = 81;
+    calibration[4][7] = 96;
+    calibration[5][7] = 111;
+    calibration[6][7] = 125;
+    calibration[7][7] = 139;
+	calibration[8][7] = 153;
+
+    writeCalibrationToFlash();
+}
+
 void initCalibration() {
 
     unsigned int temp=0;
-    unsigned int i=0;
-
-	temp = eeprom_read_word((uint16_t*)CALIB_CHECK_ADDRESS);
+ 
+ 	temp = eeprom_read_word((uint16_t*)CALIB_CHECK_ADDRESS);
 
     if(temp==0xAA55) {   // valid odometry data saved in flash, read them
         readCalibrationFromFlash();
     } else {
-        for(i=0; i<CALIBRATION_SAMPLES; i++) {
-            calibration[i][0] = i+1;
-        }
-        // the following values are taken from a field test
-        // forward left, speed control enabled
-        calibration[0][0] = 20;		// measured speed with back EMF (adc 0..1023)
-        calibration[1][0] = 40;
-        calibration[2][0] = 59;
-        calibration[3][0] = 79;
-        calibration[4][0] = 100;
-        calibration[5][0] = 120;
-        calibration[6][0] = 139;
-        calibration[7][0] = 159;
-		calibration[8][0] = 180;
-        calibration[0][1] = 19;    	// real speed measured in mm/s
-        calibration[1][1] = 47;
-        calibration[2][1] = 72;
-        calibration[3][1] = 91;
-        calibration[4][1] = 109;
-        calibration[5][1] = 125;
-        calibration[6][1] = 143;
-        calibration[7][1] = 160;
-		calibration[8][1] = 174;
-        // forward right, speed control enabled
-        calibration[0][2] = 19;		// measured speed with back EMF (adc 0..1023)
-        calibration[1][2] = 39;
-        calibration[2][2] = 60;
-        calibration[3][2] = 80;
-        calibration[4][2] = 99;
-        calibration[5][2] = 119;
-        calibration[6][2] = 140;
-        calibration[7][2] = 160;
-		calibration[8][2] = 180;
-        calibration[0][3] = 23;    	// real speed measured in mm/s
-        calibration[1][3] = 46;
-        calibration[2][3] = 64;
-        calibration[3][3] = 81;
-        calibration[4][3] = 97;
-        calibration[5][3] = 112;
-        calibration[6][3] = 125;
-        calibration[7][3] = 139;
-		calibration[8][3] = 152;
-        // backward left, speed control enabled
-        calibration[0][4] = 20;		// measured speed with back EMF (adc 0..1023)
-        calibration[1][4] = 39;
-        calibration[2][4] = 60;
-        calibration[3][4] = 79;
-        calibration[4][4] = 99;
-        calibration[5][4] = 120;
-        calibration[6][4] = 140;
-        calibration[7][4] = 160;
-		calibration[8][4] = 179;
-        calibration[0][5] = 18;    	// real speed measured in mm/s
-        calibration[1][5] = 45;
-        calibration[2][5] = 68;
-        calibration[3][5] = 87;
-        calibration[4][5] = 105;
-        calibration[5][5] = 119;
-        calibration[6][5] = 137;
-        calibration[7][5] = 151;
-		calibration[8][5] = 168;
-        // backward right, speed control enabled
-        calibration[0][6] = 20;		// measured speed with back EMF (adc 0..1023)
-        calibration[1][6] = 39;
-        calibration[2][6] = 59;
-        calibration[3][6] = 80;
-        calibration[4][6] = 100;
-        calibration[5][6] = 119;
-        calibration[6][6] = 139;
-        calibration[7][6] = 160;
-		calibration[8][6] = 180;
-        calibration[0][7] = 22;    	// real speed measured in mm/s
-        calibration[1][7] = 46;
-        calibration[2][7] = 65;
-        calibration[3][7] = 81;
-        calibration[4][7] = 96;
-        calibration[5][7] = 111;
-        calibration[6][7] = 125;
-        calibration[7][7] = 139;
-		calibration[8][7] = 153;
-
-        writeCalibrationToFlash();
-
+		writeDefaultCalibration();		
     }
 
 }

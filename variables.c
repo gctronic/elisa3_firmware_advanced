@@ -162,11 +162,15 @@ unsigned char lineFound = 0;
 unsigned char outOfLine = 0;
 unsigned char chargeContact = 0;
 unsigned long int demoStartTime = 0;
+unsigned long int demoStartTime2 = 0;
 unsigned long int demoEndTime = 0;
 unsigned char currentOsccal;
 unsigned long long int speedStepCounter=0;
 unsigned char speedStep=4;
 unsigned char softAccEnabled = 0;
+unsigned char calibrationWritten = 0;
+unsigned char greenLedState = 0;
+unsigned char rgbLedState = 0;
 
 /**************************/
 /*** OBSTACLE AVOIDANCE ***/

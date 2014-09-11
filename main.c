@@ -549,22 +549,116 @@ int main(void) {
 					}
 					break;
 
-			case 9:	if(leftMotSteps <= 3000) {
-						setLeftSpeed(40);
-						setRightSpeed(40);
-					} else {
-						setLeftSpeed(0);
-						setRightSpeed(0);
+			case 9:	// write default calibration values
+					if(!calibrationWritten) {
+						calibrationWritten = 1;
+						writeDefaultCalibration();
 					}
 					break;
 
-			case 10:if(leftMotSteps <= 4000) {
-						setLeftSpeed(40);
-						setRightSpeed(40);
-					} else {
-						setLeftSpeed(0);
-						setRightSpeed(0);
+			case 10:// obstacle avoidance with random colors; 4 seconds motion and 10 seconds pause					
+					switch(demoState) {
+						case 0: // get first clock tick and start moving the robot with obstacle avoidance enabled
+							demoStartTime = getTime100MicroSec();
+							demoEndTime = getTime100MicroSec();							
+							demoStartTime2 = getTime100MicroSec();
+							enableObstacleAvoidance();
+							setLeftSpeed(20);
+							setRightSpeed(20);
+							demoState = 1;
+							break;
+						case 1: // motion					
+							if((getTime100MicroSec()-demoStartTime) >= (PAUSE_4_SEC)) {
+								setRightSpeed(0);
+								setLeftSpeed(0);								
+								demoStartTime = getTime100MicroSec();
+								demoState = 2;							
+							}
+							break;
+
+						case 2: // pause							
+							if((getTime100MicroSec()-demoStartTime) >= (PAUSE_10_SEC)) {
+								setRightSpeed(20);
+								setLeftSpeed(20);								
+								demoStartTime = getTime100MicroSec();								
+								demoState = 1;							
+							}
+							break;
+					}	
+					
+					switch(rgbLedState) {
+						case 0:							
+							pwm_red = 255;
+							pwm_green = 255;
+							pwm_blue = 255;
+							if((getTime100MicroSec()-demoEndTime) >= (PAUSE_100_MSEC)) {
+								setGreenLed(greenLedState, 0);
+								greenLedState++;
+								if(greenLedState > 7) {
+									greenLedState = 0;
+								}
+								setGreenLed(greenLedState, 1);
+								demoEndTime = getTime100MicroSec();											
+							}
+							if((getTime100MicroSec()-demoStartTime2) >= (PAUSE_2_SEC)) {
+								rgbLedState = 1;
+								demoStartTime2 = getTime100MicroSec();
+							}
+							updateRedLed(pwm_red);
+							updateGreenLed(pwm_green);
+							updateBlueLed(pwm_blue);
+							break;
+
+						case 1:		
+							turnOffGreenLeds();					
+							currRand = rand()% 128;	// 0 to 255 is the maximum, we use 0 to 127 to get brighter colors
+							if(currRand > 95) {
+								pwm_red = 255;
+							} else {
+								pwm_red = currRand;
+							}
+
+							currRand = rand()% 128;
+							if(currRand > 95) {
+								pwm_green = 255;
+							} else {
+								pwm_green = currRand;
+							}
+
+							currRand = rand()% 128;
+							if(currRand > 95) {
+								pwm_blue = 255;
+							} else {
+								pwm_blue = currRand;
+							}
+
+							currRand = rand()% 200;
+							if(currRand<50) {
+								pwm_red = 255;
+							} else if(currRand<100) {
+								pwm_green = 255;
+							} else if (currRand<150) {	
+								pwm_blue = 255;
+							}
+							updateRedLed(pwm_red);
+							updateGreenLed(pwm_green);
+							updateBlueLed(pwm_blue);
+							rgbLedState = 2;
+							break;
+
+						case 2:
+							if((getTime100MicroSec()-demoStartTime2) >= (PAUSE_500_MSEC)) {
+								rgbLedState = 0;
+								demoStartTime2 = getTime100MicroSec();
+								demoEndTime = getTime100MicroSec();
+								greenLedState = 0;
+								setGreenLed(greenLedState, 1);
+							}
+							break;
+		
 					}
+					
+
 					break;
 
 			case 11:if(leftMotSteps <= 5000) {
@@ -626,6 +720,8 @@ int main(void) {
 			setRightSpeed(0);
 			setLeftSpeed(0);
 			rgbState = 0;
+			calibrationWritten = 0;
+			demoState = 0;
 		}
 		prevSelector = currentSelector;
 

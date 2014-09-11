@@ -148,11 +148,15 @@ extern unsigned char lineFound;
 extern unsigned char outOfLine;
 extern unsigned char chargeContact;
 extern unsigned long int demoStartTime;
+extern unsigned long int demoStartTime2;
 extern unsigned long int demoEndTime;
 extern unsigned char currentOsccal;
 extern unsigned long long int speedStepCounter;
 extern unsigned char speedStep;
 extern unsigned char softAccEnabled;
+extern unsigned char calibrationWritten;
+extern unsigned char greenLedState;
+extern unsigned char rgbLedState;
 
 /**************************/
 /*** OBSTACLE AVOIDANCE ***/
