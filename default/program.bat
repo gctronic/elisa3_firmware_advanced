@@ -1,2 +1,2 @@
-avrdude -p m2560 -P COM225 -b 57600 -c stk500v2 -D -Uflash:w:Elisa3-avr-studio.hex:i -v
+avrdude -p m2560 -P COM39 -b 57600 -c stk500v2 -D -Uflash:w:Elisa3-avr-studio.hex:i -v
 pause

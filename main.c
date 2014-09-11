@@ -549,10 +549,27 @@ int main(void) {
 					}
 					break;
 
-			case 9:	// write default calibration values
-					if(!calibrationWritten) {
-						calibrationWritten = 1;
-						writeDefaultCalibration();
+			case 9:	// write default calibration values; wait 2 seconds before start writing the calibration values
+					// in eeprom in order to avoid rewriting the data involuntarily when moving the selector and passing 
+					// through selector position 9
+					switch(demoState) {
+						case 0:
+							demoStartTime = getTime100MicroSec();
+							demoState = 1;
+							break;
+
+						case 1:
+							if((getTime100MicroSec()-demoStartTime) >= (PAUSE_2_SEC)) {
+								demoState = 2;
+							}
+							break;						
+
+						case 2:
+							if(!calibrationWritten) {
+								calibrationWritten = 1;
+								writeDefaultCalibration();
+							}							
+							break;
 					}
 					break;
 
