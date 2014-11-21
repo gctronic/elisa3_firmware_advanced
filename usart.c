@@ -110,7 +110,12 @@ ISR(USART0_RX_vect) {
 
 	char receivedByte = UDR0;
 
-	if(currentSelector==15) {
+
+	if(currentSelector==14) {
+		if(receivedByte == 0xAA) {
+			irCommSendValues = 1;
+		}
+	} else if(currentSelector==15) {
 
 		if(receivedByte == '+') {
 			if(currentOsccal<255) {

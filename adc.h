@@ -23,6 +23,8 @@
 #include "variables.h"
 #include <avr\io.h>
 #include <avr\interrupt.h>
+#include <string.h>
+#include "utility.h"
 
 #ifdef __cplusplus
 extern "C" {

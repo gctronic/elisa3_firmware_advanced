@@ -307,6 +307,10 @@
 #define SKIP_SAMPLE 5						// currently no more needed
 #endif
 
+#ifndef SAVE_TO_PROX_IRCOMM
+#define SAVE_TO_PROX_IRCOMM 6
+#endif
+
 /***************/
 /*** SENSORS ***/
 /***************/
@@ -381,5 +385,49 @@
 #define CALIB_CHECK_ADDRESS 3946
 #define CALIB_DATA_START_ADDR 3948
 #define HYSTERESIS_THR 75
+
+/***************/
+/*** IR COMM ***/
+/***************/
+#define IRCOMM_MODE_SENSORS_SAMPLING 0
+#define IRCOMM_MODE_RECEIVE 1
+#define IRCOMM_MODE_TRANSMIT 2
+#define IRCOMM_SAMPLING_WINDOW 20
+
+// reception
+#define IRCOMM_RX_INIT_STATE 0
+#define IRCOMM_RX_IDLE_STATE 1
+#define IRCOMM_RX_MAX_SENSOR_STATE 2 
+#define IRCOMM_RX_DETECT_START_BIT_STATE 3
+#define IRCOMM_RX_SYNC_SIGNAL 4
+#define IRCOMM_RX_WAITING_BIT 5
+#define IRCOMM_RX_READ_BIT 6
+#define IRCOMM_RX_CHECK_CRC 7
+#define IRCOMM_RX_DO_NOTHING 8
+
+#define IRCOMM_DETECTION_AMPLITUDE_THR 20
+#define IRCOMM_START_BIT_MIN_SWITCH_COUNT 2
+
+// transmission
+#define IRCOMM_TX_INIT_STATE 0
+#define IRCOMM_TX_IDLE_STATE 1
+#define IRCOMM_TX_COMPUTE_TIMINGS 2 
+#define IRCOMM_TX_TRANSMIT_BIT 3
+#define IRCOMM_TX_DO_NOTHING 4
+#define IRCOMM_TX_PREPARE_TRANSMISSION 5
+
+#define IRCOMM_BIT0_SWITCH_COUNT 8
+#define IRCOMM_BIT1_SWITCH_COUNT 4
+#define IRCOMM_BIT0_DURATION 30	// based on adc isr of 104 us
+#define IRCOMM_BIT1_DURATOIN 60 // based on adc isr of 104 us
+
+// debug
+#define DEBUG_MAX_SENSOR_STATE 0
+#define DEBUG_ALL_SENSORS 0
+#define DEBUG_MAX_SENSOR 0
+#define DEBUG_START_BIT_STATE 0
+#define DEBUG_READ_BIT 0
+#define DEBUG_BYTE_RECEPTION 0
+#define DEBUG_BYTE_SEQUENCE 1
 
 
