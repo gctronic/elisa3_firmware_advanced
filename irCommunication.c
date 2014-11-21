@@ -183,20 +183,6 @@ void irCommTasks() {
 					
 				}	
 
-				
-				/*
-				updateBlueLed(0);
-				rfDebugCounter = 7;
-				irCommTempValue = irCommMinSensorValueCurr;
-				ackPayload[1] = irCommTempValue&0xFF;
-				ackPayload[2] = irCommTempValue>>8;
-				irCommTempValue = irCommMinSensorValueAdc;
-				ackPayload[3] = irCommTempValue&0xFF;
-				ackPayload[4] = irCommTempValue>>8;
-				rfDebugSendData();
-				rfDebugNextPacket();
-				updateBlueLed(255);
-				*/
 												
 				break;
 
@@ -299,65 +285,7 @@ void irCommTasks() {
 				}
 				irCommRxStartPeakDurationTemp[irCommRxStartPeakDurationIndexTemp] = irCommRxStartPeakDuration;
 				irCommRxStartPeakDurationIndexTemp++;
-				
-
-				/*
-				//updateBlueLed(0);
-				ackPayload[1] = 10; //irCommMaxSensorSignal[0]&0xFF;
-				ackPayload[2] = 0; //irCommMaxSensorSignal[0]>>8;
-				ackPayload[3] = 20; //irCommMaxSensorSignal[1]&0xFF;
-				ackPayload[4] = 0; //irCommMaxSensorSignal[1]>>8;
-				ackPayload[5] = 30; //irCommMaxSensorSignal[2]&0xFF;
-				ackPayload[6] = 0; //irCommMaxSensorSignal[2]>>8;
-				ackPayload[7] = 40; //irCommMaxSensorSignal[3]&0xFF;
-				ackPayload[8] = 0; //irCommMaxSensorSignal[3]>>8;
-				ackPayload[9] = 50; //irCommMaxSensorSignal[4]&0xFF;
-				ackPayload[10] = 0; //irCommMaxSensorSignal[4]>>8;
-				ackPayload[11] = 60; //irCommMaxSensorSignal[5]&0xFF;
-				ackPayload[12] = 0; //irCommMaxSensorSignal[5]>>8;
-				ackPayload[13] = 70; //irCommMaxSensorSignal[6]&0xFF;
-				ackPayload[14] = 0; //irCommMaxSensorSignal[6]>>8;
-				ackPayload[15] = 80; //irCommMaxSensorSignal[7]&0xFF;
-				rfDebugSendData();	
-				rfDebugSendData();			
-
-				ackPayload[1] = 0; //irCommMaxSensorSignal[7]>>8;
-				ackPayload[2] = 90; //irCommMaxSensorSignal[8]&0xFF;
-				ackPayload[3] = 0; //irCommMaxSensorSignal[8]>>8;
-				ackPayload[4] = 100; //irCommMaxSensorSignal[9]&0xFF;
-				ackPayload[5] = 0; //irCommMaxSensorSignal[9]>>8;
-				ackPayload[6] = 110; //irCommMaxSensorSignal[10]&0xFF;
-				ackPayload[7] = 0; //irCommMaxSensorSignal[10]>>8;
-				ackPayload[8] = 120; //irCommMaxSensorSignal[11]&0xFF;
-				ackPayload[9] = 0; //irCommMaxSensorSignal[11]>>8;
-				ackPayload[10] = 130; //irCommMaxSensorSignal[12]&0xFF;
-				ackPayload[11] = 0; //irCommMaxSensorSignal[12]>>8;
-				ackPayload[12] = 140; //irCommMaxSensorSignal[13]&0xFF;
-				ackPayload[13] = 0; //irCommMaxSensorSignal[13]>>8;
-				ackPayload[14] = 150; //irCommMaxSensorSignal[14]&0xFF;
-				ackPayload[15] = 0; //irCommMaxSensorSignal[14]>>8;
-				rfDebugSendData();
-				rfDebugSendData();
-
-				ackPayload[1] = 160; //irCommMaxSensorSignal[15]&0xFF;
-				ackPayload[2] = 0; //irCommMaxSensorSignal[15]>>8;
-				ackPayload[3] = 170; //irCommMaxSensorSignal[16]&0xFF;
-				ackPayload[4] = 0; //irCommMaxSensorSignal[16]>>8;
-				ackPayload[5] = 180; //irCommMaxSensorSignal[17]&0xFF;
-				ackPayload[6] = 0; //irCommMaxSensorSignal[17]>>8;
-				ackPayload[7] = 190; //irCommMaxSensorSignal[18]&0xFF;
-				ackPayload[8] = 0; //irCommMaxSensorSignal[18]>>8;
-				ackPayload[9] = 200; //irCommMaxSensorSignal[19]&0xFF;
-				ackPayload[10] = 0; //irCommMaxSensorSignal[19]>>8;
-				ackPayload[11] = irCommRxMaxSensor;
-				ackPayload[12] = irCommRxMaxDiff&0xFF;
-				ackPayload[13] = irCommRxMaxDiff>>8;
-				ackPayload[14] = irCommMaxSensorValueCurrTemp&0xFF;
-				ackPayload[15] = irCommMaxSensorValueCurrTemp>>8;
-				rfDebugSendData();
-				rfDebugSendData();
-				//updateBlueLed(255);
-				*/				
+					
 				
 				//if(irCommComputeShift != 0) {	// it should not be never 1 because the difference between min and max in the current signal
 					//updateRedLed(0);			// is at least IRCOMM_DETECTION_AMPLITUDE_THR (checked in the previous state)
@@ -716,115 +644,7 @@ void irCommTasks() {
 					updateRedLed(0);
 				}
 				irCommRxStartBitDetectedTemp[irCommRxStartBitDetectedIndexTemp] = irCommRxStartBitDetected;
-				irCommRxStartBitDetectedIndexTemp++;
-								
-
-				/*
-				// check if a start bit is detected											
-				//if(irCommSwitchCount >= IRCOMM_START_BIT_MIN_SWITCH_COUNT) {
-				if((irCommSwitchCount==2) && (irCommRxStartPeakDuration>=9) && (irCommRxStartPeakDuration<=11)) {
-					if(irCommRxPeakHighToLow == 0) {
-						irCommShiftCount = IRCOMM_SAMPLING_WINDOW/2 + irCommShiftCount;
-					} else {
-						if(irCommRxStartBitDetected == 1) {
-							irCommShiftCount = irCommShiftCount;
-						} else {
-							irCommShiftCount = IRCOMM_SAMPLING_WINDOW + irCommShiftCount;
-						}
-					}
-					//irCommShiftCountTemp = irCommShiftCount;
-					irCommRxPeakHighToLow = 0;
-					irCommRxStartBitDetected = 0;
-					irCommSecondBitSkipped = 0;
-					irCommShiftCounter = 0;
-					irCommRxBitCount = 0;	
-					irCommRxCrc = 0;	
-					irCommRxByte = 0;
-					irCommState = IRCOMM_RX_SYNC_SIGNAL;
-
-					irCommStateTemp[irCommStateIndexTemp] = irCommState;
-					irCommStateIndexTemp++;
-					irCommShiftCountFinalTemp[irCommShiftCountFinalIndexTemp] = irCommShiftCount;
-					irCommShiftCountFinalIndexTemp++;
-					irCommRxStartBitDetectedTemp[irCommRxStartBitDetectedIndexTemp] = irCommRxStartBitDetected;
-					irCommRxStartBitDetectedIndexTemp++;
-
-					irCommStateIndexTemp = 0;					
-					//memset(irCommStateTemp, 0xFF, 14);
-					irCommShiftCountFinalIndexTemp = 0;
-					//memset(irCommShiftCountFinalTemp, 0xFF, 2);
-					irCommRxStartBitDetectedIndexTemp = 0;
-					//memset(irCommRxStartBitDetectedTemp, 0xFF, 2);
-					irCommSwitchCountIndexTemp = 0;
-					//memset(irCommSwitchCountTemp, 0xFF, 2);
-					irCommMaxSensorSignalFiltIndexTemp = 0;
-					//memset(irCommMaxSensorSignalFiltTemp, 0xFF, 40);
-					irCommMaxSensorSignalIndexTemp = 0;
-					//memset(irCommMaxSensorSignalTemp, 0xFF, 40);
-					irCommProxMeanIndexTemp = 0;
-					//memset(irCommProxMeanTemp, 0xFF, 4);
-					irCommComputeShiftIndexTemp = 0;
-					//memset(irCommComputeShiftTemp, 0xFF, 2);
-					irCommShiftCountIndexTemp = 0;
-					//memset(irCommShiftCountTemp, 0xFF, 2);
-					irCommRxPeakHighToLowIndexTemp = 0;
-					//memset(irCommRxPeakHighToLowTemp, 0xFF, 2);
-					irCommRxStartPeakDurationIndexTemp = 0;
-					//memset(irCommRxStartPeakDurationTemp, 0xFF, 2);
-					irCommStartDiffIndexTemp = 0;
-
-					//irCommAdcRxState = 12;																										
-				} else {
-					if(irCommSwitchCount == 1) {
-						irCommRxStartBitDetected = 1;
-
-						irCommShiftCountFinalTemp[irCommShiftCountFinalIndexTemp] = irCommShiftCount;
-						irCommShiftCountFinalIndexTemp++;
-						irCommRxStartBitDetectedTemp[irCommRxStartBitDetectedIndexTemp] = irCommRxStartBitDetected;
-						irCommRxStartBitDetectedIndexTemp++;
-					} else {
-						irCommRxStartBitDetected = 0;
-
-						// reset debug vars
-						irCommStateIndexTemp = 0;					
-						//memset(irCommStateTemp, 0xFF, 14);
-						irCommShiftCountFinalIndexTemp = 0;
-						//memset(irCommShiftCountFinalTemp, 0xFF, 2);
-						irCommRxStartBitDetectedIndexTemp = 0;
-						//memset(irCommRxStartBitDetectedTemp, 0xFF, 2);
-						irCommSwitchCountIndexTemp = 0;
-						//memset(irCommSwitchCountTemp, 0xFF, 2);
-						irCommMaxSensorSignalFiltIndexTemp = 0;
-						//memset(irCommMaxSensorSignalFiltTemp, 0xFF, 40);
-						irCommMaxSensorSignalIndexTemp = 0;
-						//memset(irCommMaxSensorSignalTemp, 0xFF, 40);
-						irCommProxMeanIndexTemp = 0;
-						//memset(irCommProxMeanTemp, 0xFF, 4);
-						irCommComputeShiftIndexTemp = 0;
-						//memset(irCommComputeShiftTemp, 0xFF, 2);
-						irCommShiftCountIndexTemp = 0;
-						//memset(irCommShiftCountTemp, 0xFF, 2);
-						irCommRxPeakHighToLowIndexTemp = 0;
-						//memset(irCommRxPeakHighToLowTemp, 0xFF, 2);
-						irCommRxStartPeakDurationIndexTemp = 0;
-						//memset(irCommRxStartPeakDurationTemp, 0xFF, 2);
-						irCommStartDiffIndexTemp = 0;
-						//memset(irCommStartDiffTemp, 0xFF, 4);
-
-						irCommState = IRCOMM_RX_DEBUG;
-						irCommAdcRxState = 12;
-						updateRedLed(0);
-
-					}
-					if(irCommEnabled == IRCOMM_MODE_RECEIVE) {
-						currentProx = 0;
-						adcSaveDataTo = SKIP_SAMPLE;
-						adcSamplingState = 0;
-						irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
-					}
-					irCommState = IRCOMM_RX_IDLE_STATE;										
-				}				
-				*/				
+				irCommRxStartBitDetectedIndexTemp++;			
 
 				/*
 				updateBlueLed(0);
@@ -862,20 +682,6 @@ void irCommTasks() {
 					usart0Transmit(irCommState,1);					
 				}
 				updateBlueLed(255);
-				*/
-
-				/*
-				ackPayload[1] = irCommMinSensorValueCurrTemp&0xFF;
-				ackPayload[2] = irCommMinSensorValueCurrTemp>>8;
-				ackPayload[3] = irCommShiftCount;
-				ackPayload[4] = irCommTempValue&0xFF;
-				ackPayload[5] = irCommTempValue>>8;
-				ackPayload[6] = irCommRxStartPeakDuration;
-				ackPayload[7] = irCommRxStartBitDetected;
-				ackPayload[8] = irCommState;
-				rfDebugSendData();
-				rfDebugSendData();
-				rfDebugNextPacket();
 				*/
 
 				break;

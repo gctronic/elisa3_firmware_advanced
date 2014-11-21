@@ -737,7 +737,6 @@ int main(void) {
 				switch(demoState) {
 					case 0:
 						irCommInit(IRCOMM_MODE_RECEIVE);
-						rfEnableDebugMode();
 						//enableObstacleAvoidance();
 						//setLeftSpeed(25);
 						//setRightSpeed(25);
