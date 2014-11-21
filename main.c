@@ -706,13 +706,8 @@ int main(void) {
 						demoState = 1;
 						break;
 
-					case 1:
-						irCommSendData(irCommRxByteExpected, 0x01);
-						// send commands to turn on green leds
-						irCommRxByteExpected++;
-						if(irCommRxByteExpected==8) {
-							irCommRxByteExpected=0;
-						}
+					case 1:						
+						irCommSendData(irCommRxByteExpected, 0x01);												
 						demoState = 2;
 						break;
 
@@ -720,6 +715,19 @@ int main(void) {
 						irCommTasks();
 						if(irCommDataSent()==1) {
 							demoState = 1;
+							// send commands to turn on green leds
+							//irCommRxByteExpected = 0;
+							//turnOffGreenLeds();
+							//setGreenLed(irCommRxByteExpected, 1);						
+							//irCommRxByteExpected++;
+							//if(irCommRxByteExpected==8) {
+							//	irCommRxByteExpected=0;
+							//}
+							if(irCommRxByteExpected<255) {
+								irCommRxByteExpected++;
+							} else {
+								irCommRxByteExpected = 0;
+							}
 						}
 						break;
 				}
@@ -728,7 +736,8 @@ int main(void) {
 			case 14: // IR comm receiver
 				switch(demoState) {
 					case 0:
-						irCommInit(IRCOMM_MODE_RECEIVE_ONLY);
+						irCommInit(IRCOMM_MODE_RECEIVE);
+						rfEnableDebugMode();
 						//enableObstacleAvoidance();
 						//setLeftSpeed(25);
 						//setRightSpeed(25);
@@ -738,7 +747,20 @@ int main(void) {
 					case 1:
 						irCommTasks();
 						if(irCommDataAvailable()==1) {
+							i = irCommReadData();
+							//turnOffGreenLeds();
+							//setGreenLed(currRand, 1);
+							//currRand++;
+							//if(currRand==8) {
+							//	currRand=0;
+							//}
+
+							/*
 							irCommRxByteExpected = irCommReadData();
+							turnOffGreenLeds();
+							setGreenLed(irCommRxByteExpected, 1);
+							*/
+							/*
 							i = irCommReceivingSensor();
 							turnOffGreenLeds();
 							setGreenLed(i, 1);
@@ -786,6 +808,7 @@ int main(void) {
 								default:
 									break;
 							}
+							*/
 						}
 						break;
 				}									

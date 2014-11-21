@@ -264,15 +264,15 @@ ISR(ADC_vect) {
 								adcSamplingState = 0;
 								irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
 							}
+							PORTA = 0x00;
 						} else {
 							irCommState = IRCOMM_TX_COMPUTE_TIMINGS;
 						}
 						irCommAdcTxState = IRCOMM_TX_ADC_WAIT_PREPARATION;
 						if((irCommTxBitCount==12) && (irCommEnabled==IRCOMM_MODE_TRANSMIT_ONLY)) {
 							irCommAdcTxState = IRCOMM_TX_ADC_IDLE;
-							updateBlueLed(255);
-						}
-						PORTA = 0x00;
+							//updateBlueLed(255);
+						}						
 						adcSaveDataTo = SKIP_SAMPLE;
 						break;
 					}
@@ -312,15 +312,15 @@ ISR(ADC_vect) {
 								adcSamplingState = 0;
 								irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
 							}
+							PORTA = 0x00;
 						} else {
 							irCommState = IRCOMM_TX_COMPUTE_TIMINGS;
 						}
 						irCommAdcTxState = IRCOMM_TX_ADC_WAIT_PREPARATION;
 						if((irCommTxBitCount==12) && (irCommEnabled==IRCOMM_MODE_TRANSMIT_ONLY)) {
 							irCommAdcTxState = IRCOMM_TX_ADC_IDLE;
-							updateBlueLed(255);
+							//updateBlueLed(255);
 						}
-						PORTA = 0x00;
 						adcSaveDataTo = SKIP_SAMPLE;
 						break;
 					}
@@ -494,6 +494,15 @@ ISR(ADC_vect) {
 						irCommState = IRCOMM_RX_READ_BIT;
 					}
 				}
+				/*
+				if(irCommTickCounter==0) {
+					irCommTickCounter = 1;
+					updateBlueLed(255);
+				} else {
+					irCommTickCounter = 0;
+					updateBlueLed(0);
+				}
+				*/
 				irCommAdcRxState = 11;
 				break;
 
@@ -507,6 +516,10 @@ ISR(ADC_vect) {
 					adcSaveDataTo = SKIP_SAMPLE;
 				}
 				irCommAdcRxState = 0;
+				break;
+
+			case 12:
+				adcSaveDataTo = SKIP_SAMPLE;
 				break;
 
 		}
