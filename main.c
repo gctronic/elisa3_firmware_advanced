@@ -9,7 +9,7 @@
 #include "nRF24L01.h"
 #include "behaviors.h"
 #include "sensors.h"
-
+#include "irCommunication.h"
 
 int main(void) {
 
@@ -697,326 +697,98 @@ int main(void) {
 					break;
 
 			case 13: // IR comm transmitter
+				switch(demoState) {
+					case 0:
+						irCommInit(IRCOMM_MODE_TRANSMIT_ONLY);
+						//enableObstacleAvoidance();
+						//setLeftSpeed(25);
+						//setRightSpeed(25);
+						demoState = 1;
+						break;
 
+					case 1:
+						irCommSendData(irCommRxByteExpected, 0x01);
+						// send commands to turn on green leds
+						irCommRxByteExpected++;
+						if(irCommRxByteExpected==8) {
+							irCommRxByteExpected=0;
+						}
+						demoState = 2;
+						break;
+
+					case 2:
+						irCommTasks();
+						if(irCommDataSent()==1) {
+							demoState = 1;
+						}
+						break;
+				}
 				break;
 			
 			case 14: // IR comm receiver
-				switch(irCommState) {
-					case IRCOMM_RX_INIT_STATE:
-						turnOffGreenLeds();
-						GREEN_LED0_ON;
-						irCommProxValuesAdc = irCommProxValuesBuff1;
-						irCommProxValuesCurr = irCommProxValuesBuff2;
-						irCommMaxSensorValueAdc = irCommMaxSensorValueBuff1;
-						irCommMaxSensorValueCurr = irCommMaxSensorValueBuff2;
-						irCommMinSensorValueAdc = irCommMinSensorValueBuff1;
-						irCommMinSensorValueCurr = irCommMinSensorValueBuff2;
-						memset(irCommMaxSensorValueAdc, 0x00, 16);
-						memset(irCommMinSensorValueAdc, 0xFF, 16);
-						irCommEnabled = IRCOMM_MODE_RECEIVE;
-						irCommState = IRCOMM_RX_IDLE_STATE;
+				switch(demoState) {
+					case 0:
+						irCommInit(IRCOMM_MODE_RECEIVE_ONLY);
+						//enableObstacleAvoidance();
+						//setLeftSpeed(25);
+						//setRightSpeed(25);
+						demoState = 1;
 						break;
 
-					case IRCOMM_RX_IDLE_STATE:
-						GREEN_LED1_OFF;							
-						GREEN_LED2_OFF;
-						GREEN_LED3_OFF;
-						GREEN_LED4_OFF;
-						GREEN_LED5_OFF;
-						GREEN_LED5_OFF;
-						GREEN_LED7_OFF;
-						GREEN_LED1_ON;					
+					case 1:
+						irCommTasks();
+						if(irCommDataAvailable()==1) {
+							irCommRxByteExpected = irCommReadData();
+							i = irCommReceivingSensor();
+							turnOffGreenLeds();
+							setGreenLed(i, 1);
+							switch(irCommRxByteExpected) {
+								case 0: 
+									updateRedLed(255);
+									updateGreenLed(255);
+									updateBlueLed(255);
+									break;
+								case 1: 
+									updateRedLed(0);
+									updateGreenLed(255);
+									updateBlueLed(255);
+									break;	
+								case 2: 
+									updateRedLed(255);
+									updateGreenLed(0);
+									updateBlueLed(255);
+									break;
+								case 3: 
+									updateRedLed(255);
+									updateGreenLed(255);
+									updateBlueLed(0);
+									break;
+								case 4: 
+									updateRedLed(0);
+									updateGreenLed(0);
+									updateBlueLed(255);
+									break;
+								case 5: 
+									updateRedLed(0);
+									updateGreenLed(255);
+									updateBlueLed(0);
+									break;
+								case 6: 
+									updateRedLed(255);
+									updateGreenLed(0);
+									updateBlueLed(0);
+									break;
+								case 7: 
+									updateRedLed(0);
+									updateGreenLed(0);
+									updateBlueLed(0);
+									break;
+								default:
+									break;
+							}
+						}
 						break;
-
-					case IRCOMM_RX_MAX_SENSOR_STATE:						
-						//updateBlueLed(0);
-						//turnOffGreenLeds();
-						GREEN_LED2_ON;
-						irCommMaxDiff = 0;
-    					irCommMaxSensor = -1;
-						for(i=0; i<8; i++) {
-							if ((signed int)(irCommMaxSensorValueCurr[i]-irCommMinSensorValueCurr[i]) > irCommMaxDiff) {
-		    					irCommMaxDiff = irCommMaxSensorValueCurr[i]-irCommMinSensorValueCurr[i];
-		    					irCommMaxSensor = i;
-							}
-						}
-						if(irCommMaxDiff >= IRCOMM_DETECTION_AMPLITUDE_THR) {
-							irCommState = IRCOMM_RX_DETECT_START_BIT_STATE;
-						} else {
-							irCommState = IRCOMM_RX_IDLE_STATE;
-							if(DEBUG_ALL_SENSORS) {
-								adcSamplingState = 11;	// restart sampling
-							} else if(DEBUG_START_BIT_STATE) {
-								adcSamplingState = 11;	// restart sampling
-							}
-						}						
-
-						// transmit debug information
-						if(DEBUG_MAX_SENSOR_STATE) {
-							irCommSendValues = 0;						
-							while(irCommSendValues==0);	// wait for the start from the uart (computer)
-							usart0Transmit(0xFF, 1);
-							usart0Transmit(irCommMaxSensor,1);
-							usart0Transmit(irCommMaxDiff&0xFF,1);
-							usart0Transmit(irCommMaxDiff>>8,1);
-							if(DEBUG_ALL_SENSORS) {
-								for(i=0; i<8*IRCOMM_SAMPLING_WINDOW; i++) {
-									usart0Transmit(irCommProxValuesCurr[i]&0xFF,1);
-									usart0Transmit(irCommProxValuesCurr[i]>>8,1);
-								}
-								adcSamplingState = 11;	// restart sampling
-							} else if(DEBUG_MAX_SENSOR) {
-								for(i=0; i<IRCOMM_SAMPLING_WINDOW; i++) {
-									irCommTempValue = irCommProxValuesCurr[irCommMaxSensor+i*8];
-									usart0Transmit(irCommTempValue&0xFF,1);
-									usart0Transmit(irCommTempValue>>8,1);
-								}
-							}
-						}	
-
-						//updateBlueLed(255);			
-
-						break;
-
-					case IRCOMM_RX_DETECT_START_BIT_STATE:
-						//updateBlueLed(0);
-						//turnOffGreenLeds();
-						GREEN_LED3_ON;
-						// extract signal from the sensor with higher amplitude and compute the signal mean
-						irCommProxSum = 0;
-						irCommTempMin = 1024;
-						irCommTempMax = 0;
-						irCommShiftCount = 0;
-						irCommComputeShift = 1;
-						for(i=0; i<IRCOMM_SAMPLING_WINDOW; i++) {
-							irCommMaxSensorSignal[i] = irCommProxValuesCurr[irCommMaxSensor+i*8];
-							irCommProxSum += irCommMaxSensorSignal[i];
-							if(irCommComputeShift == 1) {
-								irCommShiftCount++;								
-								if(irCommTempMin > irCommMaxSensorSignal[i]) {
-									irCommTempMin = irCommMaxSensorSignal[i];
-								}
-								if(irCommTempMax < irCommMaxSensorSignal[i]) {
-									irCommTempMax = irCommMaxSensorSignal[i];
-								}
-								if((irCommTempMax - irCommTempMin) >= IRCOMM_DETECTION_AMPLITUDE_THR) {
-									irCommComputeShift = 0;	
-								}
-							}
-
-						}
-						irCommProxMean = (int)(irCommProxSum / IRCOMM_SAMPLING_WINDOW);
-
-						// substract mean from signal
-						for(i=0; i<IRCOMM_SAMPLING_WINDOW; i++) {
-							irCommMaxSensorSignal[i] -= irCommProxMean;
-						}
-						
-						// start counting number of switch around mean signal
-						if(irCommMaxSensorSignal[0] > 0) {
-							irCommSignalState = 1;
-						} else {
-							irCommSignalState = -1;
-						}
-						irCommSwitchCount = 0;
-						for(i=1; i<IRCOMM_SAMPLING_WINDOW; i++) {
-							if(irCommMaxSensorSignal[i] > 0) {
-								if(irCommSignalState < 0) {
-									irCommSignalState = 1;
-									irCommSwitchCount++;
-								}
-							} else {
-								if(irCommSignalState > 0) {
-									irCommSignalState = -1;
-									irCommSwitchCount++;
-								}
-							}
-						}
-						
-						// transmit debug information
-						if(DEBUG_START_BIT_STATE) {
-							irCommSendValues = 0;						
-							while(irCommSendValues==0);	// wait for the start from the uart (computer)
-							usart0Transmit(0xFF, 1);
-							usart0Transmit(irCommMaxSensor,1);
-							usart0Transmit(irCommMaxDiff&0xFF,1);
-							usart0Transmit(irCommMaxDiff>>8,1);
-							usart0Transmit(irCommProxMean&0xFF,1);
-							usart0Transmit(irCommProxMean>>8,1);
-							usart0Transmit(irCommSwitchCount,1);
-							for(i=0; i<IRCOMM_SAMPLING_WINDOW; i++) {
-								irCommTempValue = irCommMaxSensorSignal[i];
-								usart0Transmit(irCommTempValue&0xFF,1);
-								usart0Transmit(irCommTempValue>>8,1);
-							}
-							adcSamplingState = 11;	// restart sampling
-						}
-											
-						if(irCommSwitchCount >= IRCOMM_START_BIT_MIN_SWITCH_COUNT) {
-							irCommState = IRCOMM_RX_SYNC_SIGNAL;
-							irCommRxBitCount = 0;	
-							irCommCrc = 0;	
-							irCommRxByte = 0;											
-							//updateBlueLed(0);
-						} else {
-							irCommState = IRCOMM_RX_IDLE_STATE;
-						}
-						//updateBlueLed(255);
-						break;
-				
-					case IRCOMM_RX_SYNC_SIGNAL:
-						//turnOffGreenLeds();
-						GREEN_LED4_ON;
-						break;
-
-					case IRCOMM_RX_WAITING_BIT:
-						//updateBlueLed(255);
-						//turnOffGreenLeds();
-						GREEN_LED5_ON;
-						break;
-
-					case IRCOMM_RX_READ_BIT:
-						//updateBlueLed(0);
-						//turnOffGreenLeds();
-						GREEN_LED6_ON;
-						// extract signal from the sensor with higher amplitude and compute the signal mean
-						irCommProxSum = 0;
-						irCommTempMin = 1024;
-						irCommTempMax = 0;
-						for(i=0; i<IRCOMM_SAMPLING_WINDOW; i++) {
-							irCommMaxSensorSignal[i] = irCommProxValuesCurr[irCommMaxSensor+i*8];
-							irCommProxSum += irCommMaxSensorSignal[i];
-
-						}
-						irCommProxMean = (int)(irCommProxSum / IRCOMM_SAMPLING_WINDOW);
-
-						// substract mean from signal
-						for(i=0; i<IRCOMM_SAMPLING_WINDOW; i++) {
-							irCommMaxSensorSignal[i] -= irCommProxMean;
-						}
-						
-						// start counting number of switch around mean signal
-						if(irCommMaxSensorSignal[0] > 0) {
-							irCommSignalState = 1;
-						} else {
-							irCommSignalState = -1;
-						}
-						irCommSwitchCount = 0;
-						for(i=1; i<IRCOMM_SAMPLING_WINDOW; i++) {
-							if(irCommMaxSensorSignal[i] > 0) {
-								if(irCommSignalState < 0) {
-									irCommSignalState = 1;
-									irCommSwitchCount++;
-								}
-							} else {
-								if(irCommSignalState > 0) {
-									irCommSignalState = -1;
-									irCommSwitchCount++;
-								}
-							}
-						}
-						
-						// transmit debug information
-						if(DEBUG_READ_BIT) {
-							irCommSendValues = 0;						
-							while(irCommSendValues==0);	// wait for the start from the uart (computer)
-							usart0Transmit(0xFF, 1);
-							usart0Transmit(irCommMaxSensor,1);
-							usart0Transmit(irCommMaxDiff&0xFF,1);
-							usart0Transmit(irCommMaxDiff>>8,1);
-							usart0Transmit(irCommProxMean&0xFF,1);
-							usart0Transmit(irCommProxMean>>8,1);
-							usart0Transmit(irCommSwitchCount,1);
-							for(i=0; i<IRCOMM_SAMPLING_WINDOW; i++) {
-								irCommTempValue = irCommMaxSensorSignal[i];
-								usart0Transmit(irCommTempValue&0xFF,1);
-								usart0Transmit(irCommTempValue>>8,1);
-							}
-						}
-
-						if(irCommSwitchCount >= (IRCOMM_BIT0_SWITCH_COUNT-2)) {
-							irCommRxBitReceived[irCommRxBitCount] = 0;
-							if(irCommRxBitCount< 8) {	// do not consider the crc
-								irCommRxByte = irCommRxByte<<1;
-							}
-						} else if(irCommSwitchCount >= (IRCOMM_BIT1_SWITCH_COUNT-1)) {
-							irCommRxBitReceived[irCommRxBitCount] = 1;
-							if(irCommRxBitCount<8) {	// do not consider the crc
-								irCommCrc++;
-								irCommRxByte = irCommRxByte<<1;
-								irCommRxByte += 1;
-							}
-						} else {	// error...no significant signal perceived
-							irCommRxBitReceived[irCommRxBitCount] = 2;
-						}
-						irCommRxBitCount++;
-						if(irCommRxBitCount == 10) {
-							irCommState = IRCOMM_RX_CHECK_CRC;
-							//adcSamplingState = 12;
-						} else {
-							irCommState = IRCOMM_RX_WAITING_BIT;
-						}
-						//updateBlueLed(255);						
-						break;
-
-					case IRCOMM_RX_CHECK_CRC:
-						irCommRxCrcError = (irCommCrc + (irCommRxBitReceived[8]<<1) + irCommRxBitReceived[9])&0x03;
-						if((irCommRxByte!=irCommRxByteExpected) || (irCommRxCrcError!=0)) {
-							if(irCommRxByte!=irCommRxByteExpected) {
-								updateGreenLed(0);
-							} else {
-								updateRedLed(0);
-							}
-							irCommState = IRCOMM_RX_DO_NOTHING;
-							adcSamplingState = 12;
-							if(DEBUG_BYTE_SEQUENCE) {
-								irCommSendValues = 0;						
-								while(irCommSendValues==0);	// wait for the start from the uart (computer)
-								usart0Transmit(0xFF, 1);
-								usart0Transmit(irCommRxCrcError,1);
-								usart0Transmit(irCommRxByte,1);
-								usart0Transmit(irCommRxByteExpected,1);
-								usart0Transmit(irCommRxSequenceCount,1);
-								for(i=0; i<10; i++) {
-									usart0Transmit(irCommRxBitReceived[i],1);
-								}
-								usart0Transmit(irCommMaxSensor,1);
-								usart0Transmit(irCommSwitchCount,1);
-								for(i=0; i<IRCOMM_SAMPLING_WINDOW; i++) {
-									irCommTempValue = irCommMaxSensorSignal[i];
-									usart0Transmit(irCommTempValue&0xFF,1);
-									usart0Transmit(irCommTempValue>>8,1);
-								}
-							}
-							break;
-						}
-						if(irCommRxByteExpected == 255) {
-							irCommRxByteExpected = 0;
-							irCommRxSequenceCount++;
-						} else {
-							irCommRxByteExpected++;
-						}
-						irCommState = IRCOMM_RX_IDLE_STATE;
-						irCommRxBitCount = 0;	
-						irCommCrc = 0;	
-						irCommRxByte = 0;
-						if(DEBUG_BYTE_RECEPTION) {
-							irCommSendValues = 0;						
-							while(irCommSendValues==0);	// wait for the start from the uart (computer)
-							usart0Transmit(0xFF, 1);
-							usart0Transmit(irCommRxCrcError,1);
-							usart0Transmit(irCommRxByte,1);
-							for(i=0; i<10; i++) {
-								usart0Transmit(irCommRxBitReceived[i],1);
-							}
-						}						
-						break;
-					
-					case IRCOMM_RX_DO_NOTHING:
-						GREEN_LED7_ON;
-						break;
-				}				
-					
+				}									
 				break;
 
 			case 15:// clock calibration

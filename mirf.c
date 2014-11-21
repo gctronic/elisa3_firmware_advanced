@@ -495,20 +495,20 @@ void handleRFCommands() {
 
 		switch(packetId) {
 			case 3:
-				ackPayload[1] = proximityResult[0]&0xFF;
-				ackPayload[2] = proximityResult[0]>>8;
-				ackPayload[3] = proximityResult[1]&0xFF;
-				ackPayload[4] = proximityResult[1]>>8;
-				ackPayload[5] = proximityResult[2]&0xFF;
-				ackPayload[6] = proximityResult[2]>>8;
-				ackPayload[7] = proximityResult[3]&0xFF;
-				ackPayload[8] = proximityResult[3]>>8;
-				ackPayload[9] = proximityResult[5]&0xFF;
-				ackPayload[10] = proximityResult[5]>>8;
-				ackPayload[11] = proximityResult[6]&0xFF;
-				ackPayload[12] = proximityResult[6]>>8;
-				ackPayload[13] = proximityResult[7]&0xFF;
-				ackPayload[14] = proximityResult[7]>>8;
+				ackPayload[1] = irCommRxMaxDiffTemp&0xFF; //proximityResult[0]&0xFF;
+				ackPayload[2] = irCommRxMaxDiffTemp>>8; //proximityResult[0]>>8;
+				ackPayload[3] = irCommTempValue&0xFF; //proximityResult[1]&0xFF;
+				ackPayload[4] = irCommTempValue>>8; //proximityResult[1]>>8;
+				ackPayload[5] = irCommComputeShift&0xFF; //proximityResult[2]&0xFF;
+				ackPayload[6] = irCommComputeShift>>8; //proximityResult[2]>>8;
+				ackPayload[7] = irCommState&0xFF; //proximityResult[3]&0xFF;
+				ackPayload[8] = irCommState>>8; //proximityResult[3]>>8;
+				ackPayload[9] = irCommTickCounter&0xFF; //proximityResult[5]&0xFF;
+				ackPayload[10] = irCommTickCounter>>8; //proximityResult[5]>>8;
+				ackPayload[11] = irCommMaxSensorValueCurrTemp&0xFF; //proximityResult[6]&0xFF;
+				ackPayload[12] = irCommMaxSensorValueCurrTemp>>8; //proximityResult[6]>>8;
+				ackPayload[13] = irCommMinSensorValueCurrTemp&0xFF; //proximityResult[7]&0xFF;
+				ackPayload[14] = irCommMinSensorValueCurrTemp>>8; //proximityResult[7]>>8;
 				#ifdef HW_REV_3_1
 					ackPayload[15] = CHARGE_ON | (BUTTON0 << 1) | (CHARGE_STAT << 2);
 				#else
@@ -520,56 +520,56 @@ void handleRFCommands() {
 			case 4:
 				ackPayload[1] = proximityResult[4]&0xFF;
 				ackPayload[2] = proximityResult[4]>>8;
-				ackPayload[3] = proximityResult[8]&0xFF;
-				ackPayload[4] = proximityResult[8]>>8;
-				ackPayload[5] = proximityResult[9]&0xFF;
-				ackPayload[6] = proximityResult[9]>>8;
-				ackPayload[7] = proximityResult[10]&0xFF;
-				ackPayload[8] = proximityResult[10]>>8;
-				ackPayload[9] = proximityResult[11]&0xFF;
-				ackPayload[10] = proximityResult[11]>>8;
+				ackPayload[3] = irCommMaxSensorSignalTemp[12]&0xFF; //proximityResult[8]&0xFF;
+				ackPayload[4] = irCommMaxSensorSignalTemp[12]>>8; //proximityResult[8]>>8;
+				ackPayload[5] = irCommMaxSensorSignalTemp[13]&0xFF; //proximityResult[9]&0xFF;
+				ackPayload[6] = irCommMaxSensorSignalTemp[13]>>8; //proximityResult[9]>>8;
+				ackPayload[7] = irCommMaxSensorSignalTemp[14]&0xFF; //proximityResult[10]&0xFF;
+				ackPayload[8] = irCommMaxSensorSignalTemp[14]>>8; //proximityResult[10]>>8;
+				ackPayload[9] = irCommMaxSensorSignalTemp[15]&0xFF; //proximityResult[11]&0xFF;
+				ackPayload[10] = irCommMaxSensorSignalTemp[15]>>8; //proximityResult[11]>>8;
 				ackPayload[11] = accX&0xFF;
 				ackPayload[12] = accX>>8;
 				ackPayload[13] = accY&0xFF;
 				ackPayload[14] = accY>>8;
-				ackPayload[15] = irCommand;
+				ackPayload[15] = irCommShiftCountTemp; //irCommand;
 				packetId = 5;
 				break;
 
 			case 5:
-				ackPayload[1] = proximityValue[0]&0xFF;
-				ackPayload[2] = proximityValue[0]>>8;
-				ackPayload[3] = proximityValue[2]&0xFF;
-				ackPayload[4] = proximityValue[2]>>8;
-				ackPayload[5] = proximityValue[4]&0xFF;
-				ackPayload[6] = proximityValue[4]>>8;
-				ackPayload[7] = proximityValue[6]&0xFF;
-				ackPayload[8] = proximityValue[6]>>8;
-				ackPayload[9] = proximityValue[10]&0xFF;
-				ackPayload[10] = proximityValue[10]>>8;
-				ackPayload[11] = proximityValue[12]&0xFF;
-				ackPayload[12] = proximityValue[12]>>8;
-				ackPayload[13] = proximityValue[14]&0xFF;
-				ackPayload[14] = proximityValue[14]>>8;
+				ackPayload[1] = irCommMaxSensorSignalTemp[0]&0xFF; //proximityValue[0]&0xFF;
+				ackPayload[2] = irCommMaxSensorSignalTemp[0]>>8; //proximityValue[0]>>8;
+				ackPayload[3] = irCommMaxSensorSignalTemp[1]&0xFF; //proximityValue[2]&0xFF;
+				ackPayload[4] = irCommMaxSensorSignalTemp[1]>>8; //proximityValue[2]>>8;
+				ackPayload[5] = irCommMaxSensorSignalTemp[2]&0xFF; //proximityValue[4]&0xFF;
+				ackPayload[6] = irCommMaxSensorSignalTemp[2]>>8; //proximityValue[4]>>8;
+				ackPayload[7] = irCommMaxSensorSignalTemp[3]&0xFF; //proximityValue[6]&0xFF;
+				ackPayload[8] = irCommMaxSensorSignalTemp[3]>>8; //proximityValue[6]>>8;
+				ackPayload[9] = irCommMaxSensorSignalTemp[5]&0xFF; //proximityValue[10]&0xFF;
+				ackPayload[10] = irCommMaxSensorSignalTemp[5]>>8; //proximityValue[10]>>8;
+				ackPayload[11] = irCommMaxSensorSignalTemp[6]&0xFF; //proximityValue[12]&0xFF;
+				ackPayload[12] = irCommMaxSensorSignalTemp[6]>>8; //proximityValue[12]>>8;
+				ackPayload[13] = irCommMaxSensorSignalTemp[7]&0xFF; //proximityValue[14]&0xFF;
+				ackPayload[14] = irCommMaxSensorSignalTemp[7]>>8; //proximityValue[14]>>8;
 				ackPayload[15] = currentSelector;
 				packetId = 6;
 				break;
 
 			case 6:
-				ackPayload[1] = proximityValue[8]&0xFF;
-				ackPayload[2] = proximityValue[8]>>8;
-				ackPayload[3] = proximityValue[16]&0xFF;
-				ackPayload[4] = proximityValue[16]>>8;
-				ackPayload[5] = proximityValue[18]&0xFF;
-				ackPayload[6] = proximityValue[18]>>8;
-				ackPayload[7] = proximityValue[20]&0xFF;
-				ackPayload[8] = proximityValue[20]>>8;
-				ackPayload[9] = proximityValue[22]&0xFF;
-				ackPayload[10] = proximityValue[22]>>8;
+				ackPayload[1] = irCommMaxSensorSignalTemp[4]&0xFF; //proximityValue[8]&0xFF;
+				ackPayload[2] = irCommMaxSensorSignalTemp[4]>>8; //proximityValue[8]>>8;
+				ackPayload[3] = irCommMaxSensorSignalTemp[8]&0xFF; //proximityValue[16]&0xFF;
+				ackPayload[4] = irCommMaxSensorSignalTemp[8]>>8; //proximityValue[16]>>8;
+				ackPayload[5] = irCommMaxSensorSignalTemp[9]&0xFF; //proximityValue[18]&0xFF;
+				ackPayload[6] = irCommMaxSensorSignalTemp[9]>>8; //proximityValue[18]>>8;
+				ackPayload[7] = irCommMaxSensorSignalTemp[10]&0xFF; //proximityValue[20]&0xFF;
+				ackPayload[8] = irCommMaxSensorSignalTemp[10]>>8; //proximityValue[20]>>8;
+				ackPayload[9] = irCommMaxSensorSignalTemp[11]&0xFF; //proximityValue[22]&0xFF;
+				ackPayload[10] = irCommMaxSensorSignalTemp[11]>>8; //proximityValue[22]>>8;
 				ackPayload[11] = accZ&0xFF;
 				ackPayload[12] = accZ>>8;	
-				ackPayload[13] = batteryLevel&0xFF;
-				ackPayload[14] = batteryLevel>>8;
+				ackPayload[13] = irCommMaxSensorSignalTemp[19]&0xFF; //batteryLevel&0xFF;
+				ackPayload[14] = irCommMaxSensorSignalTemp[19]>>8; //batteryLevel>>8;
 				ackPayload[15] = 0;
 				packetId = 7;
 				break;
@@ -585,12 +585,12 @@ void handleRFCommands() {
 				ackPayload[7] = ((signed long int)rightMotSteps)>>16;
 				ackPayload[8] = ((signed long int)rightMotSteps)>>24;
 				lastTheta = theta;
-				ackPayload[9] = ((signed int)(lastTheta*573.0))&0xFF;	// radians to degrees => 573 = 1800/PI
-				ackPayload[10] = ((signed int)(lastTheta*573.0))>>8;				
-				ackPayload[11] = ((unsigned int)xPos)&0xFF;
-				ackPayload[12] = ((unsigned int)xPos)>>8;
-				ackPayload[13] = ((unsigned int)yPos)&0xFF;
-				ackPayload[14] = ((unsigned int)yPos)>>8;
+				ackPayload[9] = irCommMaxSensorSignalTemp[16]&0xFF; //((signed int)(lastTheta*573.0))&0xFF;	// radians to degrees => 573 = 1800/PI
+				ackPayload[10] = irCommMaxSensorSignalTemp[16]>>8; //((signed int)(lastTheta*573.0))>>8;				
+				ackPayload[11] = irCommMaxSensorSignalTemp[17]&0xFF; //((unsigned int)xPos)&0xFF;
+				ackPayload[12] = irCommMaxSensorSignalTemp[17]>>8; //((unsigned int)xPos)>>8;
+				ackPayload[13] = irCommMaxSensorSignalTemp[18]&0xFF; //((unsigned int)yPos)&0xFF;
+				ackPayload[14] = irCommMaxSensorSignalTemp[18]>>8; //((unsigned int)yPos)>>8;
 				
 				//ackPayload[9] = ((unsigned int)(thetaOld*573.0))&0xFF;	// radians to degrees => 573 = 1800/PI
 				//ackPayload[10] = ((unsigned int)(thetaOld*573.0))>>8;

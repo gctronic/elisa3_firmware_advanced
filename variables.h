@@ -9,7 +9,7 @@ extern unsigned char currentMotLeftChannel;
 extern unsigned char currentMotRightChannel;
 extern unsigned char rightMotorPhase;
 extern unsigned char leftMotorPhase;
-extern unsigned int proximityValue[24];
+extern volatile unsigned int proximityValue[24];
 extern int proximityResult[12];
 extern signed int proximityOffset[12];
 extern unsigned long proximitySum[12];
@@ -202,13 +202,21 @@ extern uint32_t timeRightOdom;
 extern unsigned char irCommEnabled;
 extern unsigned char irCommMode;
 extern volatile unsigned char irCommState;
+extern unsigned int irCommTempValue;
+extern volatile unsigned char irCommSendValues;
+extern unsigned long int irCommTickCounter;
+extern unsigned long int irCommTickCounter2;
+extern unsigned char irCommTickCounterUpdate;
+extern signed int irCommMaxSensorSignalTemp[IRCOMM_SAMPLING_WINDOW];
+extern signed int irCommRxMaxSensorTemp;
+extern signed int irCommRxMaxDiffTemp;
+extern unsigned int irCommMaxSensorValueCurrTemp;
+extern unsigned int irCommMinSensorValueCurrTemp;
+extern unsigned char irCommShiftCountTemp;
 
 // reception
+extern unsigned char irCommAdcRxState;
 extern unsigned char irCommRxWindowSamples;
-
-
-
-
 extern unsigned int irCommMaxSensorValueBuff1[8];
 extern unsigned int irCommMaxSensorValueBuff2[8];
 extern unsigned int *irCommMaxSensorValueAdc;
@@ -217,45 +225,59 @@ extern unsigned int irCommMinSensorValueBuff1[8];
 extern unsigned int irCommMinSensorValueBuff2[8];
 extern unsigned int *irCommMinSensorValueAdc;
 extern unsigned int *irCommMinSensorValueCurr;
-
 extern unsigned int irCommProxValuesBuff1[8*IRCOMM_SAMPLING_WINDOW];
 extern unsigned int irCommProxValuesBuff2[8*IRCOMM_SAMPLING_WINDOW];
 extern unsigned int *irCommProxValuesAdc;
 extern unsigned int *irCommProxValuesCurr;
-extern signed int irCommMaxDiff;
-extern signed int irCommMaxSensor;
+extern unsigned int *irCommTempPointer;
+extern unsigned char irCommRxCrc;
+extern signed int irCommRxMaxDiff;
+extern signed int irCommRxMaxSensor;
 extern signed int irCommMaxSensorSignal[IRCOMM_SAMPLING_WINDOW];
 extern signed long int irCommProxSum;
-extern signed int irCommProxMean;
-extern signed char irCommSignalState;
-extern volatile unsigned int irCommSwitchCount;
-extern unsigned int *irCommTempPointer;
-extern volatile unsigned char irCommSendValues;
-extern unsigned int irCommTempValue;
 extern signed int irCommTempMax;
 extern signed int irCommTempMin;
 extern unsigned char irCommShiftCount;
-extern unsigned char irCommShiftCounter;
 extern unsigned char irCommComputeShift;
-extern unsigned char irCommSecondBitSkipped;
-
-// reception
-extern unsigned char irCommRxBitReceived[10];
+extern signed int irCommProxMean;
+extern signed char irCommSignalState;
+extern volatile unsigned int irCommSwitchCount;
 extern unsigned char irCommRxBitCount;
 extern unsigned char irCommRxCrcError;
 extern unsigned char irCommRxByte;
+extern unsigned char irCommSecondBitSkipped;
+extern unsigned char irCommShiftCounter;
+extern unsigned char irCommRxBitReceived[10];
 extern unsigned char irCommRxByteExpected;
 extern unsigned char irCommRxSequenceCount;
+extern unsigned char irCommRxLastDataReceived;
+extern unsigned char irCommRxDataAvailabled;
+extern signed char irCommRxReceivingSensor;
+extern unsigned char irCommRxBitSkipped;
+extern unsigned char irCommRxStartBitDetected;
+extern unsigned char irCommRxPeakHighToLow;
+extern unsigned char irCommRxStartPeakDuration;
 
 // transmission
 extern unsigned char irCommAdcTxState;
-extern unsigned int irCommTxDuration;
+extern unsigned char irCommTxByte;
+extern unsigned char irCommTxByteEnqueued;
+extern unsigned long int irCommTxWaitStartTime;
+extern unsigned char irCommTxBitToTransmit[12];
+extern unsigned char irCommTxCrc;
+extern unsigned char irCommTxBitCount;
 extern unsigned char irCommTxPulseState;
+extern unsigned int irCommTxDuration;
 extern unsigned char irCommTxSwitchCount;
 extern unsigned char irCommTxSwitchCounter;
 extern unsigned char irCommTxDurationCycle;
-extern unsigned long int irCommTxWaitStartTime;
-extern unsigned char irCommTxBitCount;
-extern unsigned char irCommTxByte;
-extern unsigned char irCommTxBitToTransmit[12];
-extern unsigned char irCommCrc;
+extern unsigned char irCommTxSensorMask;
+
+
+
+
+
+
+
+
+
