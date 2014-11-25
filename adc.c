@@ -236,6 +236,11 @@ ISR(ADC_vect) {
 				irCommState = IRCOMM_TX_PREPARE_TRANSMISSION;
 				irCommTxWaitStartTime = getTime100MicroSec();
 				irCommAdcTxState = IRCOMM_TX_ADC_WAIT_PREPARATION;
+				if(irCommTxSensorGroup==0) {
+					irCommTxSensorGroup = 1;
+				} else {
+					irCommTxSensorGroup = 0;
+				}
 				break;
 
 			case IRCOMM_TX_ADC_WAIT_PREPARATION:
@@ -249,7 +254,12 @@ ISR(ADC_vect) {
 						irCommTxPulseState = 1;
 						//PORTA = 0xFF;
 						//PORTA = 0x01;
-						PORTA = irCommTxSensorMask;
+						//PORTA = irCommTxSensorMask;
+						if(irCommTxSensorGroup==0) {
+							PORTA = 0xAA;
+						} else {
+							PORTA = 0x55;
+						}
 					} else {
 						irCommTxPulseState = 0;
 						PORTA = 0x00;
@@ -297,7 +307,12 @@ ISR(ADC_vect) {
 						irCommTxPulseState = 1;
 						//PORTA = 0xFF;
 						//PORTA = 0x01;
-						PORTA = irCommTxSensorMask;
+						//PORTA = irCommTxSensorMask;
+						if(irCommTxSensorGroup==0) {
+							PORTA = 0xAA;
+						} else {
+							PORTA = 0x55;
+						}
 					} else {
 						irCommTxPulseState = 0;
 						PORTA = 0x00;

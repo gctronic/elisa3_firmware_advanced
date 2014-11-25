@@ -307,6 +307,7 @@ extern unsigned char irCommTxSwitchCount;
 extern unsigned char irCommTxSwitchCounter;
 extern unsigned char irCommTxDurationCycle;
 extern unsigned char irCommTxSensorMask;
+extern unsigned char irCommTxSensorGroup;
 
 
 

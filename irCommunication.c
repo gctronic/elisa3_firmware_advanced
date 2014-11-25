@@ -999,7 +999,12 @@ void irCommTasks() {
 					irCommTxSwitchCount = IRCOMM_BIT0_SWITCH_COUNT;
 				}
 				if(irCommTxBitCount == 0) {
-					PORTA = irCommTxSensorMask;
+					//PORTA = irCommTxSensorMask;
+					if(irCommTxSensorGroup==0) {
+						PORTA = 0xAA;
+					} else {
+						PORTA = 0x55;
+					}					
 					irCommTxPulseState = 1;
 				}
 				irCommTxDurationCycle = 0;

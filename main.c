@@ -699,15 +699,16 @@ int main(void) {
 			case 13: // IR comm transmitter
 				switch(demoState) {
 					case 0:
-						irCommInit(IRCOMM_MODE_TRANSMIT_ONLY);
+						irCommInit(IRCOMM_MODE_TRANSMIT);
 						//enableObstacleAvoidance();
-						//setLeftSpeed(25);
-						//setRightSpeed(25);
+						//setLeftSpeed(15);
+						//setRightSpeed(-15);
 						demoState = 1;
 						break;
 
 					case 1:						
-						irCommSendData(irCommRxByteExpected, 0x01);												
+						irCommSendData(irCommRxByteExpected, 0x01);	
+						//irCommSendData(irCommRxByteExpected, 0xFF);												
 						demoState = 2;
 						break;
 

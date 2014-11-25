@@ -321,6 +321,8 @@ unsigned char irCommTxSwitchCount = 0;
 unsigned char irCommTxSwitchCounter = 0;
 unsigned char irCommTxDurationCycle = 0;
 unsigned char irCommTxSensorMask = 0;
+unsigned char irCommTxSensorGroup = 0;
+
 
 
 
