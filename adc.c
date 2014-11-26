@@ -234,7 +234,6 @@ ISR(ADC_vect) {
 				leftChannelPhase = leftMotorPhase;
 				adcSaveDataTo = SKIP_SAMPLE;				
 				irCommState = IRCOMM_TX_PREPARE_TRANSMISSION;
-				irCommTxWaitStartTime = getTime100MicroSec();
 				irCommAdcTxState = IRCOMM_TX_ADC_WAIT_PREPARATION;
 				if(irCommTxSensorGroup==0) {
 					irCommTxSensorGroup = 1;
@@ -270,19 +269,15 @@ ISR(ADC_vect) {
 						if(irCommTxBitCount==12) {
 							irCommState = IRCOMM_TX_IDLE_STATE;
 							irCommTxByteEnqueued = 0;
-							if(irCommEnabled == IRCOMM_MODE_TRANSMIT) {
-								adcSamplingState = 0;
-								irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
-							}
+							adcSamplingState = 0;
+							irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
+							irCommInitReceiver();
 							PORTA = 0x00;
+							irCommTxLastTransmissionTime = getTime100MicroSec();
 						} else {
 							irCommState = IRCOMM_TX_COMPUTE_TIMINGS;
 						}
-						irCommAdcTxState = IRCOMM_TX_ADC_WAIT_PREPARATION;
-						if((irCommTxBitCount==12) && (irCommEnabled==IRCOMM_MODE_TRANSMIT_ONLY)) {
-							irCommAdcTxState = IRCOMM_TX_ADC_IDLE;
-							//updateBlueLed(255);
-						}						
+						irCommAdcTxState = IRCOMM_TX_ADC_WAIT_PREPARATION;						
 						adcSaveDataTo = SKIP_SAMPLE;
 						break;
 					}
@@ -323,19 +318,15 @@ ISR(ADC_vect) {
 						if(irCommTxBitCount==12) {
 							irCommState = IRCOMM_TX_IDLE_STATE;
 							irCommTxByteEnqueued = 0;
-							if(irCommEnabled == IRCOMM_MODE_TRANSMIT) {
-								adcSamplingState = 0;
-								irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
-							}
+							adcSamplingState = 0;
+							irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
+							irCommInitReceiver();
 							PORTA = 0x00;
+							irCommTxLastTransmissionTime = getTime100MicroSec();
 						} else {
 							irCommState = IRCOMM_TX_COMPUTE_TIMINGS;
 						}
 						irCommAdcTxState = IRCOMM_TX_ADC_WAIT_PREPARATION;
-						if((irCommTxBitCount==12) && (irCommEnabled==IRCOMM_MODE_TRANSMIT_ONLY)) {
-							irCommAdcTxState = IRCOMM_TX_ADC_IDLE;
-							//updateBlueLed(255);
-						}
 						adcSaveDataTo = SKIP_SAMPLE;
 						break;
 					}
@@ -566,7 +557,7 @@ ISR(ADC_vect) {
 					irCommRxWindowSamples = 0;
 					memset(irCommMaxSensorValueAdc, 0x00, 16);
 					memset(irCommMinSensorValueAdc, 0xFF, 16);
-					irCommMode = IRCOMM_MODE_RECEIVE;
+					irCommMode = IRCOMM_MODE_RECEIVE;					
 				}
 				if(irCommEnabled==IRCOMM_MODE_TRANSMIT && currentProx==23) {
 					irCommMode = IRCOMM_MODE_TRANSMIT;
@@ -575,23 +566,6 @@ ISR(ADC_vect) {
 					} else {
 						irCommMode=IRCOMM_MODE_SENSORS_SAMPLING; // no data to be transmitted, restart sensors sampling
 					}
-				}
-				if(irCommEnabled==IRCOMM_MODE_RECEIVE_ONLY && currentProx==23) {					
-					currentAdChannel = 0;	// prox0					
-					measBattery = 0;
-					irCommAdcRxState = 0;					
-					irCommRxWindowSamples = 0;
-					memset(irCommMaxSensorValueAdc, 0x00, 16);
-					memset(irCommMinSensorValueAdc, 0xFF, 16);
-					irCommMode = IRCOMM_MODE_RECEIVE;
-				}
-				if(irCommEnabled==IRCOMM_MODE_TRANSMIT_ONLY && currentProx==23) {
-					irCommMode = IRCOMM_MODE_TRANSMIT;
-					if(irCommTxByteEnqueued==1) {
-						irCommAdcTxState = IRCOMM_TX_ADC_TURN_OFF_SENSORS;
-					} else {
-						irCommAdcTxState = IRCOMM_TX_ADC_IDLE;
-					}					
 				}
 				break;
 

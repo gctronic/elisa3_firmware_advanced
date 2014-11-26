@@ -699,7 +699,7 @@ int main(void) {
 			case 13: // IR comm transmitter
 				switch(demoState) {
 					case 0:
-						irCommInit(IRCOMM_MODE_TRANSMIT);
+						irCommInit();
 						//enableObstacleAvoidance();
 						//setLeftSpeed(15);
 						//setRightSpeed(-15);
@@ -737,7 +737,7 @@ int main(void) {
 			case 14: // IR comm receiver
 				switch(demoState) {
 					case 0:
-						irCommInit(IRCOMM_MODE_RECEIVE);
+						irCommInit();
 						//enableObstacleAvoidance();
 						//setLeftSpeed(25);
 						//setRightSpeed(25);

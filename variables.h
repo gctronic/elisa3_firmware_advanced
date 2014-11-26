@@ -202,6 +202,7 @@ extern uint32_t timeRightOdom;
 /*** IR COMM ***/
 /***************/
 extern unsigned char irCommEnabled;
+extern unsigned char irCommEnabledNext;
 extern unsigned char irCommMode;
 extern volatile unsigned char irCommState;
 extern unsigned int irCommTempValue;
@@ -297,7 +298,7 @@ extern unsigned char irCommRxStartPeakDuration;
 extern unsigned char irCommAdcTxState;
 extern unsigned char irCommTxByte;
 extern unsigned char irCommTxByteEnqueued;
-extern unsigned long int irCommTxWaitStartTime;
+extern unsigned long int irCommTxLastTransmissionTime;
 extern unsigned char irCommTxBitToTransmit[12];
 extern unsigned char irCommTxCrc;
 extern unsigned char irCommTxBitCount;

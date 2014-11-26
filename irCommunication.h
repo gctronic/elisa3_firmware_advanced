@@ -29,7 +29,12 @@ extern "C" {
  * \ param mode: IRCOMM_MODE_RECEIVE or IRCOMM_MODE_TRANSMIT
  * \return none
  */
-void irCommInit(unsigned char mode);
+
+void irCommInit();
+
+void irCommInitReceiver();
+
+void irCommInitTransmitter();
 
 /**
  * \brief Stop the IR communication, only sensors sampling for obstacle and cliff avoidance is enabled.

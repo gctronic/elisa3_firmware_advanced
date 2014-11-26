@@ -25,6 +25,7 @@
 #include <avr\interrupt.h>
 #include <string.h>
 #include "utility.h"
+#include "irCommunication.h"
 
 #ifdef __cplusplus
 extern "C" {

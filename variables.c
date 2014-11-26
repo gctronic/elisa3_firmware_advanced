@@ -216,6 +216,7 @@ uint32_t  timeRightOdom = 0;
 /*** IR COMM ***/
 /***************/
 unsigned char irCommEnabled = IRCOMM_MODE_SENSORS_SAMPLING;
+unsigned char irCommEnabledNext = IRCOMM_MODE_SENSORS_SAMPLING;
 unsigned char irCommMode = IRCOMM_MODE_SENSORS_SAMPLING;
 volatile unsigned char irCommState = 0;
 unsigned int irCommTempValue = 0;
@@ -311,7 +312,7 @@ unsigned char irCommRxStartPeakDuration = 0;
 unsigned char irCommAdcTxState = 0;
 unsigned char irCommTxByte = 0;
 unsigned char irCommTxByteEnqueued = 0;
-unsigned long int irCommTxWaitStartTime = 0;	// used for min pause between bytes transmission
+unsigned long int irCommTxLastTransmissionTime = 0;	// used for min pause between bytes transmission
 unsigned char irCommTxBitToTransmit[12];
 unsigned char irCommTxCrc = 0;
 unsigned char irCommTxBitCount = 0;

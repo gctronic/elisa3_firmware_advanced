@@ -1,35 +1,28 @@
 #include "irCommunication.h"
 
-void irCommInit(unsigned char mode) {
-	if(mode==IRCOMM_MODE_RECEIVE) {
-		irCommProxValuesAdc = irCommProxValuesBuff1;
-		irCommProxValuesCurr = irCommProxValuesBuff2;
-		irCommMaxSensorValueAdc = irCommMaxSensorValueBuff1;
-		irCommMaxSensorValueCurr = irCommMaxSensorValueBuff2;
-		irCommMinSensorValueAdc = irCommMinSensorValueBuff1;
-		irCommMinSensorValueCurr = irCommMinSensorValueBuff2;
-		memset(irCommMaxSensorValueAdc, 0x00, 16);
-		memset(irCommMinSensorValueAdc, 0xFF, 16);
-		irCommEnabled = IRCOMM_MODE_RECEIVE;
-		irCommState = IRCOMM_RX_IDLE_STATE;
-	} else if(mode==IRCOMM_MODE_TRANSMIT) {
-		irCommEnabled = IRCOMM_MODE_TRANSMIT;
-		irCommState = IRCOMM_TX_IDLE_STATE;
-	} else if(mode==IRCOMM_MODE_RECEIVE_ONLY) {
-		irCommProxValuesAdc = irCommProxValuesBuff1;
-		irCommProxValuesCurr = irCommProxValuesBuff2;
-		irCommMaxSensorValueAdc = irCommMaxSensorValueBuff1;
-		irCommMaxSensorValueCurr = irCommMaxSensorValueBuff2;
-		irCommMinSensorValueAdc = irCommMinSensorValueBuff1;
-		irCommMinSensorValueCurr = irCommMinSensorValueBuff2;
-		memset(irCommMaxSensorValueAdc, 0x00, 16);
-		memset(irCommMinSensorValueAdc, 0xFF, 16);
-		irCommEnabled = IRCOMM_MODE_RECEIVE_ONLY;
-		irCommState = IRCOMM_RX_IDLE_STATE;
-	} else if(mode==IRCOMM_MODE_TRANSMIT_ONLY) {
-		irCommEnabled = IRCOMM_MODE_TRANSMIT_ONLY;
-		irCommState = IRCOMM_TX_IDLE_STATE;
-	}
+
+void irCommInitTransmitter() {
+	irCommEnabled = IRCOMM_MODE_TRANSMIT;
+	irCommState = IRCOMM_TX_IDLE_STATE;
+}
+
+void irCommInitReceiver() {
+	irCommEnabled = IRCOMM_MODE_RECEIVE;
+	irCommState = IRCOMM_RX_IDLE_STATE;
+	irCommEnabledNext = IRCOMM_MODE_RECEIVE;
+}
+
+void irCommInit() {
+	irCommProxValuesAdc = irCommProxValuesBuff1;
+	irCommProxValuesCurr = irCommProxValuesBuff2;
+	irCommMaxSensorValueAdc = irCommMaxSensorValueBuff1;
+	irCommMaxSensorValueCurr = irCommMaxSensorValueBuff2;
+	irCommMinSensorValueAdc = irCommMinSensorValueBuff1;
+	irCommMinSensorValueCurr = irCommMinSensorValueBuff2;
+	memset(irCommMaxSensorValueAdc, 0x00, 16);
+	memset(irCommMinSensorValueAdc, 0xFF, 16);
+	irCommMode = IRCOMM_MODE_SENSORS_SAMPLING;
+	irCommInitReceiver();
 }
 
 void irCommDeinit() {
@@ -88,6 +81,11 @@ void irCommTasks() {
 
 		switch(irCommState) {
 			case IRCOMM_RX_IDLE_STATE:				
+				if((irCommRxStartBitDetected==0) && (irCommEnabled!=irCommEnabledNext)) {
+					if((getTime100MicroSec() - irCommTxLastTransmissionTime) > PAUSE_100_MSEC) {
+						irCommInitTransmitter();
+					}					
+				}
 				break;
 
 			case IRCOMM_RX_MAX_SENSOR_STATE:				
@@ -171,12 +169,10 @@ void irCommTasks() {
 					//	updateGreenLed(0);
 					//} else {
 						irCommRxStartBitDetected = 0;
-						if(irCommEnabled == IRCOMM_MODE_RECEIVE) {
-							currentProx = 0;
-							adcSaveDataTo = SKIP_SAMPLE;
-							adcSamplingState = 0;
-							irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
-						}
+						currentProx = 0;
+						adcSaveDataTo = SKIP_SAMPLE;
+						adcSamplingState = 0;
+						irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
 						irCommState = IRCOMM_RX_IDLE_STATE;
 						resetDebugVariables();
 					//}
@@ -381,12 +377,10 @@ void irCommTasks() {
 							irCommState = IRCOMM_RX_SYNC_SIGNAL;
 						} else {
 							irCommRxStartBitDetected = 0;
-							if(irCommEnabled == IRCOMM_MODE_RECEIVE) {
-								currentProx = 0;
-								adcSaveDataTo = SKIP_SAMPLE;
-								adcSamplingState = 0;
-								irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
-							}
+							currentProx = 0;
+							adcSaveDataTo = SKIP_SAMPLE;
+							adcSamplingState = 0;
+							irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
 							irCommState = IRCOMM_RX_IDLE_STATE;	
 
 							if(irCommSyncStateIndexTemp>1) {
@@ -442,23 +436,19 @@ void irCommTasks() {
 								irCommRxByte = 0;
 								irCommState = IRCOMM_RX_SYNC_SIGNAL;
 							} else {
-								if(irCommEnabled == IRCOMM_MODE_RECEIVE) {
-									currentProx = 0;
-									adcSaveDataTo = SKIP_SAMPLE;
-									adcSamplingState = 0;
-									irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
-								}
+								currentProx = 0;
+								adcSaveDataTo = SKIP_SAMPLE;
+								adcSamplingState = 0;
+								irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;								
 								irCommState = IRCOMM_RX_IDLE_STATE;
 
 								irCommSyncStateIndexTemp++;
 							}							
 						} else {							
-							if(irCommEnabled == IRCOMM_MODE_RECEIVE) {
-								currentProx = 0;
-								adcSaveDataTo = SKIP_SAMPLE;
-								adcSamplingState = 0;
-								irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
-							}
+							currentProx = 0;
+							adcSaveDataTo = SKIP_SAMPLE;
+							adcSamplingState = 0;
+							irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;							
 							irCommState = IRCOMM_RX_IDLE_STATE;	
 
 							if(irCommSyncStateIndexTemp>1) {
@@ -515,12 +505,10 @@ void irCommTasks() {
 							irCommState = IRCOMM_RX_WAITING_BIT;
 						} else {
 							irCommRxStartBitDetected = 0;
-							if(irCommEnabled == IRCOMM_MODE_RECEIVE) {
-								currentProx = 0;
-								adcSaveDataTo = SKIP_SAMPLE;
-								adcSamplingState = 0;
-								irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
-							}
+							currentProx = 0;
+							adcSaveDataTo = SKIP_SAMPLE;
+							adcSamplingState = 0;
+							irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
 							irCommState = IRCOMM_RX_IDLE_STATE;	
 
 							if(irCommSyncStateIndexTemp>1) {
@@ -558,12 +546,10 @@ void irCommTasks() {
 							irCommState = IRCOMM_RX_SYNC_SIGNAL;
 						} else if(irCommSwitchCount==1) {
 							if(irCommRxStartPeakDuration > IRCOMM_SAMPLING_WINDOW/2) {
-								if(irCommEnabled == IRCOMM_MODE_RECEIVE) {
-									currentProx = 0;
-									adcSaveDataTo = SKIP_SAMPLE;
-									adcSamplingState = 0;
-									irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
-								}
+								currentProx = 0;
+								adcSaveDataTo = SKIP_SAMPLE;
+								adcSamplingState = 0;
+								irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;								
 								irCommState = IRCOMM_RX_IDLE_STATE;
 
 								if(irCommSyncStateIndexTemp>1) {
@@ -599,12 +585,10 @@ void irCommTasks() {
 								irCommState = IRCOMM_RX_SYNC_SIGNAL;
 							}
 						} else {
-							if(irCommEnabled == IRCOMM_MODE_RECEIVE) {
-								currentProx = 0;
-								adcSaveDataTo = SKIP_SAMPLE;
-								adcSamplingState = 0;
-								irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
-							}
+							currentProx = 0;
+							adcSaveDataTo = SKIP_SAMPLE;
+							adcSamplingState = 0;
+							irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;							
 							irCommState = IRCOMM_RX_IDLE_STATE;
 
 							if(irCommSyncStateIndexTemp>1) {
@@ -709,12 +693,10 @@ void irCommTasks() {
 				}
 
 				if((irCommTempMax-irCommTempMin) < IRCOMM_DETECTION_AMPLITUDE_THR) {	// error...no significant signal perceived					
-					if(irCommEnabled == IRCOMM_MODE_RECEIVE) {
-						currentProx = 0;
-						adcSaveDataTo = SKIP_SAMPLE;
-						adcSamplingState = 0;
-						irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
-					}
+					currentProx = 0;
+					adcSaveDataTo = SKIP_SAMPLE;
+					adcSamplingState = 0;
+					irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
 					irCommState = IRCOMM_RX_IDLE_STATE;
 
 					//irCommState = IRCOMM_RX_DEBUG;
@@ -776,12 +758,10 @@ void irCommTasks() {
 				} else {	// error...no significant signal perceived
 					//irCommRxBitReceived[irCommRxBitCount] = 0xFF;
 					updateBlueLed(0);
-					if(irCommEnabled == IRCOMM_MODE_RECEIVE) {
-						currentProx = 0;
-						adcSaveDataTo = SKIP_SAMPLE;
-						adcSamplingState = 0;
-						irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
-					}
+					currentProx = 0;
+					adcSaveDataTo = SKIP_SAMPLE;
+					adcSamplingState = 0;
+					irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;					
 					irCommState = IRCOMM_RX_IDLE_STATE;
 
 					//irCommState = IRCOMM_RX_DEBUG;
@@ -837,12 +817,10 @@ void irCommTasks() {
 					updateBlueLed(255);
 				}
 												
-				if(irCommEnabled == IRCOMM_MODE_RECEIVE) {
-					currentProx = 0;
-					adcSaveDataTo = SKIP_SAMPLE;
-					adcSamplingState = 0;
-					irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
-				}
+				currentProx = 0;
+				adcSaveDataTo = SKIP_SAMPLE;
+				adcSamplingState = 0;
+				irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;				
 								
 				/*
 				if((irCommRxByte!=irCommRxByteExpected) || (irCommRxCrcError!=0)) {	// if there is an error
@@ -952,11 +930,7 @@ void irCommTasks() {
 			case IRCOMM_TX_IDLE_STATE:					
 				break;
 
-			case IRCOMM_TX_PREPARE_TRANSMISSION:
-				if((getTime100MicroSec() - irCommTxWaitStartTime) < PAUSE_100_MSEC) {
-					//updateBlueLed(0);
-					break;
-				}
+			case IRCOMM_TX_PREPARE_TRANSMISSION:				
 				//updateBlueLed(255);
 				//updateBlueLed(0);
 				irCommTickCounter = getTime100MicroSec()-irCommTickCounter2;
@@ -1027,6 +1001,7 @@ void irCommSendData(unsigned char value, unsigned char sensorMask) {
 	irCommTxByte = value;
 	irCommTxByteEnqueued = 1;
 	irCommTxSensorMask = sensorMask;
+	irCommEnabledNext = IRCOMM_MODE_TRANSMIT;
 }
 
 unsigned char irCommDataSent() {

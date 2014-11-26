@@ -24,7 +24,8 @@ adc.o: ../adc.c ../adc.h ../variables.h ../constants.h \
  ../speed_control.h ../eepromIO.h ../leds.h ../spi.h \
  c:\program\ files\ (x86)\atmel\avr\ tools\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/stdio.h \
  c:\program\ files\ (x86)\atmel\avr\ tools\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/include/stdarg.h \
- ../mirf.h ../sensors.h ../twimaster.h ../usart.h ../ir_remote_control.h
+ ../mirf.h ../sensors.h ../twimaster.h ../usart.h ../ir_remote_control.h \
+ ../irCommunication.h
 
 ../adc.h:
 
@@ -101,3 +102,5 @@ c:\program\ files\ (x86)\atmel\avr\ tools\avr\ toolchain\bin\../lib/gcc/avr/4.5.
 ../usart.h:
 
 ../ir_remote_control.h:
+
+../irCommunication.h:
