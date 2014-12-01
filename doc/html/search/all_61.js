@@ -17,8 +17,14 @@ var searchData=
   ['adcsamplingstate',['adcSamplingState',['../variables_8c.html#a6737af3709bd39bb8a21409ec4ba0583',1,'adcSamplingState():&#160;variables.c'],['../variables_8h.html#a6737af3709bd39bb8a21409ec4ba0583',1,'adcSamplingState():&#160;variables.c']]],
   ['adcsavedatato',['adcSaveDataTo',['../variables_8c.html#a5af1114031af3bae62645cb3f4777ef6',1,'adcSaveDataTo():&#160;variables.c'],['../variables_8h.html#a5af1114031af3bae62645cb3f4777ef6',1,'adcSaveDataTo():&#160;variables.c']]],
   ['address',['address',['../ir__remote__control_8c.html#a9ff470cb16fb31f83ca0b9192a33e402',1,'ir_remote_control.c']]],
+  ['addressreceived',['addressReceived',['../variables_8c.html#aa48bd9e1c3fcaef5fccfb718a8cc7cd1',1,'addressReceived():&#160;variables.c'],['../variables_8h.html#aa48bd9e1c3fcaef5fccfb718a8cc7cd1',1,'addressReceived():&#160;variables.c']]],
+  ['angledeg',['angleDeg',['../variables_8c.html#a8db29d6de985e046d78a234628beba0d',1,'angleDeg():&#160;variables.c'],['../variables_8h.html#a8db29d6de985e046d78a234628beba0d',1,'angleDeg():&#160;variables.c']]],
+  ['angledegencode',['angleDegEncode',['../variables_8c.html#aa4960c6d188f1411feb458775074dcf8',1,'angleDegEncode():&#160;variables.c'],['../variables_8h.html#aa4960c6d188f1411feb458775074dcf8',1,'angleDegEncode():&#160;variables.c']]],
+  ['angleerror',['angleError',['../variables_8c.html#a272e790d200933a8b2a033747b3180e5',1,'angleError():&#160;variables.c'],['../variables_8h.html#a272e790d200933a8b2a033747b3180e5',1,'angleError():&#160;variables.c']]],
   ['arc',['ARC',['../n_r_f24_l01_8h.html#a14727f92df7a9466f732141f23b9c252',1,'nRF24L01.h']]],
   ['arc_5fcnt',['ARC_CNT',['../n_r_f24_l01_8h.html#aaae5ef9927daf8a4939cd2ed6ffff2ec',1,'nRF24L01.h']]],
   ['ard',['ARD',['../n_r_f24_l01_8h.html#aa9701b150e0589afb638c82a498d1dcb',1,'nRF24L01.h']]],
+  ['avgleftspeed',['avgLeftSpeed',['../variables_8c.html#aaab9c2af46d970e467c5fc9e429ca182',1,'avgLeftSpeed():&#160;variables.c'],['../variables_8h.html#aaab9c2af46d970e467c5fc9e429ca182',1,'avgLeftSpeed():&#160;variables.c']]],
+  ['avgrightspeed',['avgRightSpeed',['../variables_8c.html#aa576731d53b75ecd0f211046940705f7',1,'avgRightSpeed():&#160;variables.c'],['../variables_8h.html#aa576731d53b75ecd0f211046940705f7',1,'avgRightSpeed():&#160;variables.c']]],
   ['aw',['AW',['../n_r_f24_l01_8h.html#abd18e97392c5401ae01a906e1567da88',1,'nRF24L01.h']]]
 ];

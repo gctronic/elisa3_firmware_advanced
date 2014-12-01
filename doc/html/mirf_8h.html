@@ -132,6 +132,12 @@ Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mirf_8h.html#a97e38a1b97f3ccd23fae567bc0cb99aa">writeAckPayload</a> (unsigned char *data, unsigned char size)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mirf_8h.html#ae0a005d5875fc1869bbe028ab900d12f">flushTxFifo</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mirf_8h.html#a8cfe88fad1863193840e1ef18336002c">handleRFCommands</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mirf_8h.html#a0ec5584f9418f0ebab4a4819e45fc350">readPayloadWidthFromTopFifo</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mirf_8h.html#a10acc162380a28be92ce3646c66ac12a">readPayloadWidthFromPipe0</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mirf_8h.html#ad6cc6fe67896c7b1ff26b46cad027830">rfEnableDebugMode</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mirf_8h.html#a29528c378c2d7d5bfa913f0f627067fe">rfDisableDebugMode</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mirf_8h.html#a0500c9d04e87b0abe1f755a5c6fce8b5">rfDebugSendData</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mirf_8h.html#a99e8fb5f1f93e2038f5956fe52a6d1dc">rfDebugNextPacket</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mirf_8h.html#a5d5e84dcab565368222cea7bc0011393">mirf_config_register</a> (uint8_t reg, uint8_t value)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mirf_8h.html#a2ec1cb46658dbf6175d5f3578518275d">mirf_read_register</a> (uint8_t reg, uint8_t *value, uint8_t len)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mirf_8h.html#a2e57e77443c90138e05be4139822e6e9">mirf_write_register</a> (uint8_t reg, uint8_t *value, uint8_t len)</td></tr>
@@ -522,6 +528,102 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a10acc162380a28be92ce3646c66ac12a"></a><!-- doxytag: member="mirf.h::readPayloadWidthFromPipe0" ref="a10acc162380a28be92ce3646c66ac12a" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t <a class="el" href="mirf_8h.html#a10acc162380a28be92ce3646c66ac12a">readPayloadWidthFromPipe0</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0ec5584f9418f0ebab4a4819e45fc350"></a><!-- doxytag: member="mirf.h::readPayloadWidthFromTopFifo" ref="a0ec5584f9418f0ebab4a4819e45fc350" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t <a class="el" href="mirf_8h.html#a0ec5584f9418f0ebab4a4819e45fc350">readPayloadWidthFromTopFifo</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a99e8fb5f1f93e2038f5956fe52a6d1dc"></a><!-- doxytag: member="mirf.h::rfDebugNextPacket" ref="a99e8fb5f1f93e2038f5956fe52a6d1dc" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="mirf_8h.html#a99e8fb5f1f93e2038f5956fe52a6d1dc">rfDebugNextPacket</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0500c9d04e87b0abe1f755a5c6fce8b5"></a><!-- doxytag: member="mirf.h::rfDebugSendData" ref="a0500c9d04e87b0abe1f755a5c6fce8b5" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="mirf_8h.html#a0500c9d04e87b0abe1f755a5c6fce8b5">rfDebugSendData</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a29528c378c2d7d5bfa913f0f627067fe"></a><!-- doxytag: member="mirf.h::rfDisableDebugMode" ref="a29528c378c2d7d5bfa913f0f627067fe" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="mirf_8h.html#a29528c378c2d7d5bfa913f0f627067fe">rfDisableDebugMode</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad6cc6fe67896c7b1ff26b46cad027830"></a><!-- doxytag: member="mirf.h::rfEnableDebugMode" ref="ad6cc6fe67896c7b1ff26b46cad027830" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="mirf_8h.html#ad6cc6fe67896c7b1ff26b46cad027830">rfEnableDebugMode</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="abffdd6a38e84ae4d35372f5b32e752ab"></a><!-- doxytag: member="mirf.h::rx_fifo_is_empty" ref="abffdd6a38e84ae4d35372f5b32e752ab" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -585,7 +687,7 @@ Functions</h2></td></tr>
     <ul>
       <li class="navelem"><a class="el" href="mirf_8h.html">mirf.h</a>      </li>
 
-    <li class="footer">Generated on Tue Mar 27 2012 16:12:03 for Elisa3 by
+    <li class="footer">Generated on Mon Dec 1 2014 08:55:04 for Elisa3 by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

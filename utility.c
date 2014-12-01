@@ -157,6 +157,8 @@ void resetOdometry() {
 	theta = 0;
 	xPos = 0;
 	yPos = 0;
+	rightDist = 0;
+	leftDist = 0;
 }
 
 

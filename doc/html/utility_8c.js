@@ -5,5 +5,6 @@ var utility_8c =
     [ "initPeripherals", "utility_8c.html#ad52efe852713596ee88dd17a247b490d", null ],
     [ "ISR", "utility_8c.html#a7cfcbe42bd266750aeb6e5d71e5ea479", null ],
     [ "readBatteryLevel", "utility_8c.html#a647ec4ab0d27b1b384f76298bb1205f5", null ],
+    [ "resetOdometry", "utility_8c.html#acf61208f0c691f7ae7171536baa48b80", null ],
     [ "sleep", "utility_8c.html#a56f15343edf0a13c026f52e527d3d3c9", null ]
 ];

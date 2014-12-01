@@ -115,6 +115,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &quot;<a class="el" href="usart_8h_source.html">usart.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="sensors_8h_source.html">sensors.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="ir__remote__control_8h_source.html">ir_remote_control.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="eeprom_i_o_8h_source.html">eepromIO.h</a>&quot;</code><br/>
 </div>
 <p><a href="utility_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -130,6 +131,7 @@ Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A global variable "clockTick" is incremented at each adc interrupt; this variable is used as base time (104 us resolution). This function is useful for instance to create non-blocking delays, calling the function at start of delay and then re-calling it to check when the desired delay is passed.  <a href="#a731c06d8c84d4a9f72f3b1238cfa9be0"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utility_8h.html#a647ec4ab0d27b1b384f76298bb1205f5">readBatteryLevel</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Simply set the flag that indicates when the battery has to be read.  <a href="#a647ec4ab0d27b1b384f76298bb1205f5"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utility_8h.html#acf61208f0c691f7ae7171536baa48b80">resetOdometry</a> ()</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Utility module. </p>
@@ -215,6 +217,22 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="acf61208f0c691f7ae7171536baa48b80"></a><!-- doxytag: member="utility.h::resetOdometry" ref="acf61208f0c691f7ae7171536baa48b80" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="utility_8h.html#acf61208f0c691f7ae7171536baa48b80">resetOdometry</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a56f15343edf0a13c026f52e527d3d3c9"></a><!-- doxytag: member="utility.h::sleep" ref="a56f15343edf0a13c026f52e527d3d3c9" args="(unsigned char seconds)" -->
 <div class="memitem">
 <div class="memproto">
@@ -261,7 +279,7 @@ Functions</h2></td></tr>
     <ul>
       <li class="navelem"><a class="el" href="utility_8h.html">utility.h</a>      </li>
 
-    <li class="footer">Generated on Tue Mar 27 2012 16:12:07 for Elisa3 by
+    <li class="footer">Generated on Mon Dec 1 2014 08:55:05 for Elisa3 by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

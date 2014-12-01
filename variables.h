@@ -210,6 +210,11 @@ extern volatile unsigned char irCommSendValues;
 extern unsigned long int irCommTickCounter;
 extern unsigned long int irCommTickCounter2;
 extern unsigned char irCommTickCounterUpdate;
+extern signed char irCommLastSensor;
+extern signed int irCommLastData;
+extern signed int angleDeg;
+extern signed int angleError;
+extern unsigned char angleDegEncode;
 
 extern signed int irCommMaxSensorSignalTemp[IRCOMM_SAMPLING_WINDOW*2];
 extern unsigned char irCommMaxSensorSignalIndexTemp;
@@ -249,6 +254,7 @@ extern signed int irCommBitsSignalTemp[IRCOMM_SAMPLING_WINDOW*10];
 extern unsigned char irCommBitsSignalIndexTemp;
 extern unsigned char irCommRxBitReceivedTemp[10];
 extern unsigned char irCommRxBitReceivedIndexTemp;
+extern unsigned char irCommRxPrevDataReceived;
 
 // reception
 extern unsigned char irCommAdcRxState;

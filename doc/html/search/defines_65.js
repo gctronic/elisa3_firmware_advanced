@@ -9,6 +9,7 @@ var searchData=
   ['enaa_5fp3',['ENAA_P3',['../n_r_f24_l01_8h.html#aade4fe5e884e4f5868daf2c706d72f5e',1,'nRF24L01.h']]],
   ['enaa_5fp4',['ENAA_P4',['../n_r_f24_l01_8h.html#a3b5bebd442d3a0351e85100a69244810',1,'nRF24L01.h']]],
   ['enaa_5fp5',['ENAA_P5',['../n_r_f24_l01_8h.html#ae28c4601af8b2f85827386fe9a27f9fa',1,'nRF24L01.h']]],
+  ['enc_5fslope',['ENC_SLOPE',['../constants_8h.html#ad63436288d2bceabc0aeb7105ed7e3d5',1,'constants.h']]],
   ['erx_5fp0',['ERX_P0',['../n_r_f24_l01_8h.html#a25999eca8c745b41102fb31489a90211',1,'nRF24L01.h']]],
   ['erx_5fp1',['ERX_P1',['../n_r_f24_l01_8h.html#a636432986a9972c8fc964def06ffdc79',1,'nRF24L01.h']]],
   ['erx_5fp2',['ERX_P2',['../n_r_f24_l01_8h.html#a115f3c3d9c945bbd660c1ddcba58340d',1,'nRF24L01.h']]],

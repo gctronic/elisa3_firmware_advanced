@@ -119,127 +119,309 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00021"></a>00021 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a5234176e50c96b22941062509b1063e5">measBattery</a>;
 <a name="l00022"></a>00022 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a65f32b0ffdeaf1b891dccedc35521f7c">proxUpdated</a>;
 <a name="l00023"></a>00023 <span class="keyword">extern</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a999dfb31e2834c24191bcccaa3f01e96">proximityResultLinear</a>[8];
-<a name="l00024"></a>00024 
-<a name="l00025"></a>00025 <span class="comment">/******************************/</span>
-<a name="l00026"></a>00026 <span class="comment">/*** CONSUMPTION CONTROLLER ***/</span>
-<a name="l00027"></a>00027 <span class="comment">/******************************/</span>
-<a name="l00028"></a>00028 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a6e026c989c405b05209cc2cda94751f8">left_current_avg</a>;
-<a name="l00029"></a>00029 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a3a5aeccbbec0d14ffaba6bf7bc7cb261">right_current_avg</a>;
-<a name="l00030"></a>00030 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#af1a5b06e4085ecd5f21f1021f3122fb3">last_left_current</a>;
-<a name="l00031"></a>00031 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a8cb2c40b88d38c30d12e1f5c3dedb66a">last_right_current</a>;
-<a name="l00032"></a>00032 
-<a name="l00033"></a>00033 <span class="comment">/************************/</span>
-<a name="l00034"></a>00034 <span class="comment">/*** SPEED CONTROLLER ***/</span>
-<a name="l00035"></a>00035 <span class="comment">/************************/</span>
-<a name="l00036"></a>00036 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a7a9f151f4c5c65068500f350e7e44791">pwm_right_desired_to_control</a>;
-<a name="l00037"></a>00037 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ae24e59756112205ab2ef22bdb543c110">pwm_left_desired_to_control</a>;
-<a name="l00038"></a>00038 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a96b5798a517e6ae85a1500afa03d4cb3">left_vel_sum</a>;
-<a name="l00039"></a>00039 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a27af2651c5f7c899aa611231f780d09c">right_vel_sum</a>;
-<a name="l00040"></a>00040 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a5b90cf5bf71ec61a70112b4e7d8f9bd6">last_left_vel</a>;
-<a name="l00041"></a>00041 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a1a95c15f631a60f57370da1b78b6985b">last_right_vel</a>;
-<a name="l00042"></a>00042 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#aa60ff17349a4bebe507fd4cc4e7a258b">pwm_right</a>;
-<a name="l00043"></a>00043 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a4e83735e34bb6f16744472cc444e2ba0">pwm_left</a>;
-<a name="l00044"></a>00044 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a77550888be74339dd05f3c18f7234d77">pwm_right_desired</a>;
-<a name="l00045"></a>00045 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a74552a4f9353495299116b51c8155e29">pwm_left_desired</a>;
-<a name="l00046"></a>00046 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a6f8f13bec2ba81a28b0beb414ffda127">k_ff_speed_control_left</a>;
-<a name="l00047"></a>00047 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a39bffdec431da89fc6caab52187b5a80">k_ff_speed_control_right</a>;
-<a name="l00048"></a>00048 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ad76483b725743cfa6e2bf31a37afd435">pwm_right_speed_controller</a>;
-<a name="l00049"></a>00049 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#af02d5264b0b53e1079b957aad0e254fc">pwm_left_speed_controller</a>;
-<a name="l00050"></a>00050 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a6a596c0e08a4d87babcc68b3f04d866b">delta_left_speed_current</a>;
-<a name="l00051"></a>00051 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ad2cdc38ff0e20edb44467d3d8b82a681">delta_right_speed_current</a>;
-<a name="l00052"></a>00052 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a0727a38a7b29034408115e03f1472b4f">delta_left_speed_prev</a>;
-<a name="l00053"></a>00053 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a4ccea4434d8c3eeedf52a20d8105a91a">delta_right_speed_prev</a>;
-<a name="l00054"></a>00054 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a9a7906239cb8916811d561fcea2695f1">delta_left_speed_sum</a>;
-<a name="l00055"></a>00055 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ad8f5a044a67026260fa2100fbe22f5e4">delta_right_speed_sum</a>;
-<a name="l00056"></a>00056 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#abe99fe40e406484cd5f1f56d5fa69c00">compute_left_vel</a>;
-<a name="l00057"></a>00057 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#afe4784af211451fa26d96622df44b4c6">compute_right_vel</a>;
-<a name="l00058"></a>00058 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a7550b09e2f065ea83091c43953614b46">pwm_right_working</a>;
-<a name="l00059"></a>00059 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a7baa55e2a9ac44f45a1492d3fb9eafce">pwm_left_working</a>;
-<a name="l00060"></a>00060 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a33a050e3bb9f5e52b3ac2316bdeb7c70">firstSampleRight</a>;
-<a name="l00061"></a>00061 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ad8d030f291242d20cc9254b3d12e9275">firstSampleLeft</a>;
-<a name="l00062"></a>00062 
-<a name="l00063"></a>00063 <span class="comment">/***********/</span>
-<a name="l00064"></a>00064 <span class="comment">/*** NRF ***/</span>
-<a name="l00065"></a>00065 <span class="comment">/***********/</span>
-<a name="l00066"></a>00066 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a591fc8c686d067b70a54af597346a772">dataLED</a>[3];
-<a name="l00067"></a>00067 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a97abdd1952d844d7a124253128cfeb2e">speedl</a>;
-<a name="l00068"></a>00068 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#af9ad15905e2651620f5a5094fd7f017d">speedr</a>;
-<a name="l00069"></a>00069 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ace0bc1fd577a6d0fdec31ef9e83bfe82">rfData</a>[PAYLOAD_SIZE];
-<a name="l00070"></a>00070 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#abaacfa2a57ccfd747cfe23fdb12a3835">ackPayload</a>[16];
-<a name="l00071"></a>00071 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ab2e0dac927f92b95c5f96155593ce05f">packetId</a>;
-<a name="l00072"></a>00072 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ab3e5a84d70fd574a2b62f0b705ffbf20">rfAddress</a>;
-<a name="l00073"></a>00073 
-<a name="l00074"></a>00074 <span class="comment">/****************/</span>
-<a name="l00075"></a>00075 <span class="comment">/*** RGB LEDS ***/</span>
-<a name="l00076"></a>00076 <span class="comment">/****************/</span>
-<a name="l00077"></a>00077 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a2a7a17c50a1da6d3765420f9bc005fff">pwm_red</a>;
-<a name="l00078"></a>00078 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a2ee6dc1f749b8833e6628d843c6e5bfa">pwm_green</a>;
-<a name="l00079"></a>00079 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a3b052a0519d149a8fa1d7ac988840eb3">pwm_blue</a>;
-<a name="l00080"></a>00080 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#af375973932b849b7fe6c1f546f3e8adc">blinkState</a>;
-<a name="l00081"></a>00081 
-<a name="l00082"></a>00082 <span class="comment">/************/</span>
-<a name="l00083"></a>00083 <span class="comment">/*** UART ***/</span>
-<a name="l00084"></a>00084 <span class="comment">/************/</span>
-<a name="l00085"></a>00085 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a0734982b153659a889ee1ff851292584">peripheralChoice</a>;
-<a name="l00086"></a>00086 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a1b9d4294c629fa08659f94b408a5d406">choosePeripheral</a>;
-<a name="l00087"></a>00087 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ad7b7c1bbc5eb9af3cab8aa0a1c6cdf7c">sendAdcValues</a>;
-<a name="l00088"></a>00088 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a5e4a5f87a073607f6dc19c26fcf541a2">commError</a>;
-<a name="l00089"></a>00089 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a3167147af72b7588996b94602b0c1348">byteCount</a>;
-<a name="l00090"></a>00090 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a45d3e5089c9d28d0c0edcd43a869226c">uartBuff</a>[UART_BUFF_SIZE];
-<a name="l00091"></a>00091 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ab4ff6f9dce673d3ad48512e5b1ea5c98">nextByteIndex</a>;
-<a name="l00092"></a>00092 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#aab278300880021140e975ac64e77d423">currByteIndex</a>;
-<a name="l00093"></a>00093 
-<a name="l00094"></a>00094 <span class="comment">/*************************/</span>
-<a name="l00095"></a>00095 <span class="comment">/*** IR REMOTE CONTROL ***/</span>
-<a name="l00096"></a>00096 <span class="comment">/*************************/</span>
-<a name="l00097"></a>00097 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#acd9d8d98145fba8d89fa53595183f6f2">irCommand</a>;
-<a name="l00098"></a>00098 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a848efaccfa3abf681a7583e2db972b49">command_received</a>;
-<a name="l00099"></a>00099 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#acda8a999560be754013d18b84ab58ffb">colorState</a>;
-<a name="l00100"></a>00100 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a32ebeb87f3ebe57f5e8c96089a3d23e6">irEnabled</a>;
-<a name="l00101"></a>00101 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#aaa8bfff0cb9fc452509ba740424df94f">checkGlitch</a>;
-<a name="l00102"></a>00102 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a50380767e92c6b0b29e60eb116b285db">behaviorState</a>;
-<a name="l00103"></a>00103 
-<a name="l00104"></a>00104 <span class="comment">/*********************/</span>
-<a name="l00105"></a>00105 <span class="comment">/*** ACCELEROMETER ***/</span>
-<a name="l00106"></a>00106 <span class="comment">/*********************/</span>
-<a name="l00107"></a>00107 <span class="keyword">extern</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#aeec7f45d961933d0721f9e1e0540a799">accelAddress</a>;
-<a name="l00108"></a>00108 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a0c65e0c665b92f0ac4bf8e671f2ecc61">useAccel</a>;
-<a name="l00109"></a>00109 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a57ffc70a70a2abc91d149183f12cdc89">accX</a>;
-<a name="l00110"></a>00110 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#af4b57b2a018bedcd4b030c1925b9dfc6">accY</a>;
-<a name="l00111"></a>00111 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ad410e86f476c255912717df192dbdedf">accZ</a>;
-<a name="l00112"></a>00112 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#acdf0c29faf6a88b3a5b06643b94e0b6c">accOffsetX</a>;
-<a name="l00113"></a>00113 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a1f745ee117798779213b38ddbc6be756">accOffsetY</a>;
-<a name="l00114"></a>00114 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a3dcf79de1e12bbe1097d84af36c715b6">accOffsetZ</a>;
-<a name="l00115"></a>00115 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a24336f6a78b7d41a3648debe6c3b7c02">accOffsetXSum</a>;
-<a name="l00116"></a>00116 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#af991008eee64ca5487961dcb8c0b3948">accOffsetYSum</a>;
-<a name="l00117"></a>00117 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a27c1f02dea0af032b0f7f200f77404ce">accOffsetZSum</a>;
-<a name="l00118"></a>00118 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ac4c2e6d13443211b5646e5bee53de1d4">currentAngle</a>;
-<a name="l00119"></a>00119 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a1eb45a987be752f402cbcd802e720392">prevPosition</a>; 
-<a name="l00120"></a>00120 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a59ee96a5b3342309a959a1966f4c8ad7">currPosition</a>;
-<a name="l00121"></a>00121 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a8beb179e52892494ff4051a07703ee21">timesInSamePos</a>;
-<a name="l00122"></a>00122 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#af6b6fc5f42e41d9b2e1c7c19d68cf1ca">robotPosition</a>;
-<a name="l00123"></a>00123 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a693872dffad437db5beb598bf28b658d">accBuff</a>[6];
-<a name="l00124"></a>00124 
-<a name="l00125"></a>00125 <span class="comment">/***************/</span>
-<a name="l00126"></a>00126 <span class="comment">/*** VARIOUS ***/</span>
-<a name="l00127"></a>00127 <span class="comment">/***************/</span>
-<a name="l00128"></a>00128 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ae5b29d64f8a1b67f8e86a9596a4ab2d8">clockTick</a>;
-<a name="l00129"></a>00129 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a28b51d82160ec9f6d8957c4da43a31bb">currentSelector</a>;
-<a name="l00130"></a>00130 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ac084b77bdafd27ce145006c472b27f42">calibrationCycle</a>;
-<a name="l00131"></a>00131 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#aac69bb11d34873c2410860817f4e1729">startCalibration</a>;
-<a name="l00132"></a>00132 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#af4331c7661c743667b33ca14da81dc98">hardwareRevision</a>;
-<a name="l00133"></a>00133 
-<a name="l00134"></a>00134 <span class="comment">/**************************/</span>
-<a name="l00135"></a>00135 <span class="comment">/*** OBSTACLE AVOIDANCE ***/</span>
-<a name="l00136"></a>00136 <span class="comment">/**************************/</span>
-<a name="l00137"></a>00137 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a5b780d6413adf73534ba19a6b04d146f">obstacleAvoidanceEnabled</a>;
-<a name="l00138"></a>00138 
-<a name="l00139"></a>00139 <span class="comment">/***********************/</span>
-<a name="l00140"></a>00140 <span class="comment">/*** CLIFF AVOIDANCE ***/</span>
-<a name="l00141"></a>00141 <span class="comment">/***********************/</span>
-<a name="l00142"></a>00142 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#aa832585990dfb07faa7341e02d933d2a">cliffAvoidanceEnabled</a>;
-<a name="l00143"></a>00143 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#aae8bc9e932ab77b75d3ac9657589540b">cliffDetectedFlag</a>;
-<a name="l00144"></a>00144 
+<a name="l00024"></a><a class="code" href="variables_8h.html#a7690828c5eb0aaffd7acfdd8ca5e79fd">00024</a> <span class="keywordtype">float</span> <a class="code" href="variables_8c.html#a7690828c5eb0aaffd7acfdd8ca5e79fd">rightMotSteps</a>;
+<a name="l00025"></a><a class="code" href="variables_8h.html#ac27f380162c2d939bc1e77cf7122f635">00025</a> <span class="keywordtype">float</span> <a class="code" href="variables_8c.html#ac27f380162c2d939bc1e77cf7122f635">leftMotSteps</a>;
+<a name="l00026"></a><a class="code" href="variables_8h.html#aaa61d1a3890dcd6e9f5c61844ed9f780">00026</a> <span class="keywordtype">float</span> <a class="code" href="variables_8c.html#aaa61d1a3890dcd6e9f5c61844ed9f780">rightMotStepsOld</a>;
+<a name="l00027"></a><a class="code" href="variables_8h.html#a40d627d52c589b3180e835a4acb48eab">00027</a> <span class="keywordtype">float</span> <a class="code" href="variables_8c.html#a40d627d52c589b3180e835a4acb48eab">leftMotStepsOld</a>;
+<a name="l00028"></a>00028 
+<a name="l00029"></a>00029 <span class="comment">/******************************/</span>
+<a name="l00030"></a>00030 <span class="comment">/*** CONSUMPTION CONTROLLER ***/</span>
+<a name="l00031"></a>00031 <span class="comment">/******************************/</span>
+<a name="l00032"></a>00032 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a6e026c989c405b05209cc2cda94751f8">left_current_avg</a>;
+<a name="l00033"></a>00033 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a3a5aeccbbec0d14ffaba6bf7bc7cb261">right_current_avg</a>;
+<a name="l00034"></a>00034 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#af1a5b06e4085ecd5f21f1021f3122fb3">last_left_current</a>;
+<a name="l00035"></a>00035 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a8cb2c40b88d38c30d12e1f5c3dedb66a">last_right_current</a>;
+<a name="l00036"></a>00036 
+<a name="l00037"></a>00037 <span class="comment">/************************/</span>
+<a name="l00038"></a>00038 <span class="comment">/*** SPEED CONTROLLER ***/</span>
+<a name="l00039"></a>00039 <span class="comment">/************************/</span>
+<a name="l00040"></a>00040 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a7a9f151f4c5c65068500f350e7e44791">pwm_right_desired_to_control</a>;
+<a name="l00041"></a>00041 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ae24e59756112205ab2ef22bdb543c110">pwm_left_desired_to_control</a>;
+<a name="l00042"></a>00042 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a96b5798a517e6ae85a1500afa03d4cb3">left_vel_sum</a>;
+<a name="l00043"></a>00043 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a27af2651c5f7c899aa611231f780d09c">right_vel_sum</a>;
+<a name="l00044"></a>00044 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a5b90cf5bf71ec61a70112b4e7d8f9bd6">last_left_vel</a>;
+<a name="l00045"></a>00045 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a1a95c15f631a60f57370da1b78b6985b">last_right_vel</a>;
+<a name="l00046"></a>00046 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#aa60ff17349a4bebe507fd4cc4e7a258b">pwm_right</a>;
+<a name="l00047"></a>00047 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a4e83735e34bb6f16744472cc444e2ba0">pwm_left</a>;
+<a name="l00048"></a>00048 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a77550888be74339dd05f3c18f7234d77">pwm_right_desired</a>;
+<a name="l00049"></a>00049 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a74552a4f9353495299116b51c8155e29">pwm_left_desired</a>;
+<a name="l00050"></a>00050 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ad3c169b43e845410c5d4562fca52a33e">pwm_intermediate_right_desired</a>;
+<a name="l00051"></a>00051 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ad2ad6ae2c73e1b09991bc16bd881afc5">pwm_intermediate_left_desired</a>;
+<a name="l00052"></a>00052 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a6f8f13bec2ba81a28b0beb414ffda127">k_ff_speed_control_left</a>;
+<a name="l00053"></a>00053 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a39bffdec431da89fc6caab52187b5a80">k_ff_speed_control_right</a>;
+<a name="l00054"></a>00054 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a7bcca0ee472884548a9d132b625ea453">pwm_right_speed_controller</a>;
+<a name="l00055"></a>00055 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#aecb6a73975ed9f4795c8105beb14169f">pwm_left_speed_controller</a>;
+<a name="l00056"></a>00056 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a6a596c0e08a4d87babcc68b3f04d866b">delta_left_speed_current</a>;
+<a name="l00057"></a>00057 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ad2cdc38ff0e20edb44467d3d8b82a681">delta_right_speed_current</a>;
+<a name="l00058"></a>00058 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a0727a38a7b29034408115e03f1472b4f">delta_left_speed_prev</a>;
+<a name="l00059"></a>00059 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a4ccea4434d8c3eeedf52a20d8105a91a">delta_right_speed_prev</a>;
+<a name="l00060"></a>00060 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a9a7906239cb8916811d561fcea2695f1">delta_left_speed_sum</a>;
+<a name="l00061"></a>00061 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ad8f5a044a67026260fa2100fbe22f5e4">delta_right_speed_sum</a>;
+<a name="l00062"></a>00062 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#abe99fe40e406484cd5f1f56d5fa69c00">compute_left_vel</a>;
+<a name="l00063"></a>00063 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#afe4784af211451fa26d96622df44b4c6">compute_right_vel</a>;
+<a name="l00064"></a>00064 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a7550b09e2f065ea83091c43953614b46">pwm_right_working</a>;
+<a name="l00065"></a>00065 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a7baa55e2a9ac44f45a1492d3fb9eafce">pwm_left_working</a>;
+<a name="l00066"></a>00066 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a33a050e3bb9f5e52b3ac2316bdeb7c70">firstSampleRight</a>;
+<a name="l00067"></a>00067 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ad8d030f291242d20cc9254b3d12e9275">firstSampleLeft</a>;
+<a name="l00068"></a>00068 
+<a name="l00069"></a>00069 <span class="comment">/***********/</span>
+<a name="l00070"></a>00070 <span class="comment">/*** NRF ***/</span>
+<a name="l00071"></a>00071 <span class="comment">/***********/</span>
+<a name="l00072"></a>00072 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a591fc8c686d067b70a54af597346a772">dataLED</a>[3];
+<a name="l00073"></a>00073 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a97abdd1952d844d7a124253128cfeb2e">speedl</a>;
+<a name="l00074"></a>00074 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#af9ad15905e2651620f5a5094fd7f017d">speedr</a>;
+<a name="l00075"></a>00075 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ace0bc1fd577a6d0fdec31ef9e83bfe82">rfData</a>[PAYLOAD_SIZE];
+<a name="l00076"></a>00076 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#abaacfa2a57ccfd747cfe23fdb12a3835">ackPayload</a>[16];
+<a name="l00077"></a>00077 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ab2e0dac927f92b95c5f96155593ce05f">packetId</a>;
+<a name="l00078"></a>00078 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ab3e5a84d70fd574a2b62f0b705ffbf20">rfAddress</a>;
+<a name="l00079"></a>00079 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a8f053ebc247844e01944a05a3e7f37b2">rfFlags</a>;
+<a name="l00080"></a>00080 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ae758b47927a10fe9e581b35213c7cce4">spiCommError</a>;
+<a name="l00081"></a>00081 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a92d94a0d820fd0303c4b5627cc44d7f9">rfDebugMode</a>;
+<a name="l00082"></a>00082 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a2fc25d5ae665b71e1ff44a11fd03818c">rfDebugCounter</a>;
+<a name="l00083"></a>00083 
+<a name="l00084"></a>00084 <span class="comment">/****************/</span>
+<a name="l00085"></a>00085 <span class="comment">/*** RGB LEDS ***/</span>
+<a name="l00086"></a>00086 <span class="comment">/****************/</span>
+<a name="l00087"></a>00087 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a2a7a17c50a1da6d3765420f9bc005fff">pwm_red</a>;
+<a name="l00088"></a>00088 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a2ee6dc1f749b8833e6628d843c6e5bfa">pwm_green</a>;
+<a name="l00089"></a>00089 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a3b052a0519d149a8fa1d7ac988840eb3">pwm_blue</a>;
+<a name="l00090"></a>00090 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#af375973932b849b7fe6c1f546f3e8adc">blinkState</a>;
+<a name="l00091"></a>00091 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a262f783dffbdbb5973d7ac8c81131030">rgbState</a>;
+<a name="l00092"></a>00092 
+<a name="l00093"></a>00093 <span class="comment">/************/</span>
+<a name="l00094"></a>00094 <span class="comment">/*** UART ***/</span>
+<a name="l00095"></a>00095 <span class="comment">/************/</span>
+<a name="l00096"></a>00096 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a0734982b153659a889ee1ff851292584">peripheralChoice</a>;
+<a name="l00097"></a>00097 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a1b9d4294c629fa08659f94b408a5d406">choosePeripheral</a>;
+<a name="l00098"></a>00098 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ad7b7c1bbc5eb9af3cab8aa0a1c6cdf7c">sendAdcValues</a>;
+<a name="l00099"></a>00099 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a5e4a5f87a073607f6dc19c26fcf541a2">commError</a>;
+<a name="l00100"></a>00100 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a3167147af72b7588996b94602b0c1348">byteCount</a>;
+<a name="l00101"></a>00101 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a45d3e5089c9d28d0c0edcd43a869226c">uartBuff</a>[UART_BUFF_SIZE];
+<a name="l00102"></a>00102 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ab4ff6f9dce673d3ad48512e5b1ea5c98">nextByteIndex</a>;
+<a name="l00103"></a>00103 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#aab278300880021140e975ac64e77d423">currByteIndex</a>;
+<a name="l00104"></a>00104 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a5992ce6eb703a026f88f15f4c407df73">chooseMenu</a>;
+<a name="l00105"></a>00105 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a74e54c166dc6ef326652b5e0b8e91ab3">menuChoice</a>;
+<a name="l00106"></a>00106 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#aa48bd9e1c3fcaef5fccfb718a8cc7cd1">addressReceived</a>;
+<a name="l00107"></a>00107 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#af0bec90ad7dd18c2dbba65cb37d0e43c">menuState</a>;
+<a name="l00108"></a>00108 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a89949bddfd879a8c814b4bbceb06436f">getDataNow</a>;
+<a name="l00109"></a>00109 
+<a name="l00110"></a>00110 <span class="comment">/*************************/</span>
+<a name="l00111"></a>00111 <span class="comment">/*** IR REMOTE CONTROL ***/</span>
+<a name="l00112"></a>00112 <span class="comment">/*************************/</span>
+<a name="l00113"></a>00113 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#acd9d8d98145fba8d89fa53595183f6f2">irCommand</a>;
+<a name="l00114"></a>00114 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a848efaccfa3abf681a7583e2db972b49">command_received</a>;
+<a name="l00115"></a>00115 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#acda8a999560be754013d18b84ab58ffb">colorState</a>;
+<a name="l00116"></a>00116 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a32ebeb87f3ebe57f5e8c96089a3d23e6">irEnabled</a>;
+<a name="l00117"></a>00117 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#aaa8bfff0cb9fc452509ba740424df94f">checkGlitch</a>;
+<a name="l00118"></a>00118 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a50380767e92c6b0b29e60eb116b285db">behaviorState</a>;
+<a name="l00119"></a>00119 
+<a name="l00120"></a>00120 <span class="comment">/*********************/</span>
+<a name="l00121"></a>00121 <span class="comment">/*** ACCELEROMETER ***/</span>
+<a name="l00122"></a>00122 <span class="comment">/*********************/</span>
+<a name="l00123"></a>00123 <span class="keyword">extern</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#aeec7f45d961933d0721f9e1e0540a799">accelAddress</a>;
+<a name="l00124"></a>00124 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a0c65e0c665b92f0ac4bf8e671f2ecc61">useAccel</a>;
+<a name="l00125"></a>00125 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a57ffc70a70a2abc91d149183f12cdc89">accX</a>;
+<a name="l00126"></a>00126 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#af4b57b2a018bedcd4b030c1925b9dfc6">accY</a>;
+<a name="l00127"></a>00127 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ad410e86f476c255912717df192dbdedf">accZ</a>;
+<a name="l00128"></a>00128 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#acdf0c29faf6a88b3a5b06643b94e0b6c">accOffsetX</a>;
+<a name="l00129"></a>00129 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a1f745ee117798779213b38ddbc6be756">accOffsetY</a>;
+<a name="l00130"></a>00130 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a3dcf79de1e12bbe1097d84af36c715b6">accOffsetZ</a>;
+<a name="l00131"></a>00131 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a24336f6a78b7d41a3648debe6c3b7c02">accOffsetXSum</a>;
+<a name="l00132"></a>00132 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#af991008eee64ca5487961dcb8c0b3948">accOffsetYSum</a>;
+<a name="l00133"></a>00133 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a27c1f02dea0af032b0f7f200f77404ce">accOffsetZSum</a>;
+<a name="l00134"></a>00134 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ac4c2e6d13443211b5646e5bee53de1d4">currentAngle</a>;
+<a name="l00135"></a>00135 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a59ee96a5b3342309a959a1966f4c8ad7">currPosition</a>;
+<a name="l00136"></a>00136 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a9d6497323822d9ef40aae20cbf4d95fc">timesInSamePos</a>;
+<a name="l00137"></a>00137 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#af6b6fc5f42e41d9b2e1c7c19d68cf1ca">robotPosition</a>;
+<a name="l00138"></a>00138 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a693872dffad437db5beb598bf28b658d">accBuff</a>[6];
+<a name="l00139"></a>00139 
+<a name="l00140"></a>00140 <span class="comment">/***************/</span>
+<a name="l00141"></a>00141 <span class="comment">/*** VARIOUS ***/</span>
+<a name="l00142"></a>00142 <span class="comment">/***************/</span>
+<a name="l00143"></a>00143 <span class="keyword">extern</span> uint32_t <a class="code" href="variables_8c.html#a3b9534e9580b5fad748ee275d61228a9">clockTick</a>;
+<a name="l00144"></a>00144 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a28b51d82160ec9f6d8957c4da43a31bb">currentSelector</a>;
+<a name="l00145"></a>00145 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ac084b77bdafd27ce145006c472b27f42">calibrationCycle</a>;
+<a name="l00146"></a>00146 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#aac69bb11d34873c2410860817f4e1729">startCalibration</a>;
+<a name="l00147"></a>00147 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#af4331c7661c743667b33ca14da81dc98">hardwareRevision</a>;
+<a name="l00148"></a>00148 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a4f22bac3488a99b4dd44d62dc47c6886">demoState</a>;
+<a name="l00149"></a>00149 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ae7a7b57e11ffdfc0c28a6a2825645f5d">lineFound</a>;
+<a name="l00150"></a>00150 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#aa31c12581a44df3adca6427a522ff46c">outOfLine</a>;
+<a name="l00151"></a>00151 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#adbf2c64d113917491de6b6a29f1beb30">chargeContact</a>;
+<a name="l00152"></a>00152 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a5f5d127a672fc93790b6ecbc802aed80">demoStartTime</a>;
+<a name="l00153"></a>00153 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a1c1b196b4ae5632015caed09a2524afd">demoStartTime2</a>;
+<a name="l00154"></a>00154 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a02798db3bfda70a98f9c046c563e23a3">demoEndTime</a>;
+<a name="l00155"></a>00155 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a365fc889d1b645683237e9d4e356e086">currentOsccal</a>;
+<a name="l00156"></a>00156 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ad0d15f44ad6f577737dee3c434f283a8">speedStepCounter</a>;
+<a name="l00157"></a>00157 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a1947820c2f03d3eeeb5ca9880a83c4fd">speedStep</a>;
+<a name="l00158"></a>00158 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a8573131a0dfde690a0c9446e564e997f">softAccEnabled</a>;
+<a name="l00159"></a>00159 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ad48173e62fd8f02d693ed02ae2e3b44c">calibrationWritten</a>;
+<a name="l00160"></a>00160 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ab7fd5a35e7e6013454356c583ff5813a">greenLedState</a>;
+<a name="l00161"></a>00161 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ac59363119b0378987cbe68ef4c223dd7">rgbLedState</a>;
+<a name="l00162"></a>00162 
+<a name="l00163"></a>00163 <span class="comment">/**************************/</span>
+<a name="l00164"></a>00164 <span class="comment">/*** OBSTACLE AVOIDANCE ***/</span>
+<a name="l00165"></a>00165 <span class="comment">/**************************/</span>
+<a name="l00166"></a>00166 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a5b780d6413adf73534ba19a6b04d146f">obstacleAvoidanceEnabled</a>;
+<a name="l00167"></a>00167 
+<a name="l00168"></a>00168 <span class="comment">/***********************/</span>
+<a name="l00169"></a>00169 <span class="comment">/*** CLIFF AVOIDANCE ***/</span>
+<a name="l00170"></a>00170 <span class="comment">/***********************/</span>
+<a name="l00171"></a>00171 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#aa832585990dfb07faa7341e02d933d2a">cliffAvoidanceEnabled</a>;
+<a name="l00172"></a>00172 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#aae8bc9e932ab77b75d3ac9657589540b">cliffDetectedFlag</a>;
+<a name="l00173"></a>00173 
+<a name="l00174"></a>00174 <span class="comment">/****************/</span>
+<a name="l00175"></a>00175 <span class="comment">/*** ODOMETRY ***/</span>
+<a name="l00176"></a>00176 <span class="comment">/****************/</span>
+<a name="l00177"></a>00177 <span class="keyword">extern</span> <span class="keywordtype">float</span> <a class="code" href="variables_8c.html#aadfc5c227ca658a29a59a0ce6fc15792">theta</a>, <a class="code" href="variables_8c.html#aed8989a0ebbb6dacaa64a8aaf7d86f1d">lastTheta</a>, <a class="code" href="variables_8c.html#a160688023fc41cf253f602ae11350f95">xPos</a>, <a class="code" href="variables_8c.html#a20e6a042580ca0008154b59b082b427e">yPos</a>, <a class="code" href="variables_8c.html#aaa40e739bc9f9565235fad8acf3a8daa">deltaDist</a>;
+<a name="l00178"></a>00178 <span class="keyword">extern</span> <span class="keywordtype">float</span> <a class="code" href="variables_8c.html#ac6ec8f747421d82cbf8357715b2a1192">thetaOld</a>, <a class="code" href="variables_8c.html#a3945676b3bfcf555816fe83fba753bf7">xPosOld</a>, <a class="code" href="variables_8c.html#a7da8406e4df8e2daeb73feb898358e1b">yPosOld</a>, <a class="code" href="variables_8c.html#a9c6fc0aeba2ff576961e0a78a5b142df">deltaDistOld</a>;
+<a name="l00179"></a>00179 <span class="keyword">extern</span> <span class="keywordtype">float</span> <a class="code" href="variables_8c.html#a7af569db3f831b1f817a2da5e60009cf">leftDist</a>, <a class="code" href="variables_8c.html#a3caaa25309cff1f9335c49fc04bcce08">rightDist</a>, <a class="code" href="variables_8c.html#a324ac36ff45b4b76f5c770f4da0bcbab">leftDistPrev</a>, <a class="code" href="variables_8c.html#ad5b67728c554f49b613732bd94973999">rightDistPrev</a>;
+<a name="l00180"></a>00180 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ac4cf536e61f095eed8cc73dee1c41827">computeOdometry</a>;
+<a name="l00181"></a>00181 <span class="keyword">extern</span> <span class="keywordtype">float</span> <a class="code" href="variables_8c.html#a56e3cdbfeb5c300a4661aacb1014ff01">thetaAcc</a>;
+<a name="l00182"></a>00182 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a9fb65272588504b6da9f8dbbf3596d22">calibState</a>;
+<a name="l00183"></a>00183 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a388ec63e5ffc66a6b48d2fe0bf70b5d5">calibVelIndex</a>;
+<a name="l00184"></a>00184 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a16483ce485aa3a5c9adaeaa92627d149">calibWheel</a>;
+<a name="l00185"></a>00185 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a1dc2258624a73b6a54f7e0c21488aef6">tempVel</a>;
+<a name="l00186"></a>00186 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a2a805973d65b4535e2ecb6914ad8d9a3">calibration</a>[<a class="code" href="constants_8h.html#a56f83b7a445aba5ced3c6a88392d5cbe">CALIBRATION_SAMPLES</a>][8];
+<a name="l00187"></a>00187 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a117eadfa79b1b5f4ace43898709e7033">timeoutOdometry</a>;
+<a name="l00188"></a>00188 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <a class="code" href="variables_8c.html#a6638855d1824effb68d59a25411afd49">timeOdometry</a>;
+<a name="l00189"></a>00189 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a60d3ed52cb959090fd8137d9d9f33a2b">calibrateOdomFlag</a>;
+<a name="l00190"></a>00190 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a20b7b8d66b8baa717c9958e29fc19a94">leftSpeedSumOdom</a>;
+<a name="l00191"></a>00191 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#acb866b9e680afd5989af0e6d52d10d44">rightSpeedSumOdom</a>;
+<a name="l00192"></a>00192 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#aea9f52d3b122e82738c0337540de3dbc">leftSumCount</a>;
+<a name="l00193"></a>00193 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a6881d27e0dda567744a8b34fb0bdb054">rightSumCount</a>;
+<a name="l00194"></a>00194 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#aaab9c2af46d970e467c5fc9e429ca182">avgLeftSpeed</a>;
+<a name="l00195"></a>00195 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#aa576731d53b75ecd0f211046940705f7">avgRightSpeed</a>;
+<a name="l00196"></a>00196 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a0554f550812c50d00778e7e669a487d8">speedLeftFromEnc</a>;
+<a name="l00197"></a>00197 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#aa1a20e1944e2ef0e6aeea9d325e0136b">speedRightFromEnc</a>;
+<a name="l00198"></a>00198 <span class="keyword">extern</span> uint32_t <a class="code" href="variables_8c.html#a28115b46e9d7c7bd8ced2b9546ec2392">timeLeftOdom</a>;
+<a name="l00199"></a>00199 <span class="keyword">extern</span> uint32_t <a class="code" href="variables_8c.html#a41b81039fca07a31f1aa56a79136927d">timeRightOdom</a>;
+<a name="l00200"></a>00200 
+<a name="l00201"></a>00201 <span class="comment">/***************/</span>
+<a name="l00202"></a>00202 <span class="comment">/*** IR COMM ***/</span>
+<a name="l00203"></a>00203 <span class="comment">/***************/</span>
+<a name="l00204"></a>00204 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a6fefe7a1289f3fb9d79136a3ccff1434">irCommEnabled</a>;
+<a name="l00205"></a>00205 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a79e8f269cb00aaeb62bde8954c10edf2">irCommEnabledNext</a>;
+<a name="l00206"></a>00206 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a02b586ca6af9a49d7999bc287f9ffefc">irCommMode</a>;
+<a name="l00207"></a>00207 <span class="keyword">extern</span> <span class="keyword">volatile</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ae8a1aa76e62590e409f1e0d9501b7175">irCommState</a>;
+<a name="l00208"></a>00208 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a6d97bde74ad76eb829e756f4dddd3afd">irCommTempValue</a>;
+<a name="l00209"></a>00209 <span class="keyword">extern</span> <span class="keyword">volatile</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a138ff78d7dd4d4557bf9ca196af26d7e">irCommSendValues</a>;
+<a name="l00210"></a>00210 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a6186e420a25de67997d21c6d360eb3d2">irCommTickCounter</a>;
+<a name="l00211"></a>00211 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a82e8a6dc1202e0fbe1c2f50c7bcf3442">irCommTickCounter2</a>;
+<a name="l00212"></a>00212 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ad96d8237ba1e7fce40c37c9527a873a4">irCommTickCounterUpdate</a>;
+<a name="l00213"></a>00213 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a3cc7e139bb69a2c07d8c8fae02154da7">irCommLastSensor</a>;
+<a name="l00214"></a>00214 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a68466c55d437e0887066ea28789faacc">irCommLastData</a>;
+<a name="l00215"></a>00215 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a8db29d6de985e046d78a234628beba0d">angleDeg</a>;
+<a name="l00216"></a>00216 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a272e790d200933a8b2a033747b3180e5">angleError</a>;
+<a name="l00217"></a>00217 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#aa4960c6d188f1411feb458775074dcf8">angleDegEncode</a>;
+<a name="l00218"></a>00218 
+<a name="l00219"></a>00219 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a1b7b9d795f8fc2a27eaec3e4f1ad5377">irCommMaxSensorSignalTemp</a>[<a class="code" href="constants_8h.html#a27457700dc973c89d266f5d25ac7581d">IRCOMM_SAMPLING_WINDOW</a>*2];
+<a name="l00220"></a>00220 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a3294bb36491807d75e1a2457f32948ca">irCommMaxSensorSignalIndexTemp</a>;
+<a name="l00221"></a>00221 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ad7bf2e2fe5b66a680637284e78f6c096">irCommMaxSensorSignalFiltTemp</a>[<a class="code" href="constants_8h.html#a27457700dc973c89d266f5d25ac7581d">IRCOMM_SAMPLING_WINDOW</a>*2];
+<a name="l00222"></a>00222 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a31b78f4356896f0aea6e71ff7f922ffa">irCommMaxSensorSignalFiltIndexTemp</a>;
+<a name="l00223"></a>00223 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#acdd0b0cbbb4fee31007feb9801f0e5dd">irCommRxMaxSensorTemp</a>[2];
+<a name="l00224"></a>00224 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a4a225f80dbdfb72167eeb9fc79a84d9e">irCommRxMaxSensorIndexTemp</a>;
+<a name="l00225"></a>00225 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a17be610ab6d5339c9d41a027af5e65f3">irCommRxMaxDiffTemp</a>[2];
+<a name="l00226"></a>00226 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a7e26db4cd10914367be22178e5f338f6">irCommRxMaxDiffIndexTemp</a>;
+<a name="l00227"></a>00227 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#abb4ff0789354452ea96c0f9e7e6883f3">irCommProxMeanTemp</a>[2];
+<a name="l00228"></a>00228 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a1565fb52653c69daffddc1488d7abae1">irCommProxMeanIndexTemp</a>;
+<a name="l00229"></a>00229 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a41db0e297f427cb7478d4e340eda67e3">irCommSwitchCountTemp</a>[2];
+<a name="l00230"></a>00230 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a518a4c1d1d23f7e13a845db464ba7dfc">irCommSwitchCountIndexTemp</a>;
+<a name="l00231"></a>00231 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a725ea102bf8bbedc5cdc6f0f9c8c618b">irCommMaxSensorValueCurrTemp</a>[2];
+<a name="l00232"></a>00232 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a58b9a5749aeb86e63e2bdf34310d2ebd">irCommMaxSensorValueCurrIndexTemp</a>;
+<a name="l00233"></a>00233 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a5203adf37d5b4919140a06499f72704d">irCommMinSensorValueCurrTemp</a>[2];
+<a name="l00234"></a>00234 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ae3aff0d7c3f6a3c546274fa5b708ed23">irCommMinSensorValueCurrIndexTemp</a>;
+<a name="l00235"></a>00235 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#afa15ae04239a8fd532542fef8a6e9188">irCommShiftCountTemp</a>[2];
+<a name="l00236"></a>00236 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ac91581e62fd726f1bdfbe053d7cb3fb9">irCommShiftCountIndexTemp</a>;
+<a name="l00237"></a>00237 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a23ae1dddd35211eb31e88a2994c71334">irCommShiftCountFinalTemp</a>[2];
+<a name="l00238"></a>00238 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a48fcade4a9beca9f444d412d010e2eda">irCommShiftCountFinalIndexTemp</a>;
+<a name="l00239"></a>00239 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ae65d709f3efdc6f8adb614e032b84aab">irCommStartDiffTemp</a>[2];
+<a name="l00240"></a>00240 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a2bddb52f2e996e13e05ac6ea9086655a">irCommStartDiffIndexTemp</a>;
+<a name="l00241"></a>00241 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#acbb1ea153636f347f21c6cfcc0692761">irCommComputeShiftTemp</a>[2];
+<a name="l00242"></a>00242 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#af12e79f27822c1300781682d6dc5c35c">irCommComputeShiftIndexTemp</a>;
+<a name="l00243"></a>00243 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a1d6bc7dc0ee1c0ab6b4daea9b1bc3502">irCommRxPeakHighToLowTemp</a>[2];
+<a name="l00244"></a>00244 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ac4c72dd9d5b1a9a8ad9b9b7079076efe">irCommRxPeakHighToLowIndexTemp</a>;
+<a name="l00245"></a>00245 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a70389b2a2c560cd01747a61bd0ecff4a">irCommRxStartPeakDurationTemp</a>[2];
+<a name="l00246"></a>00246 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a97e35ca4ca51c6eaa399896d0373f485">irCommRxStartPeakDurationIndexTemp</a>;
+<a name="l00247"></a>00247 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a4c3cd156c9da9958c13a412485bd48fa">irCommRxStartBitDetectedTemp</a>[2];
+<a name="l00248"></a>00248 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a375723728921bed8bf8213dc1da505c9">irCommRxStartBitDetectedIndexTemp</a>;
+<a name="l00249"></a>00249 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#acc0eb2db4db21e79fab0c8abdfa2133b">irCommStateTemp</a>[14];
+<a name="l00250"></a>00250 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#af063cc6cce01fc35dbb251e2f4e2e111">irCommStateIndexTemp</a>;
+<a name="l00251"></a>00251 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#af8baf36a606ff112c176a8ecc0d0e4f6">irCommSyncStateTemp</a>[2];
+<a name="l00252"></a>00252 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a20efa5df2786f208752e400bdbf58afe">irCommSyncStateIndexTemp</a>;
+<a name="l00253"></a>00253 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ab1c450cf2d23739eb4c935cf41b8c01b">irCommBitsSignalTemp</a>[<a class="code" href="constants_8h.html#a27457700dc973c89d266f5d25ac7581d">IRCOMM_SAMPLING_WINDOW</a>*10];
+<a name="l00254"></a>00254 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a81d2d427c8b6ee65d9247ef54683dd91">irCommBitsSignalIndexTemp</a>;
+<a name="l00255"></a>00255 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ae0ce11d7e73bee1c1709b6bea04383df">irCommRxBitReceivedTemp</a>[10];
+<a name="l00256"></a>00256 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#adea6fe9d7dd929e2d078b4f8761c4f18">irCommRxBitReceivedIndexTemp</a>;
+<a name="l00257"></a>00257 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a1820b8dcd60bb8747c9f78a3c4d1d02f">irCommRxPrevDataReceived</a>;
+<a name="l00258"></a>00258 
+<a name="l00259"></a>00259 <span class="comment">// reception</span>
+<a name="l00260"></a>00260 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a036d50c0b77ec1868d11968a70356e16">irCommAdcRxState</a>;
+<a name="l00261"></a>00261 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a8fd07ef26eadb9480b49d6ed436c7482">irCommRxWindowSamples</a>;
+<a name="l00262"></a>00262 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ac82d943b61094da4624076eb38567d68">irCommMaxSensorValueBuff1</a>[8];
+<a name="l00263"></a>00263 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a26a1b39dfc9ad553606d3585ad8b3bf3">irCommMaxSensorValueBuff2</a>[8];
+<a name="l00264"></a>00264 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> *<a class="code" href="variables_8c.html#a80fe42f8ec91513010cadb37c5fb15b8">irCommMaxSensorValueAdc</a>;
+<a name="l00265"></a>00265 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> *<a class="code" href="variables_8c.html#a534163facb1809f2a050161fc37689a9">irCommMaxSensorValueCurr</a>;
+<a name="l00266"></a>00266 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a14ae532ead4ff36c8676b98bc2f97ac9">irCommMinSensorValueBuff1</a>[8];
+<a name="l00267"></a>00267 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a627684914c1be5f2aab28fdb1508bacb">irCommMinSensorValueBuff2</a>[8];
+<a name="l00268"></a>00268 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> *<a class="code" href="variables_8c.html#a64baea708a84f60aa2af626cf26a6d16">irCommMinSensorValueAdc</a>;
+<a name="l00269"></a>00269 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> *<a class="code" href="variables_8c.html#a184c2dc604d160d528c8e20ab7c4f08e">irCommMinSensorValueCurr</a>;
+<a name="l00270"></a>00270 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a3bea04c5cb50bb2e5fd2e8b31f543b89">irCommProxValuesBuff1</a>[8*<a class="code" href="constants_8h.html#a27457700dc973c89d266f5d25ac7581d">IRCOMM_SAMPLING_WINDOW</a>];
+<a name="l00271"></a>00271 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ae50e90e180a651a852b80cf4af81733e">irCommProxValuesBuff2</a>[8*<a class="code" href="constants_8h.html#a27457700dc973c89d266f5d25ac7581d">IRCOMM_SAMPLING_WINDOW</a>];
+<a name="l00272"></a>00272 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> *<a class="code" href="variables_8c.html#a1d6335b5ec8d4b3f0f03b392ad8e8623">irCommProxValuesAdc</a>;
+<a name="l00273"></a>00273 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> *<a class="code" href="variables_8c.html#ae39eb8efd849ac7469629d39560921c9">irCommProxValuesCurr</a>;
+<a name="l00274"></a>00274 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> *<a class="code" href="variables_8c.html#aca5fdd0e7c2919485b457a1b14ff1889">irCommTempPointer</a>;
+<a name="l00275"></a>00275 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a7f35ad5a6d62d3ad8507b981a5d42c22">irCommRxCrc</a>;
+<a name="l00276"></a>00276 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ae38b400a8af09fb0fdf681e1800658f7">irCommRxMaxDiff</a>;
+<a name="l00277"></a>00277 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a1fb359fe4d04cc4105c46d94e706982a">irCommRxMaxSensor</a>;
+<a name="l00278"></a>00278 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#aa39e3f1656d5ad2b581297b3e033f8c4">irCommMaxSensorSignal</a>[<a class="code" href="constants_8h.html#a27457700dc973c89d266f5d25ac7581d">IRCOMM_SAMPLING_WINDOW</a>];
+<a name="l00279"></a>00279 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a43f5992aa4ec7c56b7bb857533b619f8">irCommProxSum</a>;
+<a name="l00280"></a>00280 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a553fcfdb101dfac354d5ab94934f8ba9">irCommTempMax</a>;
+<a name="l00281"></a>00281 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a6e713024688f8e3ff78b71f52cd92f86">irCommTempMin</a>;
+<a name="l00282"></a>00282 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a084aa3d5236cdd46be8dd943d1219100">irCommShiftCount</a>;
+<a name="l00283"></a>00283 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a46685d2e0b2bb69db0ebe17a2d46274f">irCommComputeShift</a>;
+<a name="l00284"></a>00284 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ae3613c01bcce72792b6954b77b2129d1">irCommProxMean</a>;
+<a name="l00285"></a>00285 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ade57ca528579ef0d524fd5ef0d5c0fe1">irCommSignalState</a>;
+<a name="l00286"></a>00286 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#aef920cca5e8ed77bf07e97f1618e461e">irCommSwitchCount</a>;
+<a name="l00287"></a>00287 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#aca5d2f5580ca07c023ed51b28bbcd23e">irCommRxBitCount</a>;
+<a name="l00288"></a>00288 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#aef12e35ec01347a06e101d5397828844">irCommRxCrcError</a>;
+<a name="l00289"></a>00289 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#afd859bd15a82c843490b7eb05db0c3f3">irCommRxByte</a>;
+<a name="l00290"></a>00290 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a51537006524d2a71177a3cef7fb4309d">irCommSecondBitSkipped</a>;
+<a name="l00291"></a>00291 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ac11f6eaec12af1e2ab2adff1474b7b4a">irCommShiftCounter</a>;
+<a name="l00292"></a>00292 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#af06f67a7bed83257a6eae624c3d81175">irCommRxBitReceived</a>[10];
+<a name="l00293"></a>00293 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#aa126eee2edad372ca6ab25bc0680cf72">irCommRxByteExpected</a>;
+<a name="l00294"></a>00294 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ad9a8f070e26198adf8388c0524c8b826">irCommRxSequenceCount</a>;
+<a name="l00295"></a>00295 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a2214a3bef5d759aa3b5f2869e748299e">irCommRxLastDataReceived</a>;
+<a name="l00296"></a>00296 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a1fee9c3fc2863072eaf0072161f5473e">irCommRxDataAvailable</a>;
+<a name="l00297"></a>00297 <span class="keyword">extern</span> <span class="keywordtype">signed</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a53a7703b9514a1c72cba55472a0b3547">irCommRxReceivingSensor</a>;
+<a name="l00298"></a>00298 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a2fecb74ee38bfc4cd6f71e6dfe24a154">irCommRxBitSkipped</a>;
+<a name="l00299"></a>00299 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a966c10501a0d03fe5b1d3c1b047ce993">irCommRxStartBitDetected</a>;
+<a name="l00300"></a>00300 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a4427d7bc127833a6ec7728b22432a6ce">irCommRxPeakHighToLow</a>;
+<a name="l00301"></a>00301 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a14bc4a07036ecccddd259c41578eba26">irCommRxStartPeakDuration</a>;
+<a name="l00302"></a>00302 
+<a name="l00303"></a>00303 <span class="comment">// transmission</span>
+<a name="l00304"></a>00304 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a91c02b7ddfc51bb9be9a60e7a57bd62f">irCommAdcTxState</a>;
+<a name="l00305"></a>00305 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ae60626ae1da44f5b13fd09728f54063f">irCommTxByte</a>;
+<a name="l00306"></a>00306 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#aeb74350453c230d1ba8d07ef8ffbdcfe">irCommTxByteEnqueued</a>;
+<a name="l00307"></a>00307 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#a3eb90c1939a146e0e709b28567bf419b">irCommTxLastTransmissionTime</a>;
+<a name="l00308"></a>00308 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#aec7eb6ee2bd069dc73a9831568e9335a">irCommTxBitToTransmit</a>[12];
+<a name="l00309"></a>00309 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a2246347ec06197c65121e4bec5c37579">irCommTxCrc</a>;
+<a name="l00310"></a>00310 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a506ef511354db055eb6355910078e158">irCommTxBitCount</a>;
+<a name="l00311"></a>00311 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ac4a19d2b4fab7b78c138dd7b3aaaa9c1">irCommTxPulseState</a>;
+<a name="l00312"></a>00312 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="variables_8c.html#ab84af081ff90204348c81cb341677821">irCommTxDuration</a>;
+<a name="l00313"></a>00313 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a399bbc4a437f49899acec06366c93fc2">irCommTxSwitchCount</a>;
+<a name="l00314"></a>00314 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a5c254076652c888461cc8ee468641d49">irCommTxSwitchCounter</a>;
+<a name="l00315"></a>00315 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#ab7e035e50663f40dd97e78f8b416f50c">irCommTxDurationCycle</a>;
+<a name="l00316"></a>00316 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#add03dbd27fc61749861e2e50807a9fd7">irCommTxSensorMask</a>;
+<a name="l00317"></a>00317 <span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="variables_8c.html#a9edfd592f478422cef359e17100d39a8">irCommTxSensorGroup</a>;
+<a name="l00318"></a>00318 
+<a name="l00319"></a>00319 
+<a name="l00320"></a>00320 
+<a name="l00321"></a>00321 
+<a name="l00322"></a>00322 
+<a name="l00323"></a>00323 
+<a name="l00324"></a>00324 
+<a name="l00325"></a>00325 
+<a name="l00326"></a>00326 
 </pre></div></div><!-- contents -->
 </div>
 <!-- window showing the filter options -->
@@ -260,7 +442,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul>
       <li class="navelem"><a class="el" href="variables_8h.html">variables.h</a>      </li>
 
-    <li class="footer">Generated on Tue Mar 27 2012 16:12:01 for Elisa3 by
+    <li class="footer">Generated on Mon Dec 1 2014 08:55:03 for Elisa3 by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

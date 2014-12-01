@@ -2,12 +2,26 @@ var searchData=
 [
   ['data_5fir',['data_ir',['../ir__remote__control_8c.html#af3cea0713bd42d9cca57b04fcf1a8a13',1,'ir_remote_control.c']]],
   ['dataled',['dataLED',['../variables_8c.html#a591fc8c686d067b70a54af597346a772',1,'dataLED():&#160;variables.c'],['../variables_8h.html#a591fc8c686d067b70a54af597346a772',1,'dataLED():&#160;variables.c']]],
+  ['debug_5fall_5fsensors',['DEBUG_ALL_SENSORS',['../constants_8h.html#afd8e490bc545f56354ef0e6a3738fa1a',1,'constants.h']]],
+  ['debug_5fbyte_5freception',['DEBUG_BYTE_RECEPTION',['../constants_8h.html#a1871a52670ccbf032904a74ef2dd1f0a',1,'constants.h']]],
+  ['debug_5fbyte_5fsequence',['DEBUG_BYTE_SEQUENCE',['../constants_8h.html#a2e4dbbf0bcd24b4fa145eba8f733e534',1,'constants.h']]],
+  ['debug_5fmax_5fsensor',['DEBUG_MAX_SENSOR',['../constants_8h.html#a204ef595264ced74c7e87f117558e70d',1,'constants.h']]],
+  ['debug_5fmax_5fsensor_5fstate',['DEBUG_MAX_SENSOR_STATE',['../constants_8h.html#a89974e95c008757caa23492dfa777546',1,'constants.h']]],
+  ['debug_5fread_5fbit',['DEBUG_READ_BIT',['../constants_8h.html#a4551168a25bd97ee15c280da74a8aa6a',1,'constants.h']]],
+  ['debug_5fstart_5fbit_5fstate',['DEBUG_START_BIT_STATE',['../constants_8h.html#aad3bf0b151454e0bf7d3f89f160f5b1a',1,'constants.h']]],
   ['delta_5fleft_5fspeed_5fcurrent',['delta_left_speed_current',['../variables_8c.html#a6a596c0e08a4d87babcc68b3f04d866b',1,'delta_left_speed_current():&#160;variables.c'],['../variables_8h.html#a6a596c0e08a4d87babcc68b3f04d866b',1,'delta_left_speed_current():&#160;variables.c']]],
   ['delta_5fleft_5fspeed_5fprev',['delta_left_speed_prev',['../variables_8c.html#a0727a38a7b29034408115e03f1472b4f',1,'delta_left_speed_prev():&#160;variables.c'],['../variables_8h.html#a0727a38a7b29034408115e03f1472b4f',1,'delta_left_speed_prev():&#160;variables.c']]],
   ['delta_5fleft_5fspeed_5fsum',['delta_left_speed_sum',['../variables_8c.html#a9a7906239cb8916811d561fcea2695f1',1,'delta_left_speed_sum():&#160;variables.c'],['../variables_8h.html#a9a7906239cb8916811d561fcea2695f1',1,'delta_left_speed_sum():&#160;variables.c']]],
   ['delta_5fright_5fspeed_5fcurrent',['delta_right_speed_current',['../variables_8c.html#ad2cdc38ff0e20edb44467d3d8b82a681',1,'delta_right_speed_current():&#160;variables.c'],['../variables_8h.html#ad2cdc38ff0e20edb44467d3d8b82a681',1,'delta_right_speed_current():&#160;variables.c']]],
   ['delta_5fright_5fspeed_5fprev',['delta_right_speed_prev',['../variables_8c.html#a4ccea4434d8c3eeedf52a20d8105a91a',1,'delta_right_speed_prev():&#160;variables.c'],['../variables_8h.html#a4ccea4434d8c3eeedf52a20d8105a91a',1,'delta_right_speed_prev():&#160;variables.c']]],
   ['delta_5fright_5fspeed_5fsum',['delta_right_speed_sum',['../variables_8c.html#ad8f5a044a67026260fa2100fbe22f5e4',1,'delta_right_speed_sum():&#160;variables.c'],['../variables_8h.html#ad8f5a044a67026260fa2100fbe22f5e4',1,'delta_right_speed_sum():&#160;variables.c']]],
+  ['deltadist',['deltaDist',['../variables_8c.html#aaa40e739bc9f9565235fad8acf3a8daa',1,'deltaDist():&#160;variables.c'],['../variables_8h.html#aaa40e739bc9f9565235fad8acf3a8daa',1,'deltaDist():&#160;variables.c']]],
+  ['deltadistold',['deltaDistOld',['../variables_8c.html#a9c6fc0aeba2ff576961e0a78a5b142df',1,'deltaDistOld():&#160;variables.c'],['../variables_8h.html#a9c6fc0aeba2ff576961e0a78a5b142df',1,'deltaDistOld():&#160;variables.c']]],
+  ['demoendtime',['demoEndTime',['../variables_8c.html#a02798db3bfda70a98f9c046c563e23a3',1,'demoEndTime():&#160;variables.c'],['../variables_8h.html#a02798db3bfda70a98f9c046c563e23a3',1,'demoEndTime():&#160;variables.c']]],
+  ['demostarttime',['demoStartTime',['../variables_8c.html#a5f5d127a672fc93790b6ecbc802aed80',1,'demoStartTime():&#160;variables.c'],['../variables_8h.html#a5f5d127a672fc93790b6ecbc802aed80',1,'demoStartTime():&#160;variables.c']]],
+  ['demostarttime2',['demoStartTime2',['../variables_8c.html#a1c1b196b4ae5632015caed09a2524afd',1,'demoStartTime2():&#160;variables.c'],['../variables_8h.html#a1c1b196b4ae5632015caed09a2524afd',1,'demoStartTime2():&#160;variables.c']]],
+  ['demostate',['demoState',['../variables_8c.html#a4f22bac3488a99b4dd44d62dc47c6886',1,'demoState():&#160;variables.c'],['../variables_8h.html#a4f22bac3488a99b4dd44d62dc47c6886',1,'demoState():&#160;variables.c']]],
   ['disablecliffavoidance',['disableCliffAvoidance',['../behaviors_8c.html#af217436726ef03752c9438e0ea85ed79',1,'disableCliffAvoidance():&#160;behaviors.c'],['../behaviors_8h.html#af217436726ef03752c9438e0ea85ed79',1,'disableCliffAvoidance():&#160;behaviors.c']]],
-  ['disableobstacleavoidance',['disableObstacleAvoidance',['../behaviors_8c.html#a7988093c6402fbf4341ed941d60eaf32',1,'disableObstacleAvoidance():&#160;behaviors.c'],['../behaviors_8h.html#a7988093c6402fbf4341ed941d60eaf32',1,'disableObstacleAvoidance():&#160;behaviors.c']]]
+  ['disableobstacleavoidance',['disableObstacleAvoidance',['../behaviors_8c.html#a7988093c6402fbf4341ed941d60eaf32',1,'disableObstacleAvoidance():&#160;behaviors.c'],['../behaviors_8h.html#a7988093c6402fbf4341ed941d60eaf32',1,'disableObstacleAvoidance():&#160;behaviors.c']]],
+  ['distance_5fmm',['DISTANCE_MM',['../constants_8h.html#a2f44855f016990d77379303a3791eda4',1,'constants.h']]]
 ];

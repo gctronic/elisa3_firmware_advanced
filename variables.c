@@ -224,6 +224,11 @@ volatile unsigned char irCommSendValues = 0;	// debug through uart
 unsigned long int irCommTickCounter = 0;
 unsigned long int irCommTickCounter2 = 0;
 unsigned char irCommTickCounterUpdate = 0;
+signed char irCommLastSensor = -1;
+signed int irCommLastData = 0;
+signed int angleDeg = 0;
+signed int angleError = 0;
+unsigned char angleDegEncode = 0;
 
 signed int irCommMaxSensorSignalTemp[IRCOMM_SAMPLING_WINDOW*2];
 unsigned char irCommMaxSensorSignalIndexTemp = 0;
@@ -263,6 +268,7 @@ signed int irCommBitsSignalTemp[IRCOMM_SAMPLING_WINDOW*10];
 unsigned char irCommBitsSignalIndexTemp=0;
 unsigned char irCommRxBitReceivedTemp[10];
 unsigned char irCommRxBitReceivedIndexTemp=0;
+unsigned char irCommRxPrevDataReceived=0;
 
 // reception
 unsigned char irCommAdcRxState = 0;

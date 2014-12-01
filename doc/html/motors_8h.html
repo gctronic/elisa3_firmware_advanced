@@ -106,6 +106,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;avr\interrupt.h&gt;</code><br/>
 <code>#include &quot;<a class="el" href="behaviors_8h_source.html">behaviors.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="speed__control_8h_source.html">speed_control.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="utility_8h_source.html">utility.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="eeprom_i_o_8h_source.html">eepromIO.h</a>&quot;</code><br/>
 </div>
 <p><a href="motors_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -121,6 +123,14 @@ Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the desired speed for the left motor.  <a href="#ad5a48454a238e152a50a46054faef69e"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motors_8h.html#ac2e0fa600855023342f960b0960f894f">setRightSpeed</a> (signed char vel)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the desired speed for the right motor.  <a href="#ac2e0fa600855023342f960b0960f894f"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motors_8h.html#a845819f66f38cc796aa80b1b34bf1062">handleCalibration</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motors_8h.html#a7dd331623224e5765907e557696e5307">updateOdomData</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motors_8h.html#af32f2e285d132059238f06dc9e59526a">initCalibration</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">signed int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motors_8h.html#a8614958c5393625712d698818e02631f">getInputFromSpeed</a> (signed int s, unsigned char mode)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">signed int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motors_8h.html#af76a4c98fa3e4f08e2457f227bad9435">cast_speed</a> (signed int vel)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motors_8h.html#a5d82c1900c839ae10b9b23252b405ee7">getLeftSpeedFromInput</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motors_8h.html#ad6901423b66ff381666f170119035c36">getRightSpeedFromInput</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="motors_8h.html#a92320c5124f0356c4a1c4dd1227eb9ba">writeDefaultCalibration</a> ()</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Motors module. </p>
@@ -130,6 +140,98 @@ Functions</h2></td></tr>
 <dl class="copyright"><dt><b>Copyright:</b></dt><dd>GNU GPL v3</dd></dl>
 <p>The motors are handled with two timers: timer3 for right motor and timer4 for left motor. Two independent timers are needed because the timer will reset when the output compare register matches the timer value. The settings for the two timers are the same; the related pwm frequency is 122 Hz and the duty cycle define the motors speed. In order to measure the consumption and speed of the motors respectively in the active and passive phase of the pwm, two interrupts per timer are generated: one at the beginning of the cycle (timer overflow) and another one when when the output compare matches (beginning of passive phase). </p>
 </div><hr/><h2>Function Documentation</h2>
+<a class="anchor" id="af76a4c98fa3e4f08e2457f227bad9435"></a><!-- doxytag: member="motors.h::cast_speed" ref="af76a4c98fa3e4f08e2457f227bad9435" args="(signed int vel)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">signed int <a class="el" href="motors_8h.html#af76a4c98fa3e4f08e2457f227bad9435">cast_speed</a> </td>
+          <td>(</td>
+          <td class="paramtype">signed int&#160;</td>
+          <td class="paramname"><em>vel</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8614958c5393625712d698818e02631f"></a><!-- doxytag: member="motors.h::getInputFromSpeed" ref="a8614958c5393625712d698818e02631f" args="(signed int s, unsigned char mode)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">signed int <a class="el" href="motors_8h.html#a8614958c5393625712d698818e02631f">getInputFromSpeed</a> </td>
+          <td>(</td>
+          <td class="paramtype">signed int&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramname"><em>mode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a5d82c1900c839ae10b9b23252b405ee7"></a><!-- doxytag: member="motors.h::getLeftSpeedFromInput" ref="a5d82c1900c839ae10b9b23252b405ee7" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="motors_8h.html#a5d82c1900c839ae10b9b23252b405ee7">getLeftSpeedFromInput</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad6901423b66ff381666f170119035c36"></a><!-- doxytag: member="motors.h::getRightSpeedFromInput" ref="ad6901423b66ff381666f170119035c36" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="motors_8h.html#ad6901423b66ff381666f170119035c36">getRightSpeedFromInput</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a845819f66f38cc796aa80b1b34bf1062"></a><!-- doxytag: member="motors.h::handleCalibration" ref="a845819f66f38cc796aa80b1b34bf1062" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="motors_8h.html#a845819f66f38cc796aa80b1b34bf1062">handleCalibration</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="afca6b6bae07c747c6c7d4980ae19159f"></a><!-- doxytag: member="motors.h::handleMotorsWithNoController" ref="afca6b6bae07c747c6c7d4980ae19159f" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -165,6 +267,22 @@ Functions</h2></td></tr>
 
 <p>Change the motors speed (pwm registers) accordingly to the obstacle avoidance (if enabled). In this function both the motors velocities measurements are also updated (even if not needed). </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>none </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af32f2e285d132059238f06dc9e59526a"></a><!-- doxytag: member="motors.h::initCalibration" ref="af32f2e285d132059238f06dc9e59526a" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="motors_8h.html#af32f2e285d132059238f06dc9e59526a">initCalibration</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
 
 </div>
 </div>
@@ -239,6 +357,38 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a7dd331623224e5765907e557696e5307"></a><!-- doxytag: member="motors.h::updateOdomData" ref="a7dd331623224e5765907e557696e5307" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="motors_8h.html#a7dd331623224e5765907e557696e5307">updateOdomData</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a92320c5124f0356c4a1c4dd1227eb9ba"></a><!-- doxytag: member="motors.h::writeDefaultCalibration" ref="a92320c5124f0356c4a1c4dd1227eb9ba" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="motors_8h.html#a92320c5124f0356c4a1c4dd1227eb9ba">writeDefaultCalibration</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 </div><!-- contents -->
 </div>
 <!-- window showing the filter options -->
@@ -259,7 +409,7 @@ Functions</h2></td></tr>
     <ul>
       <li class="navelem"><a class="el" href="motors_8h.html">motors.h</a>      </li>
 
-    <li class="footer">Generated on Tue Mar 27 2012 16:12:03 for Elisa3 by
+    <li class="footer">Generated on Mon Dec 1 2014 08:55:04 for Elisa3 by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

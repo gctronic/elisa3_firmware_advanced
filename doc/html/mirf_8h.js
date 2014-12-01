@@ -22,6 +22,12 @@ var mirf_8h =
     [ "mirf_set_RADDR", "mirf_8h.html#a86c04e7d5db441a8517fcef90904f2cd", null ],
     [ "mirf_set_TADDR", "mirf_8h.html#a23432db3b29568325b53d4932b8e5732", null ],
     [ "mirf_write_register", "mirf_8h.html#a2e57e77443c90138e05be4139822e6e9", null ],
+    [ "readPayloadWidthFromPipe0", "mirf_8h.html#a10acc162380a28be92ce3646c66ac12a", null ],
+    [ "readPayloadWidthFromTopFifo", "mirf_8h.html#a0ec5584f9418f0ebab4a4819e45fc350", null ],
+    [ "rfDebugNextPacket", "mirf_8h.html#a99e8fb5f1f93e2038f5956fe52a6d1dc", null ],
+    [ "rfDebugSendData", "mirf_8h.html#a0500c9d04e87b0abe1f755a5c6fce8b5", null ],
+    [ "rfDisableDebugMode", "mirf_8h.html#a29528c378c2d7d5bfa913f0f627067fe", null ],
+    [ "rfEnableDebugMode", "mirf_8h.html#ad6cc6fe67896c7b1ff26b46cad027830", null ],
     [ "rx_fifo_is_empty", "mirf_8h.html#abffdd6a38e84ae4d35372f5b32e752ab", null ],
     [ "writeAckPayload", "mirf_8h.html#a97e38a1b97f3ccd23fae567bc0cb99aa", null ]
 ];

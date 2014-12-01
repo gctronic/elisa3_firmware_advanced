@@ -17,6 +17,7 @@ int main(void) {
 	unsigned char prevSelector=0;
 	unsigned int i=0;
 	unsigned int currRand=0, currRand2=0;
+	float targetAngle=0;
 
 	initPeripherals();
 
@@ -678,37 +679,201 @@ int main(void) {
 
 					break;
 
-			case 11:if(leftMotSteps <= 5000) {
-						setLeftSpeed(40);
-						setRightSpeed(40);
-					} else {
-						setLeftSpeed(0);
-						setRightSpeed(0);
-					}
-					break;
-
-			case 12:if(leftMotSteps <= 6000) {
-						setLeftSpeed(40);
-						setRightSpeed(40);
-					} else {
-						setLeftSpeed(0);
-						setRightSpeed(0);
-					}
-					break;
-
-			case 13: // IR comm transmitter
+			case 11: 	// sync-react demo using the IR local communication (2 robots only): the robots move around with obstacle avoidance
+						// enabled and when they detect each other they try to align towards the same direction rotating in place
 				switch(demoState) {
 					case 0:
 						irCommInit();
-						//enableObstacleAvoidance();
-						//setLeftSpeed(15);
-						//setRightSpeed(-15);
 						demoState = 1;
 						break;
 
 					case 1:						
-						irCommSendData(irCommRxByteExpected, 0x01);	
-						//irCommSendData(irCommRxByteExpected, 0xFF);												
+						enableObstacleAvoidance();
+						setLeftSpeed(10);
+						setRightSpeed(10);
+						demoState = 2;
+						demoStartTime = getTime100MicroSec();
+						break;
+
+					case 2:
+						irCommTasks();
+						if(irCommDataSent()==1) {
+							angleDegEncode = (unsigned char)((float)angleDeg*0.7084);
+							irCommSendData(angleDegEncode);
+						}
+						if(irCommDataAvailable()==1) {
+							demoStartTime = getTime100MicroSec();
+							irCommLastData = irCommReadData();
+							irCommLastData = (int)((float)irCommLastData*1.411);
+							irCommLastSensor = irCommReceivingSensor();	
+							disableObstacleAvoidance();										
+							angleDeg = getBearing(irCommLastSensor);
+							if(angleDeg < 0) {
+								angleDeg += 360;
+							}
+							angleError = angleDeg - irCommLastData;
+							angleError += 180;
+							if(angleError > 180) {
+								angleError -= 360;
+							}
+							if(angleError < -180) {
+								angleError += 360;
+							}
+							if(abs(angleError) < 10) {
+								setLeftSpeed(0);
+								setRightSpeed(0);
+							} else {
+								resetOdometry();
+								if(angleError > 0) {	// turn left
+									setLeftSpeed(-7);
+									setRightSpeed(7);
+									targetAngle = 0.09;	// about -10 degrees
+									demoState = 4;
+								} else {	// turn right
+									setLeftSpeed(7);
+									setRightSpeed(-7);
+									targetAngle = -0.09;	// about 10 degrees
+									demoState = 3;
+								}								
+							}
+
+						}
+						if((getTime100MicroSec()-demoStartTime) >= (PAUSE_5_SEC)) {
+							demoState = 1;
+						}
+						break;
+
+					case 3:	// rotate right
+						irCommTasks();
+						if(theta <= targetAngle) {
+							setLeftSpeed(0);
+							setRightSpeed(0);
+							demoState = 2;
+							demoStartTime = getTime100MicroSec();
+						}
+						break;
+
+					case 4:	// rotate left
+						irCommTasks();
+						if(theta >= targetAngle) {
+							setLeftSpeed(0);
+							setRightSpeed(0);
+							demoState = 2;
+							demoStartTime = getTime100MicroSec();
+						}
+						break;
+				}
+				break;
+
+			case 12:	// sync-react demo using the IR local communication (2 robots only): the robots move around with obstacle avoidance
+						// enabled and when they detect each other they try to point towards each other
+				switch(demoState) {
+					case 0:
+						irCommInit();
+						demoState = 1;
+						break;
+
+					case 1:						
+						enableObstacleAvoidance();
+						setLeftSpeed(10);
+						setRightSpeed(10);
+						demoState = 2;
+						demoStartTime = getTime100MicroSec();
+						break;
+
+					case 2:						
+						irCommTasks();
+						if(irCommDataSent()==1) {
+							irCommSendData(0xAA);
+						}
+						if(irCommDataAvailable()==1) {
+							i = irCommReadData();
+							if(i == 0xAA) {
+								disableObstacleAvoidance();
+								i = irCommReceivingSensor();
+								resetOdometry();
+								demoState = 3;								
+							}							
+						}
+						if((getTime100MicroSec()-demoStartTime) >= (PAUSE_5_SEC)) {
+							demoState = 1;
+						}
+						break;
+
+					case 3:
+						irCommTasks();
+						switch(i) {	// receiving sensor
+							case 0:
+								targetAngle = 0.0;
+								break;
+							case 1:
+								targetAngle = -0.785;
+								break;
+							case 2:
+								targetAngle = -1.57;
+								break;
+							case 3:
+								targetAngle = -2.356;
+								break;
+							case 4:
+								targetAngle = 3.14;
+								break;
+							case 5:
+								targetAngle = 2.356;
+								break;
+							case 6:
+								targetAngle = 1.57;
+								break;
+							case 7:
+								targetAngle = 0.785;
+								break;
+						}
+						if(targetAngle < 0.0) {
+							setLeftSpeed(10);
+							setRightSpeed(-10);
+							demoState = 4;
+						} else {
+							setLeftSpeed(-10);
+							setRightSpeed(10);
+							demoState = 5;
+						}
+						
+						break;
+					case 4:
+						irCommTasks();
+						if(theta <= targetAngle) {
+							setLeftSpeed(0);
+							setRightSpeed(0);
+							demoState = 2;
+							demoStartTime = getTime100MicroSec();
+						}
+						break;
+
+					case 5:
+						irCommTasks();
+						if(theta >= targetAngle) {
+							setLeftSpeed(0);
+							setRightSpeed(0);
+							demoState = 2;
+							demoStartTime = getTime100MicroSec();
+						}
+						break;
+
+				}
+				break;
+
+			case 13: // IR local communication: listen and transmit continuously
+				switch(demoState) {
+					case 0:
+						irCommInit();
+						enableObstacleAvoidance();
+						setLeftSpeed(10);
+						setRightSpeed(10);
+						demoState = 1;
+						break;
+
+					case 1:						
+						irCommSendData(irCommRxByteExpected);													
 						demoState = 2;
 						break;
 
@@ -724,6 +889,7 @@ int main(void) {
 							//if(irCommRxByteExpected==8) {
 							//	irCommRxByteExpected=0;
 							//}
+
 							if(irCommRxByteExpected<255) {
 								irCommRxByteExpected++;
 							} else {
@@ -734,7 +900,7 @@ int main(void) {
 				}
 				break;
 			
-			case 14: // IR comm receiver
+			case 14: // IR local communication: listen only
 				switch(demoState) {
 					case 0:
 						irCommInit();

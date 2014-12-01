@@ -2,6 +2,7 @@ var searchData=
 [
   ['updateblueled',['updateBlueLed',['../leds_8c.html#a680ef64642d1615849ae105e862ba97d',1,'updateBlueLed(unsigned char value):&#160;leds.c'],['../leds_8h.html#a680ef64642d1615849ae105e862ba97d',1,'updateBlueLed(unsigned char value):&#160;leds.c']]],
   ['updategreenled',['updateGreenLed',['../leds_8c.html#abaff9571f81de4f23e1852fa582d15df',1,'updateGreenLed(unsigned char value):&#160;leds.c'],['../leds_8h.html#abaff9571f81de4f23e1852fa582d15df',1,'updateGreenLed(unsigned char value):&#160;leds.c']]],
+  ['updateodomdata',['updateOdomData',['../motors_8c.html#a7dd331623224e5765907e557696e5307',1,'updateOdomData():&#160;motors.c'],['../motors_8h.html#a7dd331623224e5765907e557696e5307',1,'updateOdomData():&#160;motors.c']]],
   ['updateredled',['updateRedLed',['../leds_8c.html#a63e72cccdecbe5de4d442d6314f0b443',1,'updateRedLed(unsigned char value):&#160;leds.c'],['../leds_8h.html#a63e72cccdecbe5de4d442d6314f0b443',1,'updateRedLed(unsigned char value):&#160;leds.c']]],
   ['usart0inputbufferempty',['usart0InputBufferEmpty',['../usart_8c.html#aa3ab08a0a9c26cf866ac19225033c3d5',1,'usart0InputBufferEmpty():&#160;usart.c'],['../usart_8h.html#aa3ab08a0a9c26cf866ac19225033c3d5',1,'usart0InputBufferEmpty():&#160;usart.c']]],
   ['usart0receive',['usart0Receive',['../usart_8c.html#a0d3c76e7c346f2905246c9091d676679',1,'usart0Receive():&#160;usart.c'],['../usart_8h.html#a0d3c76e7c346f2905246c9091d676679',1,'usart0Receive():&#160;usart.c']]],

@@ -82,7 +82,7 @@ void irCommTasks() {
 		switch(irCommState) {
 			case IRCOMM_RX_IDLE_STATE:				
 				if((irCommRxStartBitDetected==0) && (irCommEnabled!=irCommEnabledNext)) {
-					if((getTime100MicroSec() - irCommTxLastTransmissionTime) > PAUSE_100_MSEC) {
+					if((getTime100MicroSec() - irCommTxLastTransmissionTime) > PAUSE_200_MSEC) {
 						irCommInitTransmitter();
 					}					
 				}
@@ -135,7 +135,7 @@ void irCommTasks() {
 					
 					if(irCommStateIndexTemp>13) {
 						irCommStateIndexTemp = 13;
-						updateBlueLed(0);
+						//updateBlueLed(0);
 					}
 					irCommStateTemp[irCommStateIndexTemp] = irCommState;
 					irCommStateIndexTemp++;
@@ -194,7 +194,7 @@ void irCommTasks() {
 
 					if(irCommMaxSensorSignalIndexTemp>39) {
 						irCommMaxSensorSignalIndexTemp = 39;
-						updateRedLed(0);
+						//updateRedLed(0);
 					}
 					irCommMaxSensorSignalTemp[irCommMaxSensorSignalIndexTemp] = irCommMaxSensorSignal[i];
 					irCommMaxSensorSignalIndexTemp++;					
@@ -213,7 +213,7 @@ void irCommTasks() {
 
 							if(irCommStartDiffIndexTemp>1) {
 								irCommStartDiffIndexTemp = 1;
-								updateRedLed(0);
+								//updateRedLed(0);
 							}
 							irCommStartDiffTemp[irCommStartDiffIndexTemp] = irCommTempValue;
 							irCommStartDiffIndexTemp++;
@@ -226,8 +226,8 @@ void irCommTasks() {
 							} else {
 								//updateGreenLed(0);
 							}
-							irCommTempMin = 1024;
-							irCommTempMax = 0;
+							irCommTempMin = irCommMaxSensorSignal[i];	// otherwise I cannot detect spike of one sample (peakDuration=1), related to sensors sampling
+							irCommTempMax = irCommMaxSensorSignal[i];
 							irCommComputeShift = 2;
 							irCommShiftCount--;	// the current sample is already part of the signal start thus do not skip it
 							irCommRxStartPeakDuration = 0;
@@ -256,28 +256,28 @@ void irCommTasks() {
 
 				if(irCommComputeShiftIndexTemp>1) {
 					irCommComputeShiftIndexTemp = 1;
-					updateRedLed(0);
+					//updateRedLed(0);
 				}
 				irCommComputeShiftTemp[irCommComputeShiftIndexTemp] = irCommComputeShift;
 				irCommComputeShiftIndexTemp++;
 				
 				if(irCommShiftCountIndexTemp>1) {
 					irCommShiftCountIndexTemp = 1;
-					updateRedLed(0);
+					//updateRedLed(0);
 				}
 				irCommShiftCountTemp[irCommShiftCountIndexTemp] = irCommShiftCount;
 				irCommShiftCountIndexTemp++;
 				
 				if(irCommRxPeakHighToLowIndexTemp>1) {
 					irCommRxPeakHighToLowIndexTemp = 1;
-					updateRedLed(0);
+					//updateRedLed(0);
 				}
 				irCommRxPeakHighToLowTemp[irCommRxPeakHighToLowIndexTemp] = irCommRxPeakHighToLow;
 				irCommRxPeakHighToLowIndexTemp++;
 				
 				if(irCommRxStartPeakDurationIndexTemp>1) {
 					irCommRxStartPeakDurationIndexTemp = 1;
-					updateRedLed(0);
+					//updateRedLed(0);
 				}
 				irCommRxStartPeakDurationTemp[irCommRxStartPeakDurationIndexTemp] = irCommRxStartPeakDuration;
 				irCommRxStartPeakDurationIndexTemp++;
@@ -290,7 +290,7 @@ void irCommTasks() {
 
 				if(irCommProxMeanIndexTemp>1) {
 					irCommProxMeanIndexTemp = 1;
-					updateRedLed(0);
+					//updateRedLed(0);
 				}
 				irCommProxMeanTemp[irCommProxMeanIndexTemp] = irCommProxMean;
 				irCommProxMeanIndexTemp++;
@@ -302,7 +302,7 @@ void irCommTasks() {
 
 					if(irCommMaxSensorSignalFiltIndexTemp>39) {
 						irCommMaxSensorSignalFiltIndexTemp = 39;
-						updateRedLed(0);
+						//updateRedLed(0);
 					}
 					irCommMaxSensorSignalFiltTemp[irCommMaxSensorSignalFiltIndexTemp] = irCommMaxSensorSignal[i];
 					irCommMaxSensorSignalFiltIndexTemp++;
@@ -332,7 +332,7 @@ void irCommTasks() {
 
 				if(irCommSwitchCountIndexTemp>1) {
 					irCommSwitchCountIndexTemp = 1;
-					updateRedLed(0);
+					//updateRedLed(0);
 				}
 				irCommSwitchCountTemp[irCommSwitchCountIndexTemp] = irCommSwitchCount;
 				irCommSwitchCountIndexTemp++;
@@ -344,7 +344,7 @@ void irCommTasks() {
 						if(irCommSwitchCount==2) {
 							if(irCommSyncStateIndexTemp>1) {
 								irCommSyncStateIndexTemp = 1;
-								updateRedLed(0);
+								//updateRedLed(0);
 							}
 							irCommSyncStateTemp[irCommSyncStateIndexTemp] = 6;
 							irCommSyncStateIndexTemp++;
@@ -361,7 +361,7 @@ void irCommTasks() {
 						} else if(irCommSwitchCount==1) {
 							if(irCommSyncStateIndexTemp>1) {
 								irCommSyncStateIndexTemp = 1;
-								updateRedLed(0);
+								//updateRedLed(0);
 							}
 							irCommSyncStateTemp[irCommSyncStateIndexTemp] = 2;
 							irCommSyncStateIndexTemp++;
@@ -385,7 +385,7 @@ void irCommTasks() {
 
 							if(irCommSyncStateIndexTemp>1) {
 								irCommSyncStateIndexTemp = 1;
-								updateRedLed(0);
+								//updateRedLed(0);
 							}
 							irCommSyncStateTemp[irCommSyncStateIndexTemp] = 12;
 							irCommSyncStateIndexTemp++;
@@ -400,28 +400,51 @@ void irCommTasks() {
 						}
 					} else {
 						if(irCommSwitchCount==2) {
-							if(irCommSyncStateIndexTemp>1) {
-								irCommSyncStateIndexTemp = 1;
-								updateRedLed(0);
-							}
-							irCommSyncStateTemp[irCommSyncStateIndexTemp] = 3;
-							irCommSyncStateIndexTemp++;
+							if(irCommRxStartPeakDuration<=3) {	// peak due to sensors sampling detected
+								currentProx = 0;
+								adcSaveDataTo = SKIP_SAMPLE;
+								adcSamplingState = 0;
+								irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;							
+								irCommState = IRCOMM_RX_IDLE_STATE;
 
-							irCommShiftCount = IRCOMM_SAMPLING_WINDOW + irCommShiftCount;
-							irCommRxPeakHighToLow = 0;
-							irCommRxStartBitDetected = 0;
-							irCommSecondBitSkipped = 0;
-							irCommShiftCounter = 0;
-							irCommRxBitCount = 0;	
-							irCommRxCrc = 0;	
-							irCommRxByte = 0;
-							irCommState = IRCOMM_RX_SYNC_SIGNAL;
+								if(irCommSyncStateIndexTemp>1) {
+									irCommSyncStateIndexTemp = 1;
+									//updateRedLed(0);
+								}
+								irCommSyncStateTemp[irCommSyncStateIndexTemp] = 16;
+								irCommSyncStateIndexTemp++;
+							
+								//irCommState = IRCOMM_RX_DEBUG;
+								//irCommAdcRxState = 12;
+								//updateGreenLed(0);
+								//break;
+
+								resetDebugVariables();
+								break;
+							} else {
+								if(irCommSyncStateIndexTemp>1) {
+									irCommSyncStateIndexTemp = 1;
+									//updateRedLed(0);
+								}
+								irCommSyncStateTemp[irCommSyncStateIndexTemp] = 3;
+								irCommSyncStateIndexTemp++;
+
+								irCommShiftCount = IRCOMM_SAMPLING_WINDOW + irCommShiftCount;
+								irCommRxPeakHighToLow = 0;
+								irCommRxStartBitDetected = 0;
+								irCommSecondBitSkipped = 0;
+								irCommShiftCounter = 0;
+								irCommRxBitCount = 0;	
+								irCommRxCrc = 0;	
+								irCommRxByte = 0;
+								irCommState = IRCOMM_RX_SYNC_SIGNAL;
+							}
 						} else if(irCommSwitchCount==1) {		
 							irCommRxStartBitDetected = 1;					
 							if(irCommRxStartPeakDuration > IRCOMM_SAMPLING_WINDOW/2) {
 								if(irCommSyncStateIndexTemp>1) {
 									irCommSyncStateIndexTemp = 1;
-									updateRedLed(0);
+									//updateRedLed(0);
 								}
 								irCommSyncStateTemp[irCommSyncStateIndexTemp] = 4;
 								irCommSyncStateIndexTemp++;
@@ -453,7 +476,7 @@ void irCommTasks() {
 
 							if(irCommSyncStateIndexTemp>1) {
 								irCommSyncStateIndexTemp = 1;
-								updateRedLed(0);
+								//updateRedLed(0);
 							}
 							irCommSyncStateTemp[irCommSyncStateIndexTemp] = 11;
 							irCommSyncStateIndexTemp++;
@@ -472,7 +495,7 @@ void irCommTasks() {
 						if(irCommSwitchCount==2) {
 							if(irCommSyncStateIndexTemp>1) {
 								irCommSyncStateIndexTemp = 1;
-								updateRedLed(0);
+								//updateRedLed(0);
 							}
 							irCommSyncStateTemp[irCommSyncStateIndexTemp] = 5;
 							irCommSyncStateIndexTemp++;
@@ -489,7 +512,7 @@ void irCommTasks() {
 						} else if(irCommSwitchCount==1) {
 							if(irCommSyncStateIndexTemp>1) {
 								irCommSyncStateIndexTemp = 1;
-								updateRedLed(0);
+								//updateRedLed(0);
 							}
 							irCommSyncStateTemp[irCommSyncStateIndexTemp] = 8;
 							irCommSyncStateIndexTemp++;
@@ -513,7 +536,7 @@ void irCommTasks() {
 
 							if(irCommSyncStateIndexTemp>1) {
 								irCommSyncStateIndexTemp = 1;
-								updateRedLed(0);
+								//updateRedLed(0);
 							}
 							irCommSyncStateTemp[irCommSyncStateIndexTemp] = 13;
 							irCommSyncStateIndexTemp++;
@@ -530,7 +553,7 @@ void irCommTasks() {
 						if(irCommSwitchCount==2) {
 							if(irCommSyncStateIndexTemp>1) {
 								irCommSyncStateIndexTemp = 1;
-								updateRedLed(0);
+								//updateRedLed(0);
 							}
 							irCommSyncStateTemp[irCommSyncStateIndexTemp] = 1;
 							irCommSyncStateIndexTemp++;
@@ -554,7 +577,7 @@ void irCommTasks() {
 
 								if(irCommSyncStateIndexTemp>1) {
 									irCommSyncStateIndexTemp = 1;
-									updateRedLed(0);
+									//updateRedLed(0);
 								}
 								irCommSyncStateTemp[irCommSyncStateIndexTemp] = 14;
 								irCommSyncStateIndexTemp++;
@@ -569,7 +592,7 @@ void irCommTasks() {
 							} else {
 								if(irCommSyncStateIndexTemp>1) {
 									irCommSyncStateIndexTemp = 1;
-									updateRedLed(0);
+									//updateRedLed(0);
 								}
 								irCommSyncStateTemp[irCommSyncStateIndexTemp] = 7;
 								irCommSyncStateIndexTemp++;
@@ -593,7 +616,7 @@ void irCommTasks() {
 
 							if(irCommSyncStateIndexTemp>1) {
 								irCommSyncStateIndexTemp = 1;
-								updateRedLed(0);
+								//updateRedLed(0);
 							}
 							irCommSyncStateTemp[irCommSyncStateIndexTemp] = 15;
 							irCommSyncStateIndexTemp++;
@@ -611,21 +634,21 @@ void irCommTasks() {
 	
 				if(irCommStateIndexTemp>13) {
 					irCommStateIndexTemp = 13;
-					updateRedLed(0);
+					//updateRedLed(0);
 				}
 				irCommStateTemp[irCommStateIndexTemp] = irCommState;
 				irCommStateIndexTemp++;
 				
 				if(irCommShiftCountFinalIndexTemp>1) {
 					irCommShiftCountFinalIndexTemp = 1;
-					updateRedLed(0);
+					//updateRedLed(0);
 				}
 				irCommShiftCountFinalTemp[irCommShiftCountFinalIndexTemp] = irCommShiftCount;
 				irCommShiftCountFinalIndexTemp++;
 				
 				if(irCommRxStartBitDetectedIndexTemp>1) {
 					irCommRxStartBitDetectedIndexTemp = 1;
-					updateRedLed(0);
+					//updateRedLed(0);
 				}
 				irCommRxStartBitDetectedTemp[irCommRxStartBitDetectedIndexTemp] = irCommRxStartBitDetected;
 				irCommRxStartBitDetectedIndexTemp++;			
@@ -716,7 +739,7 @@ void irCommTasks() {
 
 					if(irCommBitsSignalIndexTemp>199) {
 						irCommBitsSignalIndexTemp = 199;
-						updateRedLed(0);
+						//updateRedLed(0);
 					}
 					irCommBitsSignalTemp[irCommBitsSignalIndexTemp] = irCommMaxSensorSignal[i];
 					irCommBitsSignalIndexTemp++;
@@ -757,7 +780,7 @@ void irCommTasks() {
 					}
 				} else {	// error...no significant signal perceived
 					//irCommRxBitReceived[irCommRxBitCount] = 0xFF;
-					updateBlueLed(0);
+					//updateRedLed(0);
 					currentProx = 0;
 					adcSaveDataTo = SKIP_SAMPLE;
 					adcSamplingState = 0;
@@ -775,7 +798,7 @@ void irCommTasks() {
 
 				if(irCommRxBitReceivedIndexTemp>9) {
 					irCommRxBitReceivedIndexTemp = 9;
-					updateRedLed(0);
+					//updateRedLed(0);
 				}
 				irCommRxBitReceivedTemp[irCommRxBitReceivedIndexTemp] = irCommRxBitReceived[irCommRxBitCount];
 				irCommRxBitReceivedIndexTemp++;
@@ -788,7 +811,7 @@ void irCommTasks() {
 
 					if(irCommStateIndexTemp>13) {
 						irCommStateIndexTemp = 13;
-						updateRedLed(0);
+						//updateRedLed(0);
 					}
 					irCommStateTemp[irCommStateIndexTemp] = irCommState;
 					irCommStateIndexTemp++;
@@ -798,7 +821,7 @@ void irCommTasks() {
 
 					if(irCommStateIndexTemp>13) {
 						irCommStateIndexTemp = 13;
-						updateRedLed(0);
+						//updateRedLed(0);
 					}
 					irCommStateTemp[irCommStateIndexTemp] = irCommState;
 					irCommStateIndexTemp++;
@@ -812,9 +835,9 @@ void irCommTasks() {
 					irCommRxLastDataReceived = irCommRxByte;
 					irCommRxReceivingSensor = irCommRxMaxSensor;
 					irCommRxDataAvailable = 1;
-					updateBlueLed(0);
+					//updateBlueLed(0);
 					usart0Transmit(irCommRxByte,1);		
-					updateBlueLed(255);
+					//updateBlueLed(255);
 				}
 												
 				currentProx = 0;
@@ -842,6 +865,19 @@ void irCommTasks() {
 				} else {
 					irCommRxByteExpected++;
 				}				
+				*/
+
+				/*
+				if(abs(irCommRxPrevDataReceived-irCommRxLastDataReceived)>10) {
+					irCommState = IRCOMM_RX_DEBUG;
+					irCommAdcRxState = 12;
+					updateRedLed(200);
+					updateGreenLed(200);
+					updateBlueLed(200);
+					break;
+				} else {
+					irCommRxPrevDataReceived = irCommRxLastDataReceived;
+				}
 				*/
 
 				resetDebugVariables();
@@ -956,13 +992,13 @@ void irCommTasks() {
 				break;
 
 			case IRCOMM_TX_COMPUTE_TIMINGS:
-				updateBlueLed(255);
+				//updateBlueLed(255);
 				if(irCommTxBitToTransmit[irCommTxBitCount] == 3) {
-					updateBlueLed(0);
+					//updateBlueLed(0);
 					irCommTxDuration = IRCOMM_BIT_START2_DURATION;					
 					irCommTxSwitchCount = IRCOMM_BIT_START2_SWITCH_COUNT;
 				} else if(irCommTxBitToTransmit[irCommTxBitCount] == 2) {
-					updateBlueLed(0);
+					//updateBlueLed(0);
 					irCommTxDuration = IRCOMM_BIT_START1_DURATION;					
 					irCommTxSwitchCount = IRCOMM_BIT_START1_SWITCH_COUNT;
 				} else if(irCommTxBitToTransmit[irCommTxBitCount] == 1) {
@@ -996,11 +1032,16 @@ void irCommTasks() {
 
 }
 
+//void irCommSendData(unsigned char value, unsigned char sensorMask) {
+//	irCommTxByte = value;
+//	irCommTxByteEnqueued = 1;
+//	irCommTxSensorMask = sensorMask;
+//	irCommEnabledNext = IRCOMM_MODE_TRANSMIT;
+//}
 
-void irCommSendData(unsigned char value, unsigned char sensorMask) {
+void irCommSendData(unsigned char value) {
 	irCommTxByte = value;
 	irCommTxByteEnqueued = 1;
-	irCommTxSensorMask = sensorMask;
 	irCommEnabledNext = IRCOMM_MODE_TRANSMIT;
 }
 
@@ -1024,3 +1065,29 @@ unsigned char irCommReadData() {
 signed char irCommReceivingSensor() {
 	return irCommRxReceivingSensor;
 }
+
+signed int getBearing(unsigned char sensor) {
+	switch(sensor) {
+		case 0:
+			return 0;
+		case 1:
+			return -45;
+		case 2:
+			return -90;
+		case 3:
+			return -135;
+		case 4:
+			return 180;
+		case 5:
+			return 135;
+		case 6:
+			return 90;
+		case 7:
+			return 45;
+		default:
+			return -1;
+	}
+}
+
+
+

@@ -152,6 +152,7 @@ void handleMotorsWithSpeedController() {
 		//timeOdometry = getTime100MicroSec()-timeLeftOdom;
 		leftDist += ((float)speedLeftFromEnc*((float)(getTime100MicroSec()-timeLeftOdom)*104.0))/1000000.0;	// distance in mm				
 		timeLeftOdom = getTime100MicroSec();
+		leftMotSteps = (signed long int)leftDist;
 
 /*
 		leftMotStepsOld=leftMotSteps;
@@ -213,6 +214,7 @@ void handleMotorsWithSpeedController() {
 		rightDistPrev = rightDist;
 		rightDist += ((float)speedRightFromEnc*((float)(getTime100MicroSec()-timeRightOdom)*104.0))/1000000.0;	// distance in mm				
 		timeRightOdom = getTime100MicroSec();
+		rightMotSteps = (signed long int)rightDist;
 
 /*
 		rightMotStepsOld = rightMotSteps;

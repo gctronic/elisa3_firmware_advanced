@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['bottoml',['BOTTOMl',['../e__remote__control_8h.html#ada644e9ae245b412e75e9ce5642bad95',1,'e_remote_control.h']]],
-  ['bottomr',['BOTTOMR',['../e__remote__control_8h.html#a7cd89a29b118e7d3c425cb693ac5ddb9',1,'e_remote_control.h']]]
+  ['byte_5fto_5fmm_5fs',['BYTE_TO_MM_S',['../constants_8h.html#a4b335e1fc2d1b1443f0fc0961c604015',1,'constants.h']]]
 ];

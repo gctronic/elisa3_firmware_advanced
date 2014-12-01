@@ -7,6 +7,8 @@ var searchData=
   ['mask_5ftx_5fds',['MASK_TX_DS',['../n_r_f24_l01_8h.html#ad5f819a0030605463504bd2599579b4c',1,'nRF24L01.h']]],
   ['max_5frt',['MAX_RT',['../n_r_f24_l01_8h.html#ab4482ead4f3b452a032f63ac03ee1870',1,'nRF24L01.h']]],
   ['measbattery',['measBattery',['../variables_8c.html#a5234176e50c96b22941062509b1063e5',1,'measBattery():&#160;variables.c'],['../variables_8h.html#a5234176e50c96b22941062509b1063e5',1,'measBattery():&#160;variables.c']]],
+  ['menuchoice',['menuChoice',['../variables_8c.html#a74e54c166dc6ef326652b5e0b8e91ab3',1,'menuChoice():&#160;variables.c'],['../variables_8h.html#a74e54c166dc6ef326652b5e0b8e91ab3',1,'menuChoice():&#160;variables.c']]],
+  ['menustate',['menuState',['../variables_8c.html#af0bec90ad7dd18c2dbba65cb37d0e43c',1,'menuState():&#160;variables.c'],['../variables_8h.html#af0bec90ad7dd18c2dbba65cb37d0e43c',1,'menuState():&#160;variables.c']]],
   ['mirf_2ec',['mirf.c',['../mirf_8c.html',1,'']]],
   ['mirf_2eh',['mirf.h',['../mirf_8h.html',1,'']]],
   ['mirf_5fce_5fhi',['mirf_CE_hi',['../mirf_8h.html#a3c5d623ca67313ea3c9accd005973452',1,'mirf.h']]],
