@@ -765,98 +765,117 @@ int main(void) {
 				}
 				break;
 
-			case 12:	// sync-react demo using the IR local communication (2 robots only): the robots move around with obstacle avoidance
-						// enabled and when they detect each other they try to point towards each other
+			case 12:	// IR local communication: 2 or more robots pass information between them in sequence
 				switch(demoState) {
 					case 0:
 						irCommInit();
-						demoState = 1;
+						irCommRobotsNum = 4;	// total number of robots that exchange data
+						irCommRobotId = 3;		// choose the id of the robot (a different id for each robot), from 0 to 254 (255 is reserved)
+						if(irCommRobotId==0) {	// robot with id 0 starts the transmission of information
+							irCommSendData(0x01);
+							updateBlueLed(255);
+							updateRedLed(255);
+							updateGreenLed(128);
+							demoState = 1;
+						} else {
+							demoState = 2;
+						}
 						break;
 
-					case 1:						
-						enableObstacleAvoidance();
-						setLeftSpeed(10);
-						setRightSpeed(10);
-						demoState = 2;
-						demoStartTime = getTime100MicroSec();
-						break;
-
-					case 2:						
+					case 1: // led is on
+							// transmission: continuously send the next robot id to tell him to turn on the led
+							// reception: listen for 0xFF and then turn off the led; when I receive 0xFF it means the next robot has
+							// received its id, thus it has turned on its led
 						irCommTasks();
 						if(irCommDataSent()==1) {
-							irCommSendData(0xAA);
-						}
-						if(irCommDataAvailable()==1) {
-							i = irCommReadData();
-							if(i == 0xAA) {
-								disableObstacleAvoidance();
-								i = irCommReceivingSensor();
-								resetOdometry();
-								demoState = 3;								
+							if(irCommRobotId < (irCommRobotsNum-1)) {
+								irCommSendData(irCommRobotId+1);
+							} else {
+								irCommSendData(0x00);
 							}							
 						}
-						if((getTime100MicroSec()-demoStartTime) >= (PAUSE_5_SEC)) {
-							demoState = 1;
+						if(irCommDataAvailable()==1) {
+							if(irCommLedToggle==0) {
+								irCommLedToggle = 1;
+								updateBlueLed(255);
+								updateRedLed(255);
+								updateGreenLed(128);
+							} else {
+								irCommLedToggle = 0;
+								updateBlueLed(255);
+								updateRedLed(255);
+								updateGreenLed(235);
+							}
+							i = irCommReadData();
+							if(i == 0xFF) {
+								demoState = 2;
+								updateBlueLed(255);		
+								updateRedLed(255);
+								updateGreenLed(255);		
+							}
+						}	
+						break;
+
+					case 2: // led is off
+							// transmission: continuously send my robot id to tell the next robot I turned off the led
+							// reception: listen for my robot id and then turn on the led				
+						irCommTasks();
+						if(irCommDataSent()==1) {
+							irCommSendData(irCommRobotId);							
+						}
+						if(irCommDataAvailable()==1) {
+							if(irCommLedToggle==0) {
+								irCommLedToggle = 1;
+								updateRedLed(255);
+							} else {
+								irCommLedToggle = 0;
+								updateRedLed(235);
+							}
+							i = irCommReadData();
+							if(i == irCommRobotId) {
+								updateBlueLed(255);
+								updateRedLed(255);
+								updateGreenLed(128);
+								irCommSendData(0xFF);
+								demoState = 3;					
+							}							
 						}
 						break;
 
-					case 3:
+					case 3:	// led is on
+							// transmission: send 0xFF untill the previous robot is turned off
+							// reception: I know that it is turned off when I receive the previous robot id 
 						irCommTasks();
-						switch(i) {	// receiving sensor
-							case 0:
-								targetAngle = 0.0;
-								break;
-							case 1:
-								targetAngle = -0.785;
-								break;
-							case 2:
-								targetAngle = -1.57;
-								break;
-							case 3:
-								targetAngle = -2.356;
-								break;
-							case 4:
-								targetAngle = 3.14;
-								break;
-							case 5:
-								targetAngle = 2.356;
-								break;
-							case 6:
-								targetAngle = 1.57;
-								break;
-							case 7:
-								targetAngle = 0.785;
-								break;
-						}
-						if(targetAngle < 0.0) {
-							setLeftSpeed(10);
-							setRightSpeed(-10);
-							demoState = 4;
-						} else {
-							setLeftSpeed(-10);
-							setRightSpeed(10);
-							demoState = 5;
-						}
-						
-						break;
-					case 4:
-						irCommTasks();
-						if(theta <= targetAngle) {
-							setLeftSpeed(0);
-							setRightSpeed(0);
-							demoState = 2;
-							demoStartTime = getTime100MicroSec();
-						}
-						break;
-
-					case 5:
-						irCommTasks();
-						if(theta >= targetAngle) {
-							setLeftSpeed(0);
-							setRightSpeed(0);
-							demoState = 2;
-							demoStartTime = getTime100MicroSec();
-						}
+						if(irCommDataSent()==1) {
+							if(irCommDataAvailable()==1) {
+								if(irCommLedToggle==0) {
+									irCommLedToggle = 1;
+									updateBlueLed(255);
+									updateRedLed(255);
+									updateGreenLed(128);
+								} else {
+									irCommLedToggle = 0;
+									updateBlueLed(255);
+									updateRedLed(255);
+									updateGreenLed(235);
+								}
+								i = irCommReadData();
+								if(irCommRobotId == 0) {
+									if(i == (unsigned int)(irCommRobotsNum-1)) {
+										demoState = 1;
+									} else {
+										irCommSendData(0xFF);
+									}
+								} else {
+									if(i == (unsigned int)(irCommRobotId-1)) {
+										demoState = 1;
+									} else {
+										irCommSendData(0xFF);
+									}
+								}
+								
+							}
+						}						
 						break;
 
 				}
@@ -870,6 +889,7 @@ int main(void) {
 						setLeftSpeed(10);
 						setRightSpeed(10);
 						demoState = 1;
+						i = 0;
 						break;
 
 					case 1:						
@@ -879,58 +899,22 @@ int main(void) {
 
 					case 2:
 						irCommTasks();
-						if(irCommDataSent()==1) {
+						if(irCommDataSent()==1) {							
 							demoState = 1;
-							// send commands to turn on green leds
-							//irCommRxByteExpected = 0;
-							//turnOffGreenLeds();
-							//setGreenLed(irCommRxByteExpected, 1);						
-							//irCommRxByteExpected++;
-							//if(irCommRxByteExpected==8) {
-							//	irCommRxByteExpected=0;
-							//}
-
 							if(irCommRxByteExpected<255) {
 								irCommRxByteExpected++;
 							} else {
 								irCommRxByteExpected = 0;
 							}
 						}
-						break;
-				}
-				break;
-			
-			case 14: // IR local communication: listen only
-				switch(demoState) {
-					case 0:
-						irCommInit();
-						//enableObstacleAvoidance();
-						//setLeftSpeed(25);
-						//setRightSpeed(25);
-						demoState = 1;
-						break;
-
-					case 1:
-						irCommTasks();
 						if(irCommDataAvailable()==1) {
-							i = irCommReadData();
-							//turnOffGreenLeds();
-							//setGreenLed(currRand, 1);
-							//currRand++;
-							//if(currRand==8) {
-							//	currRand=0;
-							//}
-
-							/*
-							irCommRxByteExpected = irCommReadData();
-							turnOffGreenLeds();
-							setGreenLed(irCommRxByteExpected, 1);
-							*/
-							/*
-							i = irCommReceivingSensor();
-							turnOffGreenLeds();
-							setGreenLed(i, 1);
-							switch(irCommRxByteExpected) {
+							irCommReadData();
+							if(i<7) {
+								i++;
+							} else {
+								i = 0;
+							}
+							switch(i) {
 								case 0: 
 									updateRedLed(255);
 									updateGreenLed(255);
@@ -974,8 +958,95 @@ int main(void) {
 								default:
 									break;
 							}
-							*/
 						}
+						break;
+				}
+				break;
+			
+			case 14: // Multirobots communication: continuously change current color and make it change also for other robots
+				switch(demoState) {
+					case 0:
+						irCommInit();
+						demoState = 1;
+						irCommRxByteExpected = 1;
+						irCommMsgCount = 0;
+						break;
+
+					case 1:	
+						irCommTasks();
+						if(irCommDataSent()==1) {	
+							irCommSendData(irCommRxByteExpected);					
+						}
+						if(irCommDataAvailable()==1) {							
+							i = irCommReadData();
+							if(i == irCommRxByteExpected) {
+								irCommMsgCount++;
+								if(irCommMsgCount >= 4) {
+									irCommMsgCount = 0;
+									if(irCommRxByteExpected < 7) {
+										irCommRxByteExpected++;
+									} else {
+										irCommRxByteExpected = 0;
+									}
+								}
+							} else {
+								if(irCommRxByteExpected==7) {
+									if(i==0) {
+										irCommRxByteExpected = 0;
+										irCommMsgCount = 0;
+									}
+								} else {
+									if(irCommRxByteExpected==(i-1)) {
+										irCommRxByteExpected = i;
+										irCommMsgCount = 0;
+									}
+								}
+							}
+							switch(irCommRxByteExpected) {
+								case 0: 
+									updateRedLed(255);
+									updateGreenLed(255);
+									updateBlueLed(255);
+									break;
+								case 1: 
+									updateRedLed(235);
+									updateGreenLed(255);
+									updateBlueLed(255);
+									break;	
+								case 2: 
+									updateRedLed(255);
+									updateGreenLed(235);
+									updateBlueLed(255);
+									break;
+								case 3: 
+									updateRedLed(255);
+									updateGreenLed(255);
+									updateBlueLed(235);
+									break;
+								case 4: 
+									updateRedLed(235);
+									updateGreenLed(235);
+									updateBlueLed(255);
+									break;
+								case 5: 
+									updateRedLed(235);
+									updateGreenLed(255);
+									updateBlueLed(235);
+									break;
+								case 6: 
+									updateRedLed(255);
+									updateGreenLed(235);
+									updateBlueLed(235);
+									break;
+								case 7: 
+									updateRedLed(235);
+									updateGreenLed(235);
+									updateBlueLed(235);
+									break;
+								default:
+									break;
+							}
+						}		
 						break;
 				}									
 				break;

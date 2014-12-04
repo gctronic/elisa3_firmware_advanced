@@ -212,10 +212,17 @@ extern unsigned long int irCommTickCounter2;
 extern unsigned char irCommTickCounterUpdate;
 extern signed char irCommLastSensor;
 extern signed int irCommLastData;
+
+// demo
 extern signed int angleDeg;
 extern signed int angleError;
 extern unsigned char angleDegEncode;
+extern unsigned char irCommRobotId;
+extern unsigned char irCommRobotsNum;
+extern unsigned char irCommLedToggle;
+extern unsigned char irCommMsgCount;
 
+// debug
 extern signed int irCommMaxSensorSignalTemp[IRCOMM_SAMPLING_WINDOW*2];
 extern unsigned char irCommMaxSensorSignalIndexTemp;
 extern signed int irCommMaxSensorSignalFiltTemp[IRCOMM_SAMPLING_WINDOW*2];
@@ -273,8 +280,6 @@ extern unsigned int *irCommProxValuesAdc;
 extern unsigned int *irCommProxValuesCurr;
 extern unsigned int *irCommTempPointer;
 extern unsigned char irCommRxCrc;
-extern signed int irCommRxMaxDiff;
-extern signed int irCommRxMaxSensor;
 extern signed int irCommMaxSensorSignal[IRCOMM_SAMPLING_WINDOW];
 extern signed long int irCommProxSum;
 extern signed int irCommTempMax;
@@ -299,6 +304,9 @@ extern unsigned char irCommRxBitSkipped;
 extern unsigned char irCommRxStartBitDetected;
 extern unsigned char irCommRxPeakHighToLow;
 extern unsigned char irCommRxStartPeakDuration;
+extern signed int irCommRxMaxDiff;
+extern signed int irCommRxMaxSensor;
+extern unsigned char irCommRxNumReceivingSensors;
 
 // transmission
 extern unsigned char irCommAdcTxState;

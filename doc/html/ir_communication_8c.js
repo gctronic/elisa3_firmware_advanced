@@ -7,6 +7,7 @@ var ir_communication_8c =
     [ "irCommInit", "ir_communication_8c.html#a4edd8fcaedbedf041662d600bb11b040", null ],
     [ "irCommInitReceiver", "ir_communication_8c.html#abca57372dec6c1f0943be58f5ba8e9a4", null ],
     [ "irCommInitTransmitter", "ir_communication_8c.html#a8d16ecce7eb417f3f980405b5789cbff", null ],
+    [ "irCommInitVars", "ir_communication_8c.html#a50b2c056924fc3ed38cffe0f1d3a04c1", null ],
     [ "irCommReadData", "ir_communication_8c.html#ad54a767f2672a6ad24ce9442567d0e39", null ],
     [ "irCommReceivingSensor", "ir_communication_8c.html#a760431ba471bb88d3614ed49a87e4e86", null ],
     [ "irCommSendData", "ir_communication_8c.html#a5fb95f3139d0e550050463509be6c389", null ],

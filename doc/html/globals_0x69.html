@@ -167,12 +167,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="twimaster_8c.html#ad35d4e4f52ca74b503d5e5e1e0a3f5f3">twimaster.c</a>
 , <a class="el" href="twimaster_8h.html#ad35d4e4f52ca74b503d5e5e1e0a3f5f3">twimaster.h</a>
 </li>
+<li>I2C_WRITE
+: <a class="el" href="twimaster_8h.html#a9536bf85bced4f4e549a82fb18eb6140">twimaster.h</a>
+</li>
 <li>i2c_write()
 : <a class="el" href="twimaster_8c.html#add947aade44ed6b7f92265f9dec4a711">twimaster.c</a>
 , <a class="el" href="twimaster_8h.html#add947aade44ed6b7f92265f9dec4a711">twimaster.h</a>
-</li>
-<li>I2C_WRITE
-: <a class="el" href="twimaster_8h.html#a9536bf85bced4f4e549a82fb18eb6140">twimaster.h</a>
 </li>
 <li>INDEX_STEP
 : <a class="el" href="constants_8h.html#a37a81e4209119603798009671dbc42ab">constants.h</a>
@@ -409,13 +409,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="ir_communication_8c.html#a8d16ecce7eb417f3f980405b5789cbff">irCommunication.c</a>
 , <a class="el" href="ir_communication_8h.html#a8d16ecce7eb417f3f980405b5789cbff">irCommunication.h</a>
 </li>
+<li>irCommInitVars()
+: <a class="el" href="ir_communication_8c.html#a50b2c056924fc3ed38cffe0f1d3a04c1">irCommunication.c</a>
+</li>
 <li>irCommLastData
 : <a class="el" href="variables_8c.html#a68466c55d437e0887066ea28789faacc">variables.c</a>
 , <a class="el" href="variables_8h.html#a68466c55d437e0887066ea28789faacc">variables.h</a>
 </li>
 <li>irCommLastSensor
-: <a class="el" href="variables_8c.html#a3cc7e139bb69a2c07d8c8fae02154da7">variables.c</a>
-, <a class="el" href="variables_8h.html#a3cc7e139bb69a2c07d8c8fae02154da7">variables.h</a>
+: <a class="el" href="variables_8h.html#a3cc7e139bb69a2c07d8c8fae02154da7">variables.h</a>
+, <a class="el" href="variables_8c.html#a3cc7e139bb69a2c07d8c8fae02154da7">variables.c</a>
+</li>
+<li>irCommLedToggle
+: <a class="el" href="variables_8c.html#ad0e29656a5924bbad6d4d7d71521e5b3">variables.c</a>
+, <a class="el" href="variables_8h.html#ad0e29656a5924bbad6d4d7d71521e5b3">variables.h</a>
 </li>
 <li>irCommMaxSensorSignal
 : <a class="el" href="variables_8c.html#aa39e3f1656d5ad2b581297b3e033f8c4">variables.c</a>
@@ -489,6 +496,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="variables_8c.html#a02b586ca6af9a49d7999bc287f9ffefc">variables.c</a>
 , <a class="el" href="variables_8h.html#a02b586ca6af9a49d7999bc287f9ffefc">variables.h</a>
 </li>
+<li>irCommMsgCount
+: <a class="el" href="variables_8c.html#ad72a699bab39688bd8b14b0249b774ac">variables.c</a>
+, <a class="el" href="variables_8h.html#ad72a699bab39688bd8b14b0249b774ac">variables.h</a>
+</li>
 <li>irCommProxMean
 : <a class="el" href="variables_8c.html#ae3613c01bcce72792b6954b77b2129d1">variables.c</a>
 , <a class="el" href="variables_8h.html#ae3613c01bcce72792b6954b77b2129d1">variables.h</a>
@@ -510,8 +521,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="variables_8h.html#a1d6335b5ec8d4b3f0f03b392ad8e8623">variables.h</a>
 </li>
 <li>irCommProxValuesBuff1
-: <a class="el" href="variables_8h.html#a3bea04c5cb50bb2e5fd2e8b31f543b89">variables.h</a>
-, <a class="el" href="variables_8c.html#a3bea04c5cb50bb2e5fd2e8b31f543b89">variables.c</a>
+: <a class="el" href="variables_8c.html#a3bea04c5cb50bb2e5fd2e8b31f543b89">variables.c</a>
+, <a class="el" href="variables_8h.html#a3bea04c5cb50bb2e5fd2e8b31f543b89">variables.h</a>
 </li>
 <li>irCommProxValuesBuff2
 : <a class="el" href="variables_8c.html#ae50e90e180a651a852b80cf4af81733e">variables.c</a>
@@ -526,24 +537,32 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="ir_communication_8h.html#ad54a767f2672a6ad24ce9442567d0e39">irCommunication.h</a>
 </li>
 <li>irCommReceivingSensor()
-: <a class="el" href="ir_communication_8h.html#a760431ba471bb88d3614ed49a87e4e86">irCommunication.h</a>
-, <a class="el" href="ir_communication_8c.html#a760431ba471bb88d3614ed49a87e4e86">irCommunication.c</a>
+: <a class="el" href="ir_communication_8c.html#a760431ba471bb88d3614ed49a87e4e86">irCommunication.c</a>
+, <a class="el" href="ir_communication_8h.html#a760431ba471bb88d3614ed49a87e4e86">irCommunication.h</a>
+</li>
+<li>irCommRobotId
+: <a class="el" href="variables_8c.html#a0f7d8120ba18736db2f664302b0840fa">variables.c</a>
+, <a class="el" href="variables_8h.html#a0f7d8120ba18736db2f664302b0840fa">variables.h</a>
+</li>
+<li>irCommRobotsNum
+: <a class="el" href="variables_8c.html#a308fc7e00cb81fb49951a924175a7503">variables.c</a>
+, <a class="el" href="variables_8h.html#a308fc7e00cb81fb49951a924175a7503">variables.h</a>
 </li>
 <li>irCommRxBitCount
 : <a class="el" href="variables_8c.html#aca5d2f5580ca07c023ed51b28bbcd23e">variables.c</a>
 , <a class="el" href="variables_8h.html#aca5d2f5580ca07c023ed51b28bbcd23e">variables.h</a>
 </li>
 <li>irCommRxBitReceived
-: <a class="el" href="variables_8h.html#af06f67a7bed83257a6eae624c3d81175">variables.h</a>
-, <a class="el" href="variables_8c.html#af06f67a7bed83257a6eae624c3d81175">variables.c</a>
+: <a class="el" href="variables_8c.html#af06f67a7bed83257a6eae624c3d81175">variables.c</a>
+, <a class="el" href="variables_8h.html#af06f67a7bed83257a6eae624c3d81175">variables.h</a>
 </li>
 <li>irCommRxBitReceivedIndexTemp
 : <a class="el" href="variables_8c.html#adea6fe9d7dd929e2d078b4f8761c4f18">variables.c</a>
 , <a class="el" href="variables_8h.html#adea6fe9d7dd929e2d078b4f8761c4f18">variables.h</a>
 </li>
 <li>irCommRxBitReceivedTemp
-: <a class="el" href="variables_8h.html#ae0ce11d7e73bee1c1709b6bea04383df">variables.h</a>
-, <a class="el" href="variables_8c.html#ae0ce11d7e73bee1c1709b6bea04383df">variables.c</a>
+: <a class="el" href="variables_8c.html#ae0ce11d7e73bee1c1709b6bea04383df">variables.c</a>
+, <a class="el" href="variables_8h.html#ae0ce11d7e73bee1c1709b6bea04383df">variables.h</a>
 </li>
 <li>irCommRxBitSkipped
 : <a class="el" href="variables_8c.html#a2fecb74ee38bfc4cd6f71e6dfe24a154">variables.c</a>
@@ -558,24 +577,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="variables_8h.html#aa126eee2edad372ca6ab25bc0680cf72">variables.h</a>
 </li>
 <li>irCommRxCrc
-: <a class="el" href="variables_8h.html#a7f35ad5a6d62d3ad8507b981a5d42c22">variables.h</a>
-, <a class="el" href="variables_8c.html#a7f35ad5a6d62d3ad8507b981a5d42c22">variables.c</a>
+: <a class="el" href="variables_8c.html#a7f35ad5a6d62d3ad8507b981a5d42c22">variables.c</a>
+, <a class="el" href="variables_8h.html#a7f35ad5a6d62d3ad8507b981a5d42c22">variables.h</a>
 </li>
 <li>irCommRxCrcError
 : <a class="el" href="variables_8c.html#aef12e35ec01347a06e101d5397828844">variables.c</a>
 , <a class="el" href="variables_8h.html#aef12e35ec01347a06e101d5397828844">variables.h</a>
 </li>
 <li>irCommRxDataAvailable
-: <a class="el" href="variables_8h.html#a1fee9c3fc2863072eaf0072161f5473e">variables.h</a>
-, <a class="el" href="variables_8c.html#a1fee9c3fc2863072eaf0072161f5473e">variables.c</a>
+: <a class="el" href="variables_8c.html#a1fee9c3fc2863072eaf0072161f5473e">variables.c</a>
+, <a class="el" href="variables_8h.html#a1fee9c3fc2863072eaf0072161f5473e">variables.h</a>
 </li>
 <li>irCommRxLastDataReceived
 : <a class="el" href="variables_8c.html#a2214a3bef5d759aa3b5f2869e748299e">variables.c</a>
 , <a class="el" href="variables_8h.html#a2214a3bef5d759aa3b5f2869e748299e">variables.h</a>
 </li>
 <li>irCommRxMaxDiff
-: <a class="el" href="variables_8h.html#ae38b400a8af09fb0fdf681e1800658f7">variables.h</a>
-, <a class="el" href="variables_8c.html#ae38b400a8af09fb0fdf681e1800658f7">variables.c</a>
+: <a class="el" href="variables_8c.html#ae38b400a8af09fb0fdf681e1800658f7">variables.c</a>
+, <a class="el" href="variables_8h.html#ae38b400a8af09fb0fdf681e1800658f7">variables.h</a>
 </li>
 <li>irCommRxMaxDiffIndexTemp
 : <a class="el" href="variables_8c.html#a7e26db4cd10914367be22178e5f338f6">variables.c</a>
@@ -597,13 +616,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="variables_8c.html#acdd0b0cbbb4fee31007feb9801f0e5dd">variables.c</a>
 , <a class="el" href="variables_8h.html#acdd0b0cbbb4fee31007feb9801f0e5dd">variables.h</a>
 </li>
+<li>irCommRxNumReceivingSensors
+: <a class="el" href="variables_8c.html#a2dc93a74d01f1d7b61720ae3b4b445ad">variables.c</a>
+, <a class="el" href="variables_8h.html#a2dc93a74d01f1d7b61720ae3b4b445ad">variables.h</a>
+</li>
 <li>irCommRxPeakHighToLow
 : <a class="el" href="variables_8c.html#a4427d7bc127833a6ec7728b22432a6ce">variables.c</a>
 , <a class="el" href="variables_8h.html#a4427d7bc127833a6ec7728b22432a6ce">variables.h</a>
 </li>
 <li>irCommRxPeakHighToLowIndexTemp
-: <a class="el" href="variables_8c.html#ac4c72dd9d5b1a9a8ad9b9b7079076efe">variables.c</a>
-, <a class="el" href="variables_8h.html#ac4c72dd9d5b1a9a8ad9b9b7079076efe">variables.h</a>
+: <a class="el" href="variables_8h.html#ac4c72dd9d5b1a9a8ad9b9b7079076efe">variables.h</a>
+, <a class="el" href="variables_8c.html#ac4c72dd9d5b1a9a8ad9b9b7079076efe">variables.c</a>
 </li>
 <li>irCommRxPeakHighToLowTemp
 : <a class="el" href="variables_8c.html#a1d6bc7dc0ee1c0ab6b4daea9b1bc3502">variables.c</a>
@@ -618,36 +641,36 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="variables_8h.html#a53a7703b9514a1c72cba55472a0b3547">variables.h</a>
 </li>
 <li>irCommRxSequenceCount
-: <a class="el" href="variables_8h.html#ad9a8f070e26198adf8388c0524c8b826">variables.h</a>
-, <a class="el" href="variables_8c.html#ad9a8f070e26198adf8388c0524c8b826">variables.c</a>
+: <a class="el" href="variables_8c.html#ad9a8f070e26198adf8388c0524c8b826">variables.c</a>
+, <a class="el" href="variables_8h.html#ad9a8f070e26198adf8388c0524c8b826">variables.h</a>
 </li>
 <li>irCommRxStartBitDetected
-: <a class="el" href="variables_8h.html#a966c10501a0d03fe5b1d3c1b047ce993">variables.h</a>
-, <a class="el" href="variables_8c.html#a966c10501a0d03fe5b1d3c1b047ce993">variables.c</a>
+: <a class="el" href="variables_8c.html#a966c10501a0d03fe5b1d3c1b047ce993">variables.c</a>
+, <a class="el" href="variables_8h.html#a966c10501a0d03fe5b1d3c1b047ce993">variables.h</a>
 </li>
 <li>irCommRxStartBitDetectedIndexTemp
 : <a class="el" href="variables_8c.html#a375723728921bed8bf8213dc1da505c9">variables.c</a>
 , <a class="el" href="variables_8h.html#a375723728921bed8bf8213dc1da505c9">variables.h</a>
 </li>
 <li>irCommRxStartBitDetectedTemp
-: <a class="el" href="variables_8h.html#a4c3cd156c9da9958c13a412485bd48fa">variables.h</a>
-, <a class="el" href="variables_8c.html#a4c3cd156c9da9958c13a412485bd48fa">variables.c</a>
+: <a class="el" href="variables_8c.html#a4c3cd156c9da9958c13a412485bd48fa">variables.c</a>
+, <a class="el" href="variables_8h.html#a4c3cd156c9da9958c13a412485bd48fa">variables.h</a>
 </li>
 <li>irCommRxStartPeakDuration
-: <a class="el" href="variables_8h.html#a14bc4a07036ecccddd259c41578eba26">variables.h</a>
-, <a class="el" href="variables_8c.html#a14bc4a07036ecccddd259c41578eba26">variables.c</a>
+: <a class="el" href="variables_8c.html#a14bc4a07036ecccddd259c41578eba26">variables.c</a>
+, <a class="el" href="variables_8h.html#a14bc4a07036ecccddd259c41578eba26">variables.h</a>
 </li>
 <li>irCommRxStartPeakDurationIndexTemp
-: <a class="el" href="variables_8h.html#a97e35ca4ca51c6eaa399896d0373f485">variables.h</a>
-, <a class="el" href="variables_8c.html#a97e35ca4ca51c6eaa399896d0373f485">variables.c</a>
+: <a class="el" href="variables_8c.html#a97e35ca4ca51c6eaa399896d0373f485">variables.c</a>
+, <a class="el" href="variables_8h.html#a97e35ca4ca51c6eaa399896d0373f485">variables.h</a>
 </li>
 <li>irCommRxStartPeakDurationTemp
 : <a class="el" href="variables_8c.html#a70389b2a2c560cd01747a61bd0ecff4a">variables.c</a>
 , <a class="el" href="variables_8h.html#a70389b2a2c560cd01747a61bd0ecff4a">variables.h</a>
 </li>
 <li>irCommRxWindowSamples
-: <a class="el" href="variables_8h.html#a8fd07ef26eadb9480b49d6ed436c7482">variables.h</a>
-, <a class="el" href="variables_8c.html#a8fd07ef26eadb9480b49d6ed436c7482">variables.c</a>
+: <a class="el" href="variables_8c.html#a8fd07ef26eadb9480b49d6ed436c7482">variables.c</a>
+, <a class="el" href="variables_8h.html#a8fd07ef26eadb9480b49d6ed436c7482">variables.h</a>
 </li>
 <li>irCommSecondBitSkipped
 : <a class="el" href="variables_8h.html#a51537006524d2a71177a3cef7fb4309d">variables.h</a>
@@ -662,68 +685,68 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="variables_8c.html#a138ff78d7dd4d4557bf9ca196af26d7e">variables.c</a>
 </li>
 <li>irCommShiftCount
-: <a class="el" href="variables_8h.html#a084aa3d5236cdd46be8dd943d1219100">variables.h</a>
-, <a class="el" href="variables_8c.html#a084aa3d5236cdd46be8dd943d1219100">variables.c</a>
+: <a class="el" href="variables_8c.html#a084aa3d5236cdd46be8dd943d1219100">variables.c</a>
+, <a class="el" href="variables_8h.html#a084aa3d5236cdd46be8dd943d1219100">variables.h</a>
 </li>
 <li>irCommShiftCounter
 : <a class="el" href="variables_8h.html#ac11f6eaec12af1e2ab2adff1474b7b4a">variables.h</a>
 , <a class="el" href="variables_8c.html#ac11f6eaec12af1e2ab2adff1474b7b4a">variables.c</a>
 </li>
 <li>irCommShiftCountFinalIndexTemp
-: <a class="el" href="variables_8c.html#a48fcade4a9beca9f444d412d010e2eda">variables.c</a>
-, <a class="el" href="variables_8h.html#a48fcade4a9beca9f444d412d010e2eda">variables.h</a>
+: <a class="el" href="variables_8h.html#a48fcade4a9beca9f444d412d010e2eda">variables.h</a>
+, <a class="el" href="variables_8c.html#a48fcade4a9beca9f444d412d010e2eda">variables.c</a>
 </li>
 <li>irCommShiftCountFinalTemp
-: <a class="el" href="variables_8c.html#a23ae1dddd35211eb31e88a2994c71334">variables.c</a>
-, <a class="el" href="variables_8h.html#a23ae1dddd35211eb31e88a2994c71334">variables.h</a>
+: <a class="el" href="variables_8h.html#a23ae1dddd35211eb31e88a2994c71334">variables.h</a>
+, <a class="el" href="variables_8c.html#a23ae1dddd35211eb31e88a2994c71334">variables.c</a>
 </li>
 <li>irCommShiftCountIndexTemp
-: <a class="el" href="variables_8c.html#ac91581e62fd726f1bdfbe053d7cb3fb9">variables.c</a>
-, <a class="el" href="variables_8h.html#ac91581e62fd726f1bdfbe053d7cb3fb9">variables.h</a>
+: <a class="el" href="variables_8h.html#ac91581e62fd726f1bdfbe053d7cb3fb9">variables.h</a>
+, <a class="el" href="variables_8c.html#ac91581e62fd726f1bdfbe053d7cb3fb9">variables.c</a>
 </li>
 <li>irCommShiftCountTemp
-: <a class="el" href="variables_8c.html#afa15ae04239a8fd532542fef8a6e9188">variables.c</a>
-, <a class="el" href="variables_8h.html#afa15ae04239a8fd532542fef8a6e9188">variables.h</a>
+: <a class="el" href="variables_8h.html#afa15ae04239a8fd532542fef8a6e9188">variables.h</a>
+, <a class="el" href="variables_8c.html#afa15ae04239a8fd532542fef8a6e9188">variables.c</a>
 </li>
 <li>irCommSignalState
-: <a class="el" href="variables_8h.html#ade57ca528579ef0d524fd5ef0d5c0fe1">variables.h</a>
-, <a class="el" href="variables_8c.html#ade57ca528579ef0d524fd5ef0d5c0fe1">variables.c</a>
+: <a class="el" href="variables_8c.html#ade57ca528579ef0d524fd5ef0d5c0fe1">variables.c</a>
+, <a class="el" href="variables_8h.html#ade57ca528579ef0d524fd5ef0d5c0fe1">variables.h</a>
 </li>
 <li>irCommStartDiffIndexTemp
-: <a class="el" href="variables_8c.html#a2bddb52f2e996e13e05ac6ea9086655a">variables.c</a>
-, <a class="el" href="variables_8h.html#a2bddb52f2e996e13e05ac6ea9086655a">variables.h</a>
+: <a class="el" href="variables_8h.html#a2bddb52f2e996e13e05ac6ea9086655a">variables.h</a>
+, <a class="el" href="variables_8c.html#a2bddb52f2e996e13e05ac6ea9086655a">variables.c</a>
 </li>
 <li>irCommStartDiffTemp
-: <a class="el" href="variables_8c.html#ae65d709f3efdc6f8adb614e032b84aab">variables.c</a>
-, <a class="el" href="variables_8h.html#ae65d709f3efdc6f8adb614e032b84aab">variables.h</a>
+: <a class="el" href="variables_8h.html#ae65d709f3efdc6f8adb614e032b84aab">variables.h</a>
+, <a class="el" href="variables_8c.html#ae65d709f3efdc6f8adb614e032b84aab">variables.c</a>
 </li>
 <li>irCommState
-: <a class="el" href="variables_8c.html#ae8a1aa76e62590e409f1e0d9501b7175">variables.c</a>
-, <a class="el" href="variables_8h.html#ae8a1aa76e62590e409f1e0d9501b7175">variables.h</a>
+: <a class="el" href="variables_8h.html#ae8a1aa76e62590e409f1e0d9501b7175">variables.h</a>
+, <a class="el" href="variables_8c.html#ae8a1aa76e62590e409f1e0d9501b7175">variables.c</a>
 </li>
 <li>irCommStateIndexTemp
 : <a class="el" href="variables_8c.html#af063cc6cce01fc35dbb251e2f4e2e111">variables.c</a>
 , <a class="el" href="variables_8h.html#af063cc6cce01fc35dbb251e2f4e2e111">variables.h</a>
 </li>
 <li>irCommStateTemp
-: <a class="el" href="variables_8c.html#acc0eb2db4db21e79fab0c8abdfa2133b">variables.c</a>
-, <a class="el" href="variables_8h.html#acc0eb2db4db21e79fab0c8abdfa2133b">variables.h</a>
+: <a class="el" href="variables_8h.html#acc0eb2db4db21e79fab0c8abdfa2133b">variables.h</a>
+, <a class="el" href="variables_8c.html#acc0eb2db4db21e79fab0c8abdfa2133b">variables.c</a>
 </li>
 <li>irCommSwitchCount
 : <a class="el" href="variables_8h.html#aef920cca5e8ed77bf07e97f1618e461e">variables.h</a>
 , <a class="el" href="variables_8c.html#aef920cca5e8ed77bf07e97f1618e461e">variables.c</a>
 </li>
 <li>irCommSwitchCountIndexTemp
-: <a class="el" href="variables_8c.html#a518a4c1d1d23f7e13a845db464ba7dfc">variables.c</a>
-, <a class="el" href="variables_8h.html#a518a4c1d1d23f7e13a845db464ba7dfc">variables.h</a>
+: <a class="el" href="variables_8h.html#a518a4c1d1d23f7e13a845db464ba7dfc">variables.h</a>
+, <a class="el" href="variables_8c.html#a518a4c1d1d23f7e13a845db464ba7dfc">variables.c</a>
 </li>
 <li>irCommSwitchCountTemp
 : <a class="el" href="variables_8h.html#a41db0e297f427cb7478d4e340eda67e3">variables.h</a>
 , <a class="el" href="variables_8c.html#a41db0e297f427cb7478d4e340eda67e3">variables.c</a>
 </li>
 <li>irCommSyncStateIndexTemp
-: <a class="el" href="variables_8c.html#a20efa5df2786f208752e400bdbf58afe">variables.c</a>
-, <a class="el" href="variables_8h.html#a20efa5df2786f208752e400bdbf58afe">variables.h</a>
+: <a class="el" href="variables_8h.html#a20efa5df2786f208752e400bdbf58afe">variables.h</a>
+, <a class="el" href="variables_8c.html#a20efa5df2786f208752e400bdbf58afe">variables.c</a>
 </li>
 <li>irCommSyncStateTemp
 : <a class="el" href="variables_8c.html#af8baf36a606ff112c176a8ecc0d0e4f6">variables.c</a>
@@ -750,24 +773,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="variables_8c.html#a6d97bde74ad76eb829e756f4dddd3afd">variables.c</a>
 </li>
 <li>irCommTickCounter
-: <a class="el" href="variables_8h.html#a6186e420a25de67997d21c6d360eb3d2">variables.h</a>
-, <a class="el" href="variables_8c.html#a6186e420a25de67997d21c6d360eb3d2">variables.c</a>
+: <a class="el" href="variables_8c.html#a6186e420a25de67997d21c6d360eb3d2">variables.c</a>
+, <a class="el" href="variables_8h.html#a6186e420a25de67997d21c6d360eb3d2">variables.h</a>
 </li>
 <li>irCommTickCounter2
 : <a class="el" href="variables_8c.html#a82e8a6dc1202e0fbe1c2f50c7bcf3442">variables.c</a>
 , <a class="el" href="variables_8h.html#a82e8a6dc1202e0fbe1c2f50c7bcf3442">variables.h</a>
 </li>
 <li>irCommTickCounterUpdate
-: <a class="el" href="variables_8h.html#ad96d8237ba1e7fce40c37c9527a873a4">variables.h</a>
-, <a class="el" href="variables_8c.html#ad96d8237ba1e7fce40c37c9527a873a4">variables.c</a>
+: <a class="el" href="variables_8c.html#ad96d8237ba1e7fce40c37c9527a873a4">variables.c</a>
+, <a class="el" href="variables_8h.html#ad96d8237ba1e7fce40c37c9527a873a4">variables.h</a>
 </li>
 <li>irCommTxBitCount
-: <a class="el" href="variables_8h.html#a506ef511354db055eb6355910078e158">variables.h</a>
-, <a class="el" href="variables_8c.html#a506ef511354db055eb6355910078e158">variables.c</a>
+: <a class="el" href="variables_8c.html#a506ef511354db055eb6355910078e158">variables.c</a>
+, <a class="el" href="variables_8h.html#a506ef511354db055eb6355910078e158">variables.h</a>
 </li>
 <li>irCommTxBitToTransmit
-: <a class="el" href="variables_8h.html#aec7eb6ee2bd069dc73a9831568e9335a">variables.h</a>
-, <a class="el" href="variables_8c.html#aec7eb6ee2bd069dc73a9831568e9335a">variables.c</a>
+: <a class="el" href="variables_8c.html#aec7eb6ee2bd069dc73a9831568e9335a">variables.c</a>
+, <a class="el" href="variables_8h.html#aec7eb6ee2bd069dc73a9831568e9335a">variables.h</a>
 </li>
 <li>irCommTxByte
 : <a class="el" href="variables_8c.html#ae60626ae1da44f5b13fd09728f54063f">variables.c</a>
@@ -810,22 +833,22 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="variables_8c.html#a399bbc4a437f49899acec06366c93fc2">variables.c</a>
 </li>
 <li>irCommTxSwitchCounter
-: <a class="el" href="variables_8h.html#a5c254076652c888461cc8ee468641d49">variables.h</a>
-, <a class="el" href="variables_8c.html#a5c254076652c888461cc8ee468641d49">variables.c</a>
+: <a class="el" href="variables_8c.html#a5c254076652c888461cc8ee468641d49">variables.c</a>
+, <a class="el" href="variables_8h.html#a5c254076652c888461cc8ee468641d49">variables.h</a>
 </li>
 <li>irEnabled
 : <a class="el" href="variables_8c.html#a32ebeb87f3ebe57f5e8c96089a3d23e6">variables.c</a>
 , <a class="el" href="variables_8h.html#a32ebeb87f3ebe57f5e8c96089a3d23e6">variables.h</a>
 </li>
 <li>ISR()
-: <a class="el" href="ir__remote__control_8c.html#afe6035149a64d5f448fbda08e9d1b67f">ir_remote_control.c</a>
+: <a class="el" href="motors_8c.html#a31e211eaf3d75b51ddc639533541f25e">motors.c</a>
+, <a class="el" href="ir__remote__control_8c.html#a5686c229bdef50123688ab6cb1404230">ir_remote_control.c</a>
+, <a class="el" href="motors_8c.html#a86953738188622410b88938da2bf8a63">motors.c</a>
+, <a class="el" href="ir__remote__control_8c.html#afe6035149a64d5f448fbda08e9d1b67f">ir_remote_control.c</a>
+, <a class="el" href="adc_8c.html#a05c2e5b588ced1cd7312f5b0edc5b295">adc.c</a>
 , <a class="el" href="motors_8c.html#a8aa6a32130ab26be17555166513a23ba">motors.c</a>
 , <a class="el" href="utility_8c.html#a7cfcbe42bd266750aeb6e5d71e5ea479">utility.c</a>
-, <a class="el" href="motors_8c.html#a86953738188622410b88938da2bf8a63">motors.c</a>
 , <a class="el" href="usart_8c.html#a084f0a9cf05b1877bd8a71a90dae7ff8">usart.c</a>
-, <a class="el" href="ir__remote__control_8c.html#a5686c229bdef50123688ab6cb1404230">ir_remote_control.c</a>
-, <a class="el" href="adc_8c.html#a05c2e5b588ced1cd7312f5b0edc5b295">adc.c</a>
-, <a class="el" href="motors_8c.html#a31e211eaf3d75b51ddc639533541f25e">motors.c</a>
 </li>
 </ul>
 </div><!-- contents -->
@@ -847,7 +870,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="nav-path" class="navpath">
     <ul>
 
-    <li class="footer">Generated on Mon Dec 1 2014 08:55:05 for Elisa3 by
+    <li class="footer">Generated on Thu Dec 4 2014 08:30:54 for Elisa3 by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

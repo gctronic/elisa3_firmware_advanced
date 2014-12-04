@@ -83,6 +83,7 @@ var constants_8h =
     [ "PAUSE_20_SEC", "constants_8h.html#a1d795dd729d323f812cf85f62d99102b", null ],
     [ "PAUSE_250_MSEC", "constants_8h.html#a84938e01c329907a3d5fd50800e24800", null ],
     [ "PAUSE_2_SEC", "constants_8h.html#ad22b4ab180030cae5c45d1fbb8003426", null ],
+    [ "PAUSE_300_MSEC", "constants_8h.html#acaf3a355573cf28b2a5fffc66e029f1c", null ],
     [ "PAUSE_30_SEC", "constants_8h.html#af49fca4d2a94dad5dca4204a84484b3f", null ],
     [ "PAUSE_400_MSEC", "constants_8h.html#aaec14398227a4af9e529bb0e52bad6c2", null ],
     [ "PAUSE_40_SEC", "constants_8h.html#a00fe673c15938a8f5134d6165db6381e", null ],

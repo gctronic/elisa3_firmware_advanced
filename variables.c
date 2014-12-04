@@ -226,10 +226,17 @@ unsigned long int irCommTickCounter2 = 0;
 unsigned char irCommTickCounterUpdate = 0;
 signed char irCommLastSensor = -1;
 signed int irCommLastData = 0;
+
+// demo
 signed int angleDeg = 0;
 signed int angleError = 0;
 unsigned char angleDegEncode = 0;
+unsigned char irCommRobotId = 0;
+unsigned char irCommRobotsNum = 0;
+unsigned char irCommLedToggle = 0;
+unsigned char irCommMsgCount = 0;
 
+// debug
 signed int irCommMaxSensorSignalTemp[IRCOMM_SAMPLING_WINDOW*2];
 unsigned char irCommMaxSensorSignalIndexTemp = 0;
 signed int irCommMaxSensorSignalFiltTemp[IRCOMM_SAMPLING_WINDOW*2];
@@ -287,8 +294,6 @@ unsigned int *irCommProxValuesAdc;
 unsigned int *irCommProxValuesCurr;
 unsigned int *irCommTempPointer;
 unsigned char irCommRxCrc = 0;
-signed int irCommRxMaxDiff;
-signed int irCommRxMaxSensor;
 signed int irCommMaxSensorSignal[IRCOMM_SAMPLING_WINDOW];
 signed long int irCommProxSum = 0;
 signed int irCommTempMax = 0;
@@ -313,6 +318,9 @@ unsigned char irCommRxBitSkipped = 0;
 unsigned char irCommRxStartBitDetected = 0;
 unsigned char irCommRxPeakHighToLow = 0;
 unsigned char irCommRxStartPeakDuration = 0;
+signed int irCommRxMaxDiff = 0;
+signed int irCommRxMaxSensor = 0;
+unsigned char irCommRxNumReceivingSensors = 0;
 
 // transmission
 unsigned char irCommAdcTxState = 0;

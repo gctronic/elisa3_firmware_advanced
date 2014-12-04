@@ -12,6 +12,12 @@ void irCommInitReceiver() {
 	irCommEnabledNext = IRCOMM_MODE_RECEIVE;
 }
 
+void irCommInitVars() {
+	memset(irCommMaxSensorValueAdc, 0x00, 16);
+	memset(irCommMinSensorValueAdc, 0xFF, 16);
+	irCommMode = IRCOMM_MODE_SENSORS_SAMPLING;
+}
+
 void irCommInit() {
 	irCommProxValuesAdc = irCommProxValuesBuff1;
 	irCommProxValuesCurr = irCommProxValuesBuff2;
@@ -19,9 +25,7 @@ void irCommInit() {
 	irCommMaxSensorValueCurr = irCommMaxSensorValueBuff2;
 	irCommMinSensorValueAdc = irCommMinSensorValueBuff1;
 	irCommMinSensorValueCurr = irCommMinSensorValueBuff2;
-	memset(irCommMaxSensorValueAdc, 0x00, 16);
-	memset(irCommMinSensorValueAdc, 0xFF, 16);
-	irCommMode = IRCOMM_MODE_SENSORS_SAMPLING;
+	irCommInitVars();
 	irCommInitReceiver();
 }
 
@@ -88,15 +92,62 @@ void irCommTasks() {
 				}
 				break;
 
-			case IRCOMM_RX_MAX_SENSOR_STATE:				
-				irCommRxMaxDiff = -1;
-    			irCommRxMaxSensor = -1;
+			case IRCOMM_RX_MAX_SENSOR_STATE:
+				// check from how many sensors the robot is receiving a possible message
 				for(i=0; i<8; i++) {
-					if ((signed int)(irCommMaxSensorValueCurr[i]-irCommMinSensorValueCurr[i]) > irCommRxMaxDiff) {
-						irCommRxMaxDiff = irCommMaxSensorValueCurr[i]-irCommMinSensorValueCurr[i];
-						irCommRxMaxSensor = i;
+					if((signed int)(irCommMaxSensorValueCurr[i]-irCommMinSensorValueCurr[i]) >= IRCOMM_DETECTION_AMPLITUDE_THR) {
+						irCommRxNumReceivingSensors++;
+					}					
+				}
+				if(irCommRxNumReceivingSensors==0) {
+					//if(irCommRxStartBitDetected == 1) {	// signal becomes too low to be reliable...or something else happened				
+					//	irCommState = IRCOMM_RX_DEBUG;
+					//	irCommAdcRxState = 12;
+					//	updateGreenLed(0);
+					//} else {
+						irCommRxStartBitDetected = 0;
+						currentProx = 0;
+						adcSaveDataTo = SKIP_SAMPLE;
+						adcSamplingState = 0;
+						irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
+						irCommState = IRCOMM_RX_IDLE_STATE;
+						resetDebugVariables();
+					//}			
+					// start listening from the next sensor the next time I check for a start bit in order to get the same chance 
+					// to all sensors, instead of always listening from the sensor that has the best signal
+					if(irCommRxMaxSensor < 7) {
+						irCommRxMaxSensor++;
+					} else {
+						irCommRxMaxSensor = 0;
+					}
+				} else {
+					if(irCommRxStartBitDetected==0) {
+						// start listening from the next sensor
+						if(irCommRxMaxSensor < 7) {
+							irCommRxMaxSensor++;
+						} else {
+							irCommRxMaxSensor = 0;
+						}
+						// check which is the next sensor that has a reliable signal
+						i = 0;
+						while(i<8) {
+							if((signed int)(irCommMaxSensorValueCurr[irCommRxMaxSensor]-irCommMinSensorValueCurr[irCommRxMaxSensor]) >= IRCOMM_DETECTION_AMPLITUDE_THR) {
+								irCommRxMaxDiff = irCommMaxSensorValueCurr[irCommRxMaxSensor]-irCommMinSensorValueCurr[irCommRxMaxSensor];
+								break;
+							}
+							if(irCommRxMaxSensor < 7) {
+								irCommRxMaxSensor++;
+							} else {
+								irCommRxMaxSensor = 0;
+							}
+							i++;
+						}
+					} else {	// listen from the same sensor when a start bit is detected
+						irCommRxMaxDiff = irCommMaxSensorValueCurr[irCommRxMaxSensor]-irCommMinSensorValueCurr[irCommRxMaxSensor];
 					}
 				}
+				//turnOffGreenLeds();
+				//setGreenLed(irCommRxMaxSensor, 1);			
 
 				if(irCommRxMaxSensorIndexTemp>1) {
 					irCommRxMaxSensorIndexTemp = 1;
@@ -163,6 +214,16 @@ void irCommTasks() {
 						}
 					}
 				} else {
+					// cannot get a reliable signal from the sensor from which the start bit was detected the previous time,
+					// thus restart listening from the next sensor
+					if(irCommRxStartBitDetected == 1) {
+						if(irCommRxMaxSensor < 7) {
+							irCommRxMaxSensor++;
+						} else {
+							irCommRxMaxSensor = 0;
+						}	
+					}
+
 					//if(irCommRxStartBitDetected == 1) {	// signal becomes too low to be reliable...or something else happened				
 					//	irCommState = IRCOMM_RX_DEBUG;
 					//	irCommAdcRxState = 12;
@@ -175,8 +236,7 @@ void irCommTasks() {
 						irCommMode=IRCOMM_MODE_SENSORS_SAMPLING;
 						irCommState = IRCOMM_RX_IDLE_STATE;
 						resetDebugVariables();
-					//}
-					
+													
 				}	
 
 												
@@ -338,7 +398,7 @@ void irCommTasks() {
 				irCommSwitchCountIndexTemp++;
 				
 
-				turnOffGreenLeds();
+				//turnOffGreenLeds();
 				if(irCommRxPeakHighToLow==1) {
 					if(irCommRxStartBitDetected==1) {
 						if(irCommSwitchCount==2) {
@@ -693,7 +753,7 @@ void irCommTasks() {
 
 				break;
 				
-			case IRCOMM_RX_SYNC_SIGNAL:
+			case IRCOMM_RX_SYNC_SIGNAL:				
 				break;
 
 			case IRCOMM_RX_WAITING_BIT:
@@ -803,7 +863,7 @@ void irCommTasks() {
 				irCommRxBitReceivedTemp[irCommRxBitReceivedIndexTemp] = irCommRxBitReceived[irCommRxBitCount];
 				irCommRxBitReceivedIndexTemp++;
 
-				setGreenLed(irCommRxBitCount, 1);
+				//setGreenLed(irCommRxBitCount, 1);
 
 				irCommRxBitCount++;
 				if(irCommRxBitCount == 10) {	// received 8 bit of data + 2 bit of crc
@@ -837,7 +897,7 @@ void irCommTasks() {
 					irCommRxDataAvailable = 1;
 					//updateBlueLed(0);
 					usart0Transmit(irCommRxByte,1);		
-					//updateBlueLed(255);
+					//updateBlueLed(255);			
 				}
 												
 				currentProx = 0;
