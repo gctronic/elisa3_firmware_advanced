@@ -14510,11 +14510,11 @@ void handleCalibration() {
                     timeoutOdometry = getTime100MicroSec();;
 				}
 			} else {
-            	if(proximityResult[11]<(512-2*HYSTERESIS_THR)) {
+            	if(proximityResult[11] < CALIBRATION_LOW_THR) {
     56f6:	80 91 7f 02 	lds	r24, 0x027F
     56fa:	90 91 80 02 	lds	r25, 0x0280
     56fe:	21 e0       	ldi	r18, 0x01	; 1
-    5700:	8a 36       	cpi	r24, 0x6A	; 106
+    5700:	86 38       	cpi	r24, 0x86	; 134
     5702:	92 07       	cpc	r25, r18
     5704:	0c f4       	brge	.+2      	; 0x5708 <handleCalibration+0x3e>
     5706:	8a c1       	rjmp	.+788    	; 0x5a1c <handleCalibration+0x352>
@@ -14652,11 +14652,11 @@ void handleCalibration() {
                     timeoutOdometry = getTime100MicroSec();;
 				}
 			} else {
-            	if(proximityResult[11]<(512-2*HYSTERESIS_THR)) {
+            	if(proximityResult[11] < CALIBRATION_LOW_THR) {
     57d6:	80 91 7f 02 	lds	r24, 0x027F
     57da:	90 91 80 02 	lds	r25, 0x0280
     57de:	21 e0       	ldi	r18, 0x01	; 1
-    57e0:	8a 36       	cpi	r24, 0x6A	; 106
+    57e0:	86 38       	cpi	r24, 0x86	; 134
     57e2:	92 07       	cpc	r25, r18
     57e4:	0c f0       	brlt	.+2      	; 0x57e8 <handleCalibration+0x11e>
     57e6:	90 cf       	rjmp	.-224    	; 0x5708 <handleCalibration+0x3e>
@@ -14681,16 +14681,16 @@ void handleCalibration() {
     5808:	49 f1       	breq	.+82     	; 0x585c <handleCalibration+0x192>
     580a:	82 30       	cpi	r24, 0x02	; 2
     580c:	39 f1       	breq	.+78     	; 0x585c <handleCalibration+0x192>
-            	if(proximityResult[8]>(512-HYSTERESIS_THR)) {
+            	if(proximityResult[8] > CALIBRATION_HIGH_THR) {
 				//if((proximityResult[8])>(proximityOffset[8]>>1)) {	
                 	calibState = 5;
 				}
 			} else {
-            	if(proximityResult[11]>(512-HYSTERESIS_THR)) {
+            	if(proximityResult[11] > CALIBRATION_HIGH_THR) {
     580e:	80 91 7f 02 	lds	r24, 0x027F
     5812:	90 91 80 02 	lds	r25, 0x0280
     5816:	21 e0       	ldi	r18, 0x01	; 1
-    5818:	86 3b       	cpi	r24, 0xB6	; 182
+    5818:	8f 3a       	cpi	r24, 0xAF	; 175
     581a:	92 07       	cpc	r25, r18
     581c:	3c f5       	brge	.+78     	; 0x586c <handleCalibration+0x1a2>
 				//if((proximityResult[11])>(proximityOffset[11]>>1)) {	
@@ -14729,17 +14729,17 @@ void handleCalibration() {
 
 		case 4: // exit from black line again
         	if(calibWheel==LEFT_WHEEL_FW_SC || calibWheel==LEFT_WHEEL_BW_SC) {
-            	if(proximityResult[8]>(512-HYSTERESIS_THR)) {
+            	if(proximityResult[8] > CALIBRATION_HIGH_THR) {
     585c:	80 91 79 02 	lds	r24, 0x0279
     5860:	90 91 7a 02 	lds	r25, 0x027A
     5864:	21 e0       	ldi	r18, 0x01	; 1
-    5866:	86 3b       	cpi	r24, 0xB6	; 182
+    5866:	8f 3a       	cpi	r24, 0xAF	; 175
     5868:	92 07       	cpc	r25, r18
     586a:	cc f2       	brlt	.-78     	; 0x581e <handleCalibration+0x154>
                 	calibState = 5;
 				}
 			} else {
-            	if(proximityResult[11]>(512-HYSTERESIS_THR)) {
+            	if(proximityResult[11] > CALIBRATION_HIGH_THR) {
 				//if((proximityResult[11])>(proximityOffset[11]>>1)) {	
 					calibState = 5;
     586c:	85 e0       	ldi	r24, 0x05	; 5
@@ -14763,11 +14763,11 @@ void handleCalibration() {
                     timeoutOdometry = getTime100MicroSec();;
 				}
 			} else {
-            	if(proximityResult[11]>(512-HYSTERESIS_THR)) {
+            	if(proximityResult[11] > CALIBRATION_HIGH_THR) {
     5884:	80 91 7f 02 	lds	r24, 0x027F
     5888:	90 91 80 02 	lds	r25, 0x0280
     588c:	21 e0       	ldi	r18, 0x01	; 1
-    588e:	86 3b       	cpi	r24, 0xB6	; 182
+    588e:	8f 3a       	cpi	r24, 0xAF	; 175
     5890:	92 07       	cpc	r25, r18
     5892:	0c f4       	brge	.+2      	; 0x5896 <handleCalibration+0x1cc>
     5894:	39 cf       	rjmp	.-398    	; 0x5708 <handleCalibration+0x3e>
@@ -14787,11 +14787,11 @@ void handleCalibration() {
 
 		case 3: // look for black line again, stop time measure
         	if(calibWheel==LEFT_WHEEL_FW_SC || calibWheel==LEFT_WHEEL_BW_SC) {
-            	if(proximityResult[8]<(512-2*HYSTERESIS_THR)) {
+            	if(proximityResult[8] < CALIBRATION_LOW_THR) {
     58b2:	80 91 79 02 	lds	r24, 0x0279
     58b6:	90 91 7a 02 	lds	r25, 0x027A
     58ba:	21 e0       	ldi	r18, 0x01	; 1
-    58bc:	8a 36       	cpi	r24, 0x6A	; 106
+    58bc:	86 38       	cpi	r24, 0x86	; 134
     58be:	92 07       	cpc	r25, r18
     58c0:	0c f0       	brlt	.+2      	; 0x58c4 <handleCalibration+0x1fa>
     58c2:	22 cf       	rjmp	.-444    	; 0x5708 <handleCalibration+0x3e>
@@ -14844,7 +14844,7 @@ void handleCalibration() {
     5944:	0e 94 7b 56 	call	0xacf6	; 0xacf6 <__divmodsi4>
     5948:	30 93 c5 04 	sts	0x04C5, r19
     594c:	20 93 c4 04 	sts	0x04C4, r18
-            	if(proximityResult[11]<(512-2*HYSTERESIS_THR)) {
+            	if(proximityResult[11] < CALIBRATION_LOW_THR) {
 				//if((proximityResult[11])<(proximityOffset[11]>>1)) {	
                 	timeOdometry = getTime100MicroSec() - timeOdometry;
                     tempVel = (unsigned int)(DISTANCE_MM/((float)timeOdometry*104.0/1000000.0));
@@ -14866,11 +14866,11 @@ void handleCalibration() {
 
 		case 1: // look for black line, start time measure
         	if(calibWheel==LEFT_WHEEL_FW_SC || calibWheel==LEFT_WHEEL_BW_SC) {
-            	if(proximityResult[8]<(512-2*HYSTERESIS_THR)) {
+            	if(proximityResult[8] < CALIBRATION_LOW_THR) {
     5970:	80 91 79 02 	lds	r24, 0x0279
     5974:	90 91 7a 02 	lds	r25, 0x027A
     5978:	21 e0       	ldi	r18, 0x01	; 1
-    597a:	8a 36       	cpi	r24, 0x6A	; 106
+    597a:	86 38       	cpi	r24, 0x86	; 134
     597c:	92 07       	cpc	r25, r18
     597e:	0c f0       	brlt	.+2      	; 0x5982 <handleCalibration+0x2b8>
     5980:	c3 ce       	rjmp	.-634    	; 0x5708 <handleCalibration+0x3e>
@@ -14884,7 +14884,7 @@ void handleCalibration() {
     5992:	10 92 ba 04 	sts	0x04BA, r1
     5996:	10 92 bb 04 	sts	0x04BB, r1
 			} else {
-            	if(proximityResult[11]<(512-2*HYSTERESIS_THR)) {
+            	if(proximityResult[11] < CALIBRATION_LOW_THR) {
 				//if((proximityResult[11])<(proximityOffset[11]>>1)) {	
 					rightSumCount = 0;
 					rightSpeedSumOdom = 0;
@@ -14909,11 +14909,11 @@ void handleCalibration() {
 
 		case 2: // exit from black line
         	if(calibWheel==LEFT_WHEEL_FW_SC || calibWheel==LEFT_WHEEL_BW_SC) {
-            	if(proximityResult[8]>(512-HYSTERESIS_THR)) {
+            	if(proximityResult[8] > CALIBRATION_HIGH_THR) {
     59ca:	80 91 79 02 	lds	r24, 0x0279
     59ce:	90 91 7a 02 	lds	r25, 0x027A
     59d2:	21 e0       	ldi	r18, 0x01	; 1
-    59d4:	86 3b       	cpi	r24, 0xB6	; 182
+    59d4:	8f 3a       	cpi	r24, 0xAF	; 175
     59d6:	92 07       	cpc	r25, r18
     59d8:	0c f4       	brge	.+2      	; 0x59dc <handleCalibration+0x312>
     59da:	96 ce       	rjmp	.-724    	; 0x5708 <handleCalibration+0x3e>
@@ -14961,7 +14961,7 @@ void handleCalibration() {
                     timeoutOdometry = getTime100MicroSec();;
 				}
 			} else {
-            	if(proximityResult[11]<(512-2*HYSTERESIS_THR)) {
+            	if(proximityResult[11] < CALIBRATION_LOW_THR) {
 				//if((proximityResult[11])<(proximityOffset[11]>>1)) {	
                 	timeOdometry = getTime100MicroSec() - timeOdometry;
     5a1c:	0e 94 35 22 	call	0x446a	; 0x446a <getTime100MicroSec>

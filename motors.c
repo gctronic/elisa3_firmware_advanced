@@ -333,7 +333,7 @@ void handleCalibration() {
 
 		case 1: // look for black line, start time measure
         	if(calibWheel==LEFT_WHEEL_FW_SC || calibWheel==LEFT_WHEEL_BW_SC) {
-            	if(proximityResult[8]<(512-2*HYSTERESIS_THR)) {
+            	if(proximityResult[8] < CALIBRATION_LOW_THR) {
 				//if((proximityResult[8])<(proximityOffset[8]>>1)) {				
                 	leftSumCount = 0;
                     leftSpeedSumOdom = 0;
@@ -342,7 +342,7 @@ void handleCalibration() {
                     timeoutOdometry = getTime100MicroSec();;
 				}
 			} else {
-            	if(proximityResult[11]<(512-2*HYSTERESIS_THR)) {
+            	if(proximityResult[11] < CALIBRATION_LOW_THR) {
 				//if((proximityResult[11])<(proximityOffset[11]>>1)) {	
 					rightSumCount = 0;
 					rightSpeedSumOdom = 0;
@@ -362,13 +362,13 @@ void handleCalibration() {
 
 		case 2: // exit from black line
         	if(calibWheel==LEFT_WHEEL_FW_SC || calibWheel==LEFT_WHEEL_BW_SC) {
-            	if(proximityResult[8]>(512-HYSTERESIS_THR)) {
+            	if(proximityResult[8] > CALIBRATION_HIGH_THR) {
 				//if((proximityResult[8])>(proximityOffset[8]>>1)) {	
                 	calibState = 3;
                     timeoutOdometry = getTime100MicroSec();;
 				}
 			} else {
-            	if(proximityResult[11]>(512-HYSTERESIS_THR)) {
+            	if(proximityResult[11] > CALIBRATION_HIGH_THR) {
 				//if((proximityResult[11])>(proximityOffset[11]>>1)) {	
                 	calibState = 3;
                     timeoutOdometry = getTime100MicroSec();;
@@ -385,7 +385,7 @@ void handleCalibration() {
 
 		case 3: // look for black line again, stop time measure
         	if(calibWheel==LEFT_WHEEL_FW_SC || calibWheel==LEFT_WHEEL_BW_SC) {
-            	if(proximityResult[8]<(512-2*HYSTERESIS_THR)) {
+            	if(proximityResult[8] < CALIBRATION_LOW_THR) {
 				//if((proximityResult[8])<(proximityOffset[8]>>1)) {	
                 	timeOdometry = getTime100MicroSec() - timeOdometry;
                     tempVel = (unsigned int)(DISTANCE_MM/((float)timeOdometry*104.0/1000000.0));
@@ -395,7 +395,7 @@ void handleCalibration() {
                     timeoutOdometry = getTime100MicroSec();;
 				}
 			} else {
-            	if(proximityResult[11]<(512-2*HYSTERESIS_THR)) {
+            	if(proximityResult[11] < CALIBRATION_LOW_THR) {
 				//if((proximityResult[11])<(proximityOffset[11]>>1)) {	
                 	timeOdometry = getTime100MicroSec() - timeOdometry;
                     tempVel = (unsigned int)(DISTANCE_MM/((float)timeOdometry*104.0/1000000.0));
@@ -416,12 +416,12 @@ void handleCalibration() {
 
 		case 4: // exit from black line again
         	if(calibWheel==LEFT_WHEEL_FW_SC || calibWheel==LEFT_WHEEL_BW_SC) {
-            	if(proximityResult[8]>(512-HYSTERESIS_THR)) {
+            	if(proximityResult[8] > CALIBRATION_HIGH_THR) {
 				//if((proximityResult[8])>(proximityOffset[8]>>1)) {	
                 	calibState = 5;
 				}
 			} else {
-            	if(proximityResult[11]>(512-HYSTERESIS_THR)) {
+            	if(proximityResult[11] > CALIBRATION_HIGH_THR) {
 				//if((proximityResult[11])>(proximityOffset[11]>>1)) {	
 					calibState = 5;
 				}
