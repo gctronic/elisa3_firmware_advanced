@@ -211,6 +211,11 @@ signed int speedLeftFromEnc = 0;
 signed int speedRightFromEnc = 0;
 uint32_t  timeLeftOdom = 0;
 uint32_t  timeRightOdom = 0;
+int minGround = 0;
+int maxGround = 0;
+int calibrationThr = 0;
+//int calibrationThrLow = 0;
+//int calibrationThrHigh = 0;
 
 /***************/
 /*** IR COMM ***/

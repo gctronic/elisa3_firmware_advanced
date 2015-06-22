@@ -197,6 +197,11 @@ extern signed int speedLeftFromEnc;
 extern signed int speedRightFromEnc;
 extern uint32_t timeLeftOdom;
 extern uint32_t timeRightOdom;
+extern int minGround;
+extern int maxGround;
+extern int calibrationThr;
+//extern int calibrationThrLow;
+//extern int calibrationThrHigh;
 
 /***************/
 /*** IR COMM ***/

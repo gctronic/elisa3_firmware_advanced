@@ -312,8 +312,61 @@ void setRightSpeed(signed char vel) {
 void handleCalibration() {
 
 	switch(calibState) {
+		case CALIBRATION_STATE_FIND_THRS_0:
+			timeoutOdometry = getTime100MicroSec();
+			calibState = CALIBRATION_STATE_FIND_THRS_1;
+			break;
+		
+		case CALIBRATION_STATE_FIND_THRS_1:	// Find the max and min of the ground sensor value in order to get a threshold to detect 
+											// the black line securily (the threshold will be the average of the min and max).
+			if((getTime100MicroSec() - timeoutOdometry)>PAUSE_1_SEC) { 	// Wait for the current sensor calibration to be terminated 
+																		// (started when calibration is started).
+				if(calibWheel == LEFT_WHEEL_FW_SC) {
+					pwm_intermediate_right_desired = 0;
+					pwm_intermediate_left_desired = (INDEX_STEP*3)<<2;		// Use a moderate speed.
+	        	} else if(calibWheel == RIGHT_WHEEL_FW_SC) {
+					pwm_intermediate_right_desired = (INDEX_STEP*3)<<2;
+					pwm_intermediate_left_desired = 0;
+				} else if(calibWheel == LEFT_WHEEL_BW_SC) {
+					pwm_intermediate_right_desired = 0;
+					pwm_intermediate_left_desired = -((INDEX_STEP*3)<<2);
+	        	} else if(calibWheel == RIGHT_WHEEL_BW_SC) {
+					pwm_intermediate_right_desired = -((INDEX_STEP*3)<<2);
+					pwm_intermediate_left_desired = 0;
+				}               
+				minGround = 1023;
+				maxGround = 0;
+	            calibState = CALIBRATION_STATE_FIND_THRS_2;
+	            timeoutOdometry = getTime100MicroSec();
+			}
+			break;
 
-    	case 0: // set speed
+		case CALIBRATION_STATE_FIND_THRS_2:	// Wait for 5 seconds during which the ground min and max values are saved.
+			if(calibWheel==LEFT_WHEEL_FW_SC || calibWheel==LEFT_WHEEL_BW_SC) {
+				if(proximityResult[8] < minGround) {
+					minGround = proximityResult[8];
+				}
+				if(proximityResult[8] > maxGround) {
+					maxGround = proximityResult[8];
+				}
+			} else {
+				if(proximityResult[11] < minGround) {
+					minGround = proximityResult[11];
+				}
+				if(proximityResult[11] > maxGround) {
+					maxGround = proximityResult[11];
+				}
+			}
+			if((getTime100MicroSec() - timeoutOdometry)>PAUSE_5_SEC) {    // the robot seems to be still, go to next velcoity
+				calibrationThr = (minGround + maxGround)>>1;	// Take the average of the 2 as the reference threshold value.
+				//calibrationThrLow = calibrationThr - ((maxGround-minGround)>>2);	// Use an histeresys between max and min (not needed...).
+				//calibrationThrHigh = calibrationThr + ((maxGround-minGround)>>2);
+                calibState = CALIBRATION_STATE_SET_SPEED;
+			}
+			break;
+
+
+    	case CALIBRATION_STATE_SET_SPEED: // set speed
         	if(calibWheel == LEFT_WHEEL_FW_SC) {
 				pwm_intermediate_right_desired = 0;
 				pwm_intermediate_left_desired = (INDEX_STEP*calibVelIndex)<<2;
@@ -327,27 +380,25 @@ void handleCalibration() {
 				pwm_intermediate_right_desired = -((INDEX_STEP*calibVelIndex)<<2);
 				pwm_intermediate_left_desired = 0;
 			}               
-            calibState = 1;
+            calibState = CALIBRATION_STATE_START_MEASURE;
             timeoutOdometry = getTime100MicroSec();
             break;
 
-		case 1: // look for black line, start time measure
+		case CALIBRATION_STATE_START_MEASURE: // look for black line, start time measure
         	if(calibWheel==LEFT_WHEEL_FW_SC || calibWheel==LEFT_WHEEL_BW_SC) {
-            	if(proximityResult[8] < CALIBRATION_LOW_THR) {
-				//if((proximityResult[8])<(proximityOffset[8]>>1)) {				
+				if(proximityResult[8] < calibrationThr) {				
                 	leftSumCount = 0;
                     leftSpeedSumOdom = 0;
                     timeOdometry = getTime100MicroSec();;
-                    calibState = 2;
+                    calibState = CALIBRATION_STATE_EXIT_BLACK_LINE_1;
                     timeoutOdometry = getTime100MicroSec();;
 				}
 			} else {
-            	if(proximityResult[11] < CALIBRATION_LOW_THR) {
-				//if((proximityResult[11])<(proximityOffset[11]>>1)) {	
+				if(proximityResult[11] < calibrationThr) {	
 					rightSumCount = 0;
 					rightSpeedSumOdom = 0;
                     timeOdometry = getTime100MicroSec();;
-                    calibState = 2;
+                    calibState = CALIBRATION_STATE_EXIT_BLACK_LINE_1;
                     timeoutOdometry = getTime100MicroSec();;
 				}
 			}
@@ -356,21 +407,19 @@ void handleCalibration() {
 				avgLeftSpeed = 0;
 				avgRightSpeed = 0;
                 updateOdomData();
-                calibState = 5;
+                calibState = CALIBRATION_STATE_NEXT;
 			}
 			break;
 
-		case 2: // exit from black line
+		case CALIBRATION_STATE_EXIT_BLACK_LINE_1: // exit from black line
         	if(calibWheel==LEFT_WHEEL_FW_SC || calibWheel==LEFT_WHEEL_BW_SC) {
-            	if(proximityResult[8] > CALIBRATION_HIGH_THR) {
-				//if((proximityResult[8])>(proximityOffset[8]>>1)) {	
-                	calibState = 3;
+				if(proximityResult[8] > calibrationThr) {	
+                	calibState = CALIBRATION_STATE_STOP_MEASURE;
                     timeoutOdometry = getTime100MicroSec();;
 				}
 			} else {
-            	if(proximityResult[11] > CALIBRATION_HIGH_THR) {
-				//if((proximityResult[11])>(proximityOffset[11]>>1)) {	
-                	calibState = 3;
+				if(proximityResult[11] > calibrationThr) {	
+                	calibState = CALIBRATION_STATE_STOP_MEASURE;
                     timeoutOdometry = getTime100MicroSec();;
 				}
 			}
@@ -379,29 +428,27 @@ void handleCalibration() {
 				avgLeftSpeed = 0;
 				avgRightSpeed = 0;
                 updateOdomData();
-                calibState = 5;
+                calibState = CALIBRATION_STATE_NEXT;
 			}
             break;
 
-		case 3: // look for black line again, stop time measure
+		case CALIBRATION_STATE_STOP_MEASURE: // look for black line again, stop time measure
         	if(calibWheel==LEFT_WHEEL_FW_SC || calibWheel==LEFT_WHEEL_BW_SC) {
-            	if(proximityResult[8] < CALIBRATION_LOW_THR) {
-				//if((proximityResult[8])<(proximityOffset[8]>>1)) {	
+				if(proximityResult[8] < calibrationThr) {	
                 	timeOdometry = getTime100MicroSec() - timeOdometry;
                     tempVel = (unsigned int)(DISTANCE_MM/((float)timeOdometry*104.0/1000000.0));
 					avgLeftSpeed = leftSpeedSumOdom/leftSumCount;
                     updateOdomData();
-                    calibState = 4;
+                    calibState = CALIBRATION_STATE_EXIT_BLACK_LINE_2;
                     timeoutOdometry = getTime100MicroSec();;
 				}
 			} else {
-            	if(proximityResult[11] < CALIBRATION_LOW_THR) {
-				//if((proximityResult[11])<(proximityOffset[11]>>1)) {	
+				if(proximityResult[11] < calibrationThr) {	
                 	timeOdometry = getTime100MicroSec() - timeOdometry;
                     tempVel = (unsigned int)(DISTANCE_MM/((float)timeOdometry*104.0/1000000.0));
                     avgRightSpeed = rightSpeedSumOdom/rightSumCount;
 					updateOdomData();
-                    calibState = 4;
+                    calibState = CALIBRATION_STATE_EXIT_BLACK_LINE_2;
                     timeoutOdometry = getTime100MicroSec();;
 				}
 			}
@@ -410,30 +457,28 @@ void handleCalibration() {
 				avgLeftSpeed = 0;
 				avgRightSpeed = 0;
                 updateOdomData();
-                calibState = 5;
+                calibState = CALIBRATION_STATE_NEXT;
 			}
             break;
 
-		case 4: // exit from black line again
+		case CALIBRATION_STATE_EXIT_BLACK_LINE_2: // exit from black line again
         	if(calibWheel==LEFT_WHEEL_FW_SC || calibWheel==LEFT_WHEEL_BW_SC) {
-            	if(proximityResult[8] > CALIBRATION_HIGH_THR) {
-				//if((proximityResult[8])>(proximityOffset[8]>>1)) {	
-                	calibState = 5;
+				if(proximityResult[8] > calibrationThr) {	
+                	calibState = CALIBRATION_STATE_NEXT;
 				}
 			} else {
-            	if(proximityResult[11] > CALIBRATION_HIGH_THR) {
-				//if((proximityResult[11])>(proximityOffset[11]>>1)) {	
-					calibState = 5;
+				if(proximityResult[11] > calibrationThr) {	
+					calibState = CALIBRATION_STATE_NEXT;
 				}
 			}
             if((getTime100MicroSec() - timeoutOdometry)>PAUSE_60_SEC) {    // the robot seems to be still, go to next velocity
             	tempVel = 0;
                 //updateOdomData();
-                calibState = 5;
+                calibState = CALIBRATION_STATE_NEXT;
 			}
             break;
 
-		case 5:
+		case CALIBRATION_STATE_NEXT:
         	calibVelIndex++;
             if(calibVelIndex == 10) {
             	calibVelIndex = 1;
@@ -444,6 +489,8 @@ void handleCalibration() {
 				} else if(calibWheel == LEFT_WHEEL_BW_SC) {
                 	calibWheel = RIGHT_WHEEL_FW_SC;
 					calibrateOdomFlag = 0;
+					calibState = CALIBRATION_STATE_FIND_THRS_0;	// Recompute the thresholds for the right ground.
+					break;
 					// red on
 				} else if(calibWheel == RIGHT_WHEEL_BW_SC) {
                 	calibWheel = LEFT_WHEEL_FW_SC;					
@@ -452,7 +499,7 @@ void handleCalibration() {
 					calibrateOdomFlag = 0;
 				}
 			}
-			calibState = 0;
+			calibState = CALIBRATION_STATE_SET_SPEED;
 			break;
 
 		default:

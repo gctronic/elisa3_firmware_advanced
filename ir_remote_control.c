@@ -191,7 +191,7 @@ void handleIRRemoteCommands() {
 						calibrateSensors();
 						proximityResult[8] = 1023;	// because the first time this value could be low after calibration
 						proximityResult[11] = 1023;	// and in that case a false black line will be detected
-						calibState = 0;
+						calibState = CALIBRATION_STATE_FIND_THRS_0;
 						calibVelIndex = 1;
 						calibrateOdomFlag = 1;
 
