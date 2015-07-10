@@ -71,43 +71,22 @@
 #endif
 
 // horizontal speed controller
-#ifndef P_HORIZONTAL
-#define P_HORIZONTAL 15 //25						// P parameter of the PID speed controller
+#ifndef P_PART
+#define P_PART 10 //15						// P parameter of the PID speed controller
 #endif
 
-#ifndef I_HORIZONTAL
-#define I_HORIZONTAL 2						// I parameter of the PID speed controller
+#ifndef I_PART
+#define I_PART 3 //2						// I parameter of the PID speed controller
 #endif
 
-#ifndef D_HORIZONTAL
-#define D_HORIZONTAL 3						// D parameter of the PID speed controller
+#ifndef D_PART
+#define D_PART 2 //3						// D parameter of the PID speed controller
 #endif
 
-#ifndef I_LIMIT_HORIZONTAL
-#define I_LIMIT_HORIZONTAL 1600				// limit of the errors sum
+#ifndef I_LIMIT
+#define I_LIMIT 1600				// limit of the errors sum
 #endif
 
-// vertical speed controller
-#ifndef P_VERTICAL
-#define P_VERTICAL 25 //10
-#endif
-
-#ifndef I_VERTICAL
-#define I_VERTICAL 3 //3
-#endif
-
-#ifndef D_VERTICAL
-#define D_VERTICAL 2
-#endif
-
-#ifndef I_LIMIT_VERTICAL
-#define I_LIMIT_VERTICAL 1600
-#endif
-
-#ifndef INIT_KFF
-#define INIT_KFF 25							// base feed forward for the vertical speed controller;
-#endif										// used then for computing the actual feed forward based on
-											// the robot vertical angle
 /****************/
 /*** RGB LEDS ***/
 /****************/

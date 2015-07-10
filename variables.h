@@ -49,8 +49,6 @@ extern signed int pwm_right_desired;
 extern signed int pwm_left_desired;
 extern signed int pwm_intermediate_right_desired;
 extern signed int pwm_intermediate_left_desired;
-extern signed int k_ff_speed_control_left;
-extern signed int k_ff_speed_control_right;
 extern signed long int pwm_right_speed_controller;
 extern signed long int pwm_left_speed_controller;
 extern signed int delta_left_speed_current;

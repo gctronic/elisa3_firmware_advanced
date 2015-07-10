@@ -36,32 +36,18 @@ extern "C" {
 void init_speed_control();
 
 /**
- * \brief Control the speed of the left motor in a vertical wall.
+ * \brief Control the speed of the left motor in a flat surface or vertical wall.
  * \param pwm_left it's a reference; input => desired speed; output => pwm value
  * \return none
  */
-void start_vertical_speed_control_left(signed int *pwm_left);
+void start_speed_control_left(signed int *pwm_left);
 
 /**
- * \brief Control the speed of the right motor in a vertical wall.
+ * \brief Control the speed of the right motor in a flat surface or vertical wall.
  * \param pwm_right it's a reference; input => desired speed; output => pwm value
  * \return none
  */
-void start_vertical_speed_control_right(signed int *pwm_right);
-
-/**
- * \brief Control the speed of the left motor in a flat surface.
- * \param pwm_left it's a reference; input => desired speed; output => pwm value
- * \return none
- */
-void start_horizontal_speed_control_left(signed int *pwm_left);
-
-/**
- * \brief Control the speed of the right motor in a flat surface.
- * \param pwm_right it's a reference; input => desired speed; output => pwm value
- * \return none
- */
-void start_horizontal_speed_control_right(signed int *pwm_right);
+void start_speed_control_right(signed int *pwm_right);
 
 #ifdef __cplusplus
 } // extern "C"

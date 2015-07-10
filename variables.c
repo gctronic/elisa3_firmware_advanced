@@ -64,8 +64,6 @@ signed int pwm_intermediate_left_desired = 0;
 //unsigned int d_speed_control;
 //signed int i_speed_control = 2;
 //unsigned int i_limit_speed_control;
-signed int k_ff_speed_control_left=INIT_KFF;		// feed forward term for the vertical speed controller
-signed int k_ff_speed_control_right=INIT_KFF;
 signed long int pwm_right_speed_controller = 0;			// the pwm values after the speed controller adaptation
 signed long int pwm_left_speed_controller = 0;			
 signed int delta_left_speed_current;				// current error between desired and measured speed

@@ -178,15 +178,8 @@ void handleMotorsWithSpeedController() {
 		}
 
 */
-		if(robotPosition == HORIZONTAL_POS) {
-			//PORTB &= ~(1 << 5);
-			start_horizontal_speed_control_left(&pwm_left_working);
-			//PORTB |= (1 << 5);
-		} else {
-			//PORTB &= ~(1 << 6);
-			start_vertical_speed_control_left(&pwm_left_working);
-			//PORTB |= (1 << 6);
-		}
+
+		start_speed_control_left(&pwm_left_working);
 
 		pwm_left = pwm_left_working;
 
@@ -229,15 +222,7 @@ void handleMotorsWithSpeedController() {
 		}
 */
 
-		if(robotPosition == HORIZONTAL_POS) {
-			//PORTB &= ~(1 << 5);
-			start_horizontal_speed_control_right(&pwm_right_working);
-			//PORTB |= (1 << 5);
-		} else {
-			//PORTB &= ~(1 << 6);
-			start_vertical_speed_control_right(&pwm_right_working);
-			//PORTB |= (1 << 6);
-		}
+		start_speed_control_right(&pwm_right_working);
 
 		pwm_right = pwm_right_working;
 
