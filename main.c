@@ -10,6 +10,7 @@
 #include "behaviors.h"
 #include "sensors.h"
 #include "irCommunication.h"
+#include "motors.h"
 
 int main(void) {
 
@@ -21,13 +22,18 @@ int main(void) {
 
 	initPeripherals();
 
-	calibrateSensors();
-
 	initBehaviors();
 
-	startTime = getTime100MicroSec();
-
 	speedStepCounter = getTime100MicroSec();
+	
+	// I noticed that I have to wait a little before calibrating in order to have the sensors to be 
+	// well calibrated (sensors noise eliminated). Don't sure why, maybe due to the sensitivity of the 
+	// sensor that stabilizes...
+	startTime = getTime100MicroSec();
+	while((getTime100MicroSec() - startTime) < PAUSE_300_MSEC);
+	calibrateSensors();
+
+	startTime = getTime100MicroSec();
 
 /*
 	unsigned int j=0;
@@ -159,51 +165,6 @@ int main(void) {
 		//if(calibrateOdomFlag==0) {
 			handleRFCommands();
 		//}
-
-
-		if(calibrateOdomFlag==0) {
-			if((getTime100MicroSec()-speedStepCounter) >= SPEED_STEP_DELAY) {
-				speedStepCounter = getTime100MicroSec();
-
-				if(softAccEnabled) {
-					if(pwm_right_desired == 0) {
-						pwm_intermediate_right_desired = 0;
-					} else if((pwm_right_desired*pwm_intermediate_right_desired) < 0) {
-						pwm_intermediate_right_desired = 0;
-					} else if(pwm_right_desired > pwm_intermediate_right_desired) {
-						pwm_intermediate_right_desired += speedStep;
-						if(pwm_intermediate_right_desired > pwm_right_desired) {
-							pwm_intermediate_right_desired = pwm_right_desired;
-						}
-					} else if(pwm_right_desired < pwm_intermediate_right_desired) {
-						pwm_intermediate_right_desired -= speedStep;
-						if(pwm_intermediate_right_desired < pwm_right_desired) {
-							pwm_intermediate_right_desired = pwm_right_desired;
-						}					
-					}
-	
-					if(pwm_left_desired == 0) {
-						pwm_intermediate_left_desired = 0;
-					} else if((pwm_left_desired*pwm_intermediate_left_desired) < 0) {
-						pwm_intermediate_left_desired = 0;
-					} else if(pwm_left_desired > pwm_intermediate_left_desired) {
-						pwm_intermediate_left_desired += speedStep;
-						if(pwm_intermediate_left_desired > pwm_left_desired) {
-							pwm_intermediate_left_desired = pwm_left_desired;
-						}
-					} else if(pwm_left_desired < pwm_intermediate_left_desired) {
-						pwm_intermediate_left_desired -= speedStep;
-						if(pwm_intermediate_left_desired < pwm_left_desired) {
-							pwm_intermediate_left_desired = pwm_left_desired;
-						}					
-					}
-				} else {
-					pwm_intermediate_right_desired = pwm_right_desired;
-					pwm_intermediate_left_desired = pwm_left_desired;
-				}
-
-			}
-		}
 
 		//if(currentSelector!=6 && currentSelector!=15) {
 		//	usart0Transmit(currentSelector,0);		// send the current selector position through uart as debug info

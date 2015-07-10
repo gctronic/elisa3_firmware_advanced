@@ -25,6 +25,8 @@
 #include <avr\io.h>
 #include "leds.h"
 #include "twimaster.h"
+#include "motors.h"
+#include "utility.h"
 
 #ifdef __cplusplus
 extern "C" {

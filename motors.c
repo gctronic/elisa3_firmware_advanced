@@ -57,6 +57,8 @@ signed int cast_speed(signed int vel) {
 
 void handleMotorsWithNoController() {
 
+	handleSoftAcceleration();
+
 	// compute velocities even if they aren't used
 	if(compute_left_vel) {
 		last_left_vel = left_vel_sum>>2;
@@ -113,6 +115,8 @@ void handleMotorsWithNoController() {
 }
 
 void handleMotorsWithSpeedController() {
+
+	handleSoftAcceleration();
 
 	if(calibrateOdomFlag==1) {
 		pwm_right_working = pwm_intermediate_right_desired;
@@ -809,6 +813,59 @@ void initCalibration() {
     }
 
 }
+
+// Handle "soft acceleration" that basically increase or decrease the current speed
+// at steps untill raching the new desired speed, resulting in a smooth acceleration).
+// At the moment the "soft acceleration" is disabled and can be enabled only in the code 
+// by setting the value of "softAccEnabled" to 1 at variable initialization.
+void handleSoftAcceleration() {
+		
+	if(calibrateOdomFlag==0) {
+		if((getTime100MicroSec()-speedStepCounter) >= SPEED_STEP_DELAY) {
+			speedStepCounter = getTime100MicroSec();
+
+			if(softAccEnabled) {
+				if(pwm_right_desired == 0) {
+					pwm_intermediate_right_desired = 0;
+				} else if((pwm_right_desired*pwm_intermediate_right_desired) < 0) {
+					pwm_intermediate_right_desired = 0;
+				} else if(pwm_right_desired > pwm_intermediate_right_desired) {
+					pwm_intermediate_right_desired += speedStep;
+					if(pwm_intermediate_right_desired > pwm_right_desired) {
+						pwm_intermediate_right_desired = pwm_right_desired;
+					}
+				} else if(pwm_right_desired < pwm_intermediate_right_desired) {
+					pwm_intermediate_right_desired -= speedStep;
+					if(pwm_intermediate_right_desired < pwm_right_desired) {
+						pwm_intermediate_right_desired = pwm_right_desired;
+					}					
+				}
+	
+				if(pwm_left_desired == 0) {
+					pwm_intermediate_left_desired = 0;
+				} else if((pwm_left_desired*pwm_intermediate_left_desired) < 0) {
+					pwm_intermediate_left_desired = 0;
+				} else if(pwm_left_desired > pwm_intermediate_left_desired) {
+					pwm_intermediate_left_desired += speedStep;
+					if(pwm_intermediate_left_desired > pwm_left_desired) {
+						pwm_intermediate_left_desired = pwm_left_desired;
+					}
+				} else if(pwm_left_desired < pwm_intermediate_left_desired) {
+					pwm_intermediate_left_desired -= speedStep;
+					if(pwm_intermediate_left_desired < pwm_left_desired) {
+						pwm_intermediate_left_desired = pwm_left_desired;
+					}					
+				}
+			} else {
+				pwm_intermediate_right_desired = pwm_right_desired;
+				pwm_intermediate_left_desired = pwm_left_desired;
+			}
+
+		}
+	}
+
+}
+
 
 // Motor left
 ISR(TIMER4_OVF_vect) {

@@ -42,8 +42,11 @@ ISR(ADC_vect) {
 
 	//LED_BLUE_ON;
 
-	clockTick++;				// this variable is used as base time for timed processes/functions (e,g, delay); 
-								// resolution of 104 us based on adc interrupts
+	if(clockTick == MAX_U32) {
+		clockTick = 0;
+	} else {
+		clockTick++;				// this variable is used as base time for timed processes/functions (e,g, delay); 
+	}								// resolution of 104 us based on adc interrupts
 
 	unsigned int value = ADCL;			// get the sample; low byte must be read first!!
 	value = (ADCH<<8) | value;

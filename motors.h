@@ -77,6 +77,7 @@ signed int getInputFromSpeed(signed int s, unsigned char mode);
 signed int cast_speed(signed int vel);
 void getLeftSpeedFromInput();
 void getRightSpeedFromInput();
+void handleSoftAcceleration();
 void writeDefaultCalibration();
 
 

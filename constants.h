@@ -3,6 +3,8 @@
 /***************/
 /*** VARIOUS ***/
 /***************/
+#define MAX_U32 4294967295
+
 #ifndef RAD_2_DEG
 #define RAD_2_DEG 57.2957796				// conversion factor from radiant to degrees; 
 #endif										// use: degrees_value = radiant_value * RAD_2_DEG
@@ -65,7 +67,7 @@
 #endif
 
 #ifndef MAX_MOTORS_PWM
-#define MAX_MOTORS_PWM 1024					// max value for the pwm registers of the motors; 50% of maximum is then used actually
+#define MAX_MOTORS_PWM 1023					// max value for the pwm registers of the motors; 50% of maximum is then used actually
 #endif
 
 // horizontal speed controller
@@ -126,8 +128,8 @@
 /*** ACCELEROMETER ***/
 /*********************/
 #ifndef VERTICAL_THRESHOLD
-#define VERTICAL_THRESHOLD 20				// threshold value to swtich from horizontal to vertical plane
-#endif										// (when Z > threshold then vertical plane)
+#define VERTICAL_THRESHOLD 45				// threshold value to swtich from horizontal to vertical plane
+#endif										// (when Z > threshold then horizontal plane)
 
 #ifndef SAME_POS_NUM
 #define SAME_POS_NUM 200						// hysteresis value to pass from horizontal to vertical plane and

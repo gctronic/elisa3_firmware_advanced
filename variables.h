@@ -116,6 +116,7 @@ extern unsigned char colorState;
 extern unsigned char irEnabled;
 extern unsigned char checkGlitch;
 extern unsigned char behaviorState;
+extern uint32_t lastCmdTime;
 
 /*********************/
 /*** ACCELEROMETER ***/
@@ -127,10 +128,9 @@ extern signed int accY;
 extern signed int accZ;
 extern signed int accOffsetX;
 extern signed int accOffsetY;
-extern signed int accOffsetZ;
 extern signed int accOffsetXSum;
 extern signed int accOffsetYSum;
-extern signed int accOffsetZSum;
+extern signed int accXMax, accXMin, accYMax, accYMin;
 extern signed int currentAngle;
 extern unsigned char currPosition;
 extern unsigned int timesInSamePos;
@@ -159,6 +159,7 @@ extern unsigned char softAccEnabled;
 extern unsigned char calibrationWritten;
 extern unsigned char greenLedState;
 extern unsigned char rgbLedState;
+extern uint32_t lastTick;
 
 /**************************/
 /*** OBSTACLE AVOIDANCE ***/

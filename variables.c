@@ -130,6 +130,7 @@ unsigned char colorState = 0;						// used with command 0 to switch from one col
 unsigned char irEnabled = 1;						// flag indicating whether the TV remote commands are interpreted or discarded
 unsigned char checkGlitch = 1;						// flag indicating the phase in which the signal is checked for glitches
 unsigned char behaviorState = 0;					// used to switch between behaviors (for small remote control)
+uint32_t lastCmdTime = 0;
 
 /*********************/
 /*** ACCELEROMETER ***/
@@ -139,10 +140,10 @@ unsigned char useAccel = USE_MMAX7455L;				// flag indicatin which accelerometer
 signed int accX=0, accY=0, accZ=0;					// accelerometer calibrated values
 signed int accOffsetX = 0;							// values obtained during the calibration process; acc = raw_acc - offset
 signed int accOffsetY = 0;							// before calibration: values between -3g and +3g corresponds to values between 0 and 1024
-signed int accOffsetZ = 0;							// after calibration: values between -3g and +3g corresponds to values between -512 and 512
+													// after calibration: values between -3g and +3g corresponds to values between -512 and 512
 signed int accOffsetXSum = 0;						// contains the sum of the accelerometer values during calibration (these values will then be 
 signed int accOffsetYSum = 0;						// divided by the number of samples taken to get the calibration offsets)
-signed int accOffsetZSum = 0;
+signed int accXMax=0, accXMin=0, accYMax=0, accYMin=0;
 signed int currentAngle = 0;						// current orientation of the robot (in a vertical wall) extracted from both the x and y axes
 unsigned char currPosition=HORIZONTAL_POS;			//  "currPosition" is used to change the "robotPosition" in a smoother way
 unsigned int timesInSamePos = 0;					// number of cycles in which the new robot position remain stable; after some stability it will 
@@ -173,6 +174,7 @@ unsigned char softAccEnabled = 0;
 unsigned char calibrationWritten = 0;
 unsigned char greenLedState = 0;
 unsigned char rgbLedState = 0;
+uint32_t lastTick = 0;
 
 /**************************/
 /*** OBSTACLE AVOIDANCE ***/
