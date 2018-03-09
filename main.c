@@ -295,6 +295,7 @@ int main(void) {
 					break;
 			
 			case 7:
+				irEnabled = 0;	// Disable tv remote to avoid involuntary/wrong commands reception.
 					switch(demoState) {
 						case 0:	// move around
 							turnOffGreenLeds();

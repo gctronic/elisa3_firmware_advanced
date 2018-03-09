@@ -134,6 +134,7 @@ extern unsigned char currPosition;
 extern unsigned int timesInSamePos;
 extern unsigned char robotPosition;
 extern signed char accBuff[6];
+extern unsigned temperature;
 
 /***************/
 /*** VARIOUS ***/

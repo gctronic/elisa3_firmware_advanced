@@ -148,6 +148,7 @@ unsigned int timesInSamePos = 0;					// number of cycles in which the new robot 
 													// change the current "robotPosition"
 unsigned char robotPosition = 1;					// indicate whether the robot is in vertical (=0) or horizontal (=1) position
 signed char accBuff[6] = {0};
+unsigned temperature = 0;
 
 /***************/
 /*** VARIOUS ***/

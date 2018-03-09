@@ -90,6 +90,8 @@ void readAccelXYZ_2();
  */
 void computeAngle();
 
+void readTemperature();
+
 #ifdef __cplusplus
 } // extern "C"
 #endif

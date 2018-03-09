@@ -278,6 +278,7 @@ void readAccelXY() {
 		// reg 0x03: 10 bits output value Y MSB
 		// reg 0x04: 10 bits output value Z LSB
 		// reg 0x05: 10 bits output value Z MSB
+		// The sensitivity is 64 LSB/g.
 
 		i2c_start(accelAddress+I2C_WRITE);							// set device address and write mode
 		i2c_write(0x00);											// sends address to read from (X LSB)
@@ -306,6 +307,7 @@ void readAccelXY() {
 		// reg 0x35: 10 bits output value Y MSB
 		// reg 0x36: 10 bits output value Z LSB
 		// reg 0x37: 10 bits output value Z MSB
+		// The sensitivity is 256 LSB/g so scale the values to be compatible with the MMA7455.
 
 		i2c_start(accelAddress+I2C_WRITE);							// set device address and write mode
 		i2c_write(0x32);											// sends address to read from (X LSB)
@@ -318,11 +320,11 @@ void readAccelXY() {
 		i2c_stop();													// set stop conditon = release bus
 
 		if(startCalibration) {										// if performing the calibration, then return the raw values
-			accX = ((signed int)buff[1]<<8)|buff[0];    			// X axis
-			accY = ((signed int)buff[3]<<8)|buff[2];    			// Y axis
+			accX = (((int16_t)buff[1])<<6)|(((uint8_t)buff[0])>>2);	// X axis
+			accY = (((int16_t)buff[3])<<6)|(((uint8_t)buff[2])>>2);	// Y axis
 		} else {													// else return the calibrated values
-			accX = (((signed int)buff[1]<<8)|buff[0])-accOffsetX;	// X axis
-			accY = (((signed int)buff[3]<<8)|buff[2])-accOffsetY;	// Y axis
+			accX = ((((int16_t)buff[1])<<6)|(((uint8_t)buff[0])>>2))-accOffsetX;	// X axis
+			accY = ((((int16_t)buff[3])<<6)|(((uint8_t)buff[2])>>2))-accOffsetY;	// Y axis
 		}
 
 	} else {
@@ -348,6 +350,7 @@ void readAccelXYZ() {
 		// reg 0x03: 10 bits output value Y MSB
 		// reg 0x04: 10 bits output value Z LSB
 		// reg 0x05: 10 bits output value Z MSB
+		// The sensitivity is 64 LSB/g.
 
 		i2c_start(accelAddress+I2C_WRITE);							// set device address and write mode
 		i2c_write(0x00);											// sends address to read from (X LSB)
@@ -378,6 +381,7 @@ void readAccelXYZ() {
 		// reg 0x35: 10 bits output value Y MSB
 		// reg 0x36: 10 bits output value Z LSB
 		// reg 0x37: 10 bits output value Z MSB
+		// The sensitivity is 256 LSB/g so scale the values to be compatible with the MMA7455.
 
 		i2c_start(accelAddress+I2C_WRITE);							// set device address and write mode	
 		i2c_write(0x32);											// sends address to read from (X LSB)
@@ -387,16 +391,16 @@ void readAccelXYZ() {
 			buff[i] = i2c_readAck();								// read one byte at a time
 		}
 		buff[i] = i2c_readNak();									// read last byte sending NACK
-		i2c_stop();													// set stop conditon = release bus
+		i2c_stop();												// set stop conditon = release bus
 
 		if(startCalibration) {										// if performing the calibration, then return the raw values
-			accX = ((signed int)buff[1]<<8)|buff[0];    			// X axis
-			accY = ((signed int)buff[3]<<8)|buff[2];    			// Y axis
-			accZ = ((signed int)buff[5]<<8)|buff[4];    			// Z axis
+			accX = (((int16_t)buff[1])<<6)|(((uint8_t)buff[0])>>2);	// X axis
+			accY = (((int16_t)buff[3])<<6)|(((uint8_t)buff[2])>>2);	// Y axis
+			accZ = (((int16_t)buff[5])<<6)|(((uint8_t)buff[4])>>2);	// Z axis
 		} else {													// else return the calibrated values
-			accX = (((signed int)buff[1]<<8)|buff[0])-accOffsetX;	// X axis
-			accY = (((signed int)buff[3]<<8)|buff[2])-accOffsetY;	// Y axis
-			accZ = (((signed int)buff[5]<<8)|buff[4]);				// Z axis
+			accX = ((((int16_t)buff[1])<<6)|(((uint8_t)buff[0])>>2))-accOffsetX;	// X axis
+			accY = ((((int16_t)buff[3])<<6)|(((uint8_t)buff[2])>>2))-accOffsetY;	// Y axis
+			accZ = (((int16_t)buff[5])<<6)|(((uint8_t)buff[4])>>2);					// Z axis
 		}
 
 	} else {
@@ -422,6 +426,7 @@ void readAccelXYZ_1() {
 		// reg 0x03: 10 bits output value Y MSB
 		// reg 0x04: 10 bits output value Z LSB
 		// reg 0x05: 10 bits output value Z MSB
+		// The sensitivity is 64 LSB/g.
 
 		i2c_start(accelAddress+I2C_WRITE);							// set device address and write mode
 		i2c_write(0x00);											// sends address to read from (X LSB)
@@ -441,6 +446,7 @@ void readAccelXYZ_1() {
 		// reg 0x35: 10 bits output value Y MSB
 		// reg 0x36: 10 bits output value Z LSB
 		// reg 0x37: 10 bits output value Z MSB
+		// The sensitivity is 256 LSB/g so scale the values to be compatible with the MMA7455.
 
 		i2c_start(accelAddress+I2C_WRITE);							// set device address and write mode	
 		i2c_write(0x32);											// sends address to read from (X LSB)
@@ -492,13 +498,13 @@ void readAccelXYZ_2() {
 		i2c_stop();													// set stop conditon = release bus
 
 		if(startCalibration) {										// if performing the calibration, then return the raw values
-			accX = ((signed int)accBuff[1]<<8)|accBuff[0];    			// X axis
-			accY = ((signed int)accBuff[3]<<8)|accBuff[2];    			// Y axis
-			accZ = ((signed int)accBuff[5]<<8)|accBuff[4];    			// Z axis
+			accX = (((int16_t)accBuff[1])<<6)|(((uint8_t)accBuff[0])>>2);	// X axis
+			accY = (((int16_t)accBuff[3])<<6)|(((uint8_t)accBuff[2])>>2);	// Y axis
+			accZ = (((int16_t)accBuff[5])<<6)|(((uint8_t)accBuff[4])>>2);	// Z axis
 		} else {													// else return the calibrated values
-			accX = (((signed int)accBuff[1]<<8)|accBuff[0])-accOffsetX;	// X axis
-			accY = (((signed int)accBuff[3]<<8)|accBuff[2])-accOffsetY;	// Y axis
-			accZ = (((signed int)accBuff[5]<<8)|accBuff[4]);			// Z axis
+			accX = ((((int16_t)accBuff[1])<<6)|(((uint8_t)accBuff[0])>>2))-accOffsetX;	// X axis
+			accY = ((((int16_t)accBuff[3])<<6)|(((uint8_t)accBuff[2])>>2))-accOffsetY;	// Y axis
+			accZ = (((int16_t)accBuff[5])<<6)|(((uint8_t)accBuff[4])>>2);				// Z axis
 		}
 
 	} else {
@@ -537,5 +543,18 @@ void computeAngle() {
 		currentAngle = currentAngle + (signed int)360;	// angles from 0 to 360
 	}
 
+}
+
+void readTemperature() {
+	if(useAccel == USE_MMAX7455L) {
+		// Always get zero as value!
+		i2c_start(accelAddress+I2C_WRITE);							// set device address and write mode
+		i2c_write(0x0B);											// sends address to read from (X LSB)
+		i2c_rep_start(accelAddress+I2C_READ);						// set device address and read mode
+		temperature = i2c_readNak();
+		i2c_stop();												// set stop conditon = release bus
+	} else {
+		temperature = 0;
+	}
 }
 
