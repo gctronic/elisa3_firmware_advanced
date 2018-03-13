@@ -21,10 +21,10 @@ extern unsigned int batteryLevel;
 extern unsigned char measBattery;
 extern unsigned char proxUpdated;
 extern int proximityResultLinear[8];
-float rightMotSteps;
-float leftMotSteps;
-float rightMotStepsOld;
-float leftMotStepsOld;
+extern float rightMotSteps;
+extern float leftMotSteps;
+extern float rightMotStepsOld;
+extern float leftMotStepsOld;
 
 /******************************/
 /*** CONSUMPTION CONTROLLER ***/
@@ -119,7 +119,7 @@ extern uint32_t lastCmdTime;
 /*********************/
 /*** ACCELEROMETER ***/
 /*********************/
-extern int accelAddress;
+extern unsigned char accelAddress;
 extern unsigned char useAccel;
 extern signed int accX;
 extern signed int accY;
