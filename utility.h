@@ -31,6 +31,7 @@
 #include "sensors.h"
 #include "ir_remote_control.h"
 #include "eepromIO.h"
+#include "TWI_slave.h"
 
 #ifdef __cplusplus
 extern "C" {

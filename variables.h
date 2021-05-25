@@ -159,6 +159,9 @@ extern unsigned char calibrationWritten;
 extern unsigned char greenLedState;
 extern unsigned char rgbLedState;
 extern uint32_t lastTick;
+extern unsigned char TWI_slaveAddress;
+extern uint8_t i2cRxBuff[TWI_BUFFER_SIZE];
+extern uint8_t i2cTxBuff[TWI_BUFFER_SIZE];
 
 /**************************/
 /*** OBSTACLE AVOIDANCE ***/

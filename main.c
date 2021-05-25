@@ -1017,6 +1017,448 @@ int main(void) {
 					//usart0Transmit(irCommand,1);
 					//currentOsccal = OSCCAL;
 					//usart0Transmit(currentOsccal,1);
+
+					if ( ! TWI_Transceiver_Busy() ) {
+						if ( TWI_statusReg.RxDataInBuf ) {
+							TWI_Get_Data_From_Transceiver(i2cRxBuff, 8);
+							
+							//usart0Transmit(i2cRxBuff[0], 1);
+							//usart0Transmit(i2cRxBuff[1], 1);
+							//usart0Transmit(i2cRxBuff[2], 1);
+							//usart0Transmit(i2cRxBuff[3], 1);
+							//usart0Transmit(i2cRxBuff[4], 1);
+							//usart0Transmit(i2cRxBuff[5], 1);
+							//usart0Transmit(i2cRxBuff[6], 1);
+							//usart0Transmit(i2cRxBuff[7], 1);
+							
+
+							// Interpret the commands
+							if(i2cRxBuff[3]==0b00001000) {
+								sleep(60);
+							}
+							if(calibrateOdomFlag==0) {
+								speedr = (rfData[4]&0x7F);	// cast the speed to be at most 127, thus the received speed are in the range 0..127 (usually 0..100),
+								speedl = (rfData[5]&0x7F);	// the received speed is then shifted by 3 (x8) in order to have a speed more or less
+								// in the same range of the measured speed that is 0..800.
+								// In order to have greater resolution at lower speed we shift the speed only by 2 (x4),
+								// this means that the range is more or less 0..400.
+
+
+								if((i2cRxBuff[4]&0x80)==0x80) {			// motor right forward
+									pwm_right_desired = speedr; 		// speed received (0..127) is expressed in 1/5 of mm/s (0..635 mm/s)
+									} else {								// backward
+									pwm_right_desired = -(speedr);
+								}
+
+								if((i2cRxBuff[5]&0x80)==0x80) {			// motor left forward
+									pwm_left_desired = speedl;
+									} else {								// backward
+									pwm_left_desired = -(speedl);
+								}
+
+							}
+
+							for(i=0; i<3; i++) {
+								dataLED[i]=i2cRxBuff[i]&0xFF;
+							}
+							pwm_red = MAX_LEDS_PWM-MAX_LEDS_PWM*(dataLED[0]&0xFF)/100;
+							pwm_blue = MAX_LEDS_PWM-MAX_LEDS_PWM*(dataLED[1]&0xFF)/100;
+							pwm_green = MAX_LEDS_PWM-MAX_LEDS_PWM*(dataLED[2]&0xFF)/100;
+							updateRedLed(pwm_red);
+							updateGreenLed(pwm_green);
+							updateBlueLed(pwm_blue);
+
+
+							if((i2cRxBuff[3]&0b00000001)==0b00000001) {	// turn on back IR
+								LED_IR1_LOW;
+								} else {
+								LED_IR1_HIGH;
+							}
+
+							if((i2cRxBuff[3]&0b00000010)==0b00000010) {	// turn on front IRs
+								LED_IR2_LOW;
+								} else {
+								LED_IR2_HIGH;
+							}
+
+							if((i2cRxBuff[3]&0b00000100)==0b00000100) {	// check the 3rd bit to enable/disable the IR receiving
+								irEnabled = 1;
+								} else {
+								irEnabled = 0;
+							}
+
+							if((i2cRxBuff[3]&0b00010000)==0b00010000) {	// check the 5th bit to start calibration of all sensors
+								calibrateSensors();
+								resetOdometry();
+							}
+
+							if((i2cRxBuff[3]&0b01000000)==0b01000000) {	// check the seventh bit to enable/disable obstacle avoidance
+								obstacleAvoidanceEnabled = 1;
+								} else {
+								obstacleAvoidanceEnabled = 0;
+							}
+
+							if((i2cRxBuff[3]&0b10000000)==0b10000000) {	// check the eight bit to enable/disable obstacle avoidance
+								cliffAvoidanceEnabled = 1;
+								} else {
+								cliffAvoidanceEnabled = 0;
+							}
+
+							// handle small green LEDs
+							if(bit_is_set(i2cRxBuff[6], 0) ) {
+								GREEN_LED0_ON;
+								} else {
+								GREEN_LED0_OFF;
+							}
+									
+							if(bit_is_set(i2cRxBuff[6], 1) ) {
+								GREEN_LED1_ON;
+								} else {
+								GREEN_LED1_OFF;
+							}
+									
+							if(bit_is_set(i2cRxBuff[6], 2) ) {
+								GREEN_LED2_ON;
+								} else {
+								GREEN_LED2_OFF;
+							}
+
+							if(bit_is_set(i2cRxBuff[6], 3) ) {
+								GREEN_LED3_ON;
+								} else {
+								GREEN_LED3_OFF;
+							}
+
+							if(bit_is_set(i2cRxBuff[6], 4) ) {
+								GREEN_LED4_ON;
+								} else {
+								GREEN_LED4_OFF;
+							}
+
+							if(bit_is_set(i2cRxBuff[6], 5) ) {
+								GREEN_LED5_ON;
+								} else {
+								GREEN_LED5_OFF;
+							}
+
+							if(bit_is_set(i2cRxBuff[6], 6) ) {
+								GREEN_LED6_ON;
+								} else {
+								GREEN_LED6_OFF;
+							}
+
+							if(bit_is_set(i2cRxBuff[6], 7) ) {
+								GREEN_LED7_ON;
+								} else {
+								GREEN_LED7_OFF;
+							}
+
+						}
+
+						// Prepare the sensors data
+						// Prox
+						i2cTxBuff[0] = proximityResult[0]&0xFF;
+						i2cTxBuff[1] = proximityResult[0]>>8;
+						i2cTxBuff[2] = proximityResult[1]&0xFF;
+						i2cTxBuff[3] = proximityResult[1]>>8;
+						i2cTxBuff[4] = proximityResult[2]&0xFF;
+						i2cTxBuff[5] = proximityResult[2]>>8;
+						i2cTxBuff[6] = proximityResult[3]&0xFF;
+						i2cTxBuff[7] = proximityResult[3]>>8;
+						i2cTxBuff[8] = proximityResult[4]&0xFF;
+						i2cTxBuff[9] = proximityResult[4]>>8;
+						i2cTxBuff[10] = proximityResult[5]&0xFF;
+						i2cTxBuff[11] = proximityResult[5]>>8;
+						i2cTxBuff[12] = proximityResult[6]&0xFF;
+						i2cTxBuff[13] = proximityResult[6]>>8;
+						i2cTxBuff[14] = proximityResult[7]&0xFF;
+						i2cTxBuff[15] = proximityResult[7]>>8;
+						// Prox ambient
+						i2cTxBuff[16] = proximityValue[0]&0xFF;
+						i2cTxBuff[17] = proximityValue[0]>>8;
+						i2cTxBuff[18] = proximityValue[2]&0xFF;
+						i2cTxBuff[19] = proximityValue[2]>>8;
+						i2cTxBuff[20] = proximityValue[4]&0xFF;
+						i2cTxBuff[21] = proximityValue[4]>>8;
+						i2cTxBuff[22] = proximityValue[6]&0xFF;
+						i2cTxBuff[23] = proximityValue[6]>>8;
+						i2cTxBuff[24] = proximityValue[8]&0xFF;
+						i2cTxBuff[25] = proximityValue[8]>>8;
+						i2cTxBuff[26] = proximityValue[10]&0xFF;
+						i2cTxBuff[27] = proximityValue[10]>>8;
+						i2cTxBuff[28] = proximityValue[12]&0xFF;
+						i2cTxBuff[29] = proximityValue[12]>>8;
+						i2cTxBuff[30] = proximityValue[14]&0xFF;
+						i2cTxBuff[31] = proximityValue[14]>>8;
+						// Ground
+						i2cTxBuff[32] = proximityResult[8]&0xFF;
+						i2cTxBuff[33] = proximityResult[8]>>8;
+						i2cTxBuff[34] = proximityResult[9]&0xFF;
+						i2cTxBuff[35] = proximityResult[9]>>8;
+						i2cTxBuff[36] = proximityResult[10]&0xFF;
+						i2cTxBuff[37] = proximityResult[10]>>8;
+						i2cTxBuff[38] = proximityResult[11]&0xFF;
+						i2cTxBuff[39] = proximityResult[11]>>8;
+						// Ground ambient
+						i2cTxBuff[40] = proximityValue[16]&0xFF;
+						i2cTxBuff[41] = proximityValue[16]>>8;
+						i2cTxBuff[42] = proximityValue[18]&0xFF;
+						i2cTxBuff[43] = proximityValue[18]>>8;
+						i2cTxBuff[44] = proximityValue[20]&0xFF;
+						i2cTxBuff[45] = proximityValue[20]>>8;
+						i2cTxBuff[46] = proximityValue[22]&0xFF;
+						i2cTxBuff[47] = proximityValue[22]>>8;
+						// Flags
+						i2cTxBuff[48] = CHARGE_ON | (BUTTON0 << 1) | (CHARGE_STAT << 2);
+						// TV remote
+						i2cTxBuff[49] = irCommand;
+						// Selector
+						i2cTxBuff[50] = currentSelector;
+						// Battery
+						i2cTxBuff[51] = batteryLevel&0xFF;
+						i2cTxBuff[52] = batteryLevel>>8;
+						// Odometry
+						lastTheta = theta;
+						i2cTxBuff[53] = ((signed int)(lastTheta*573.0))&0xFF;	// radians to degrees => 573 = 1800/PI
+						i2cTxBuff[54] = ((signed int)(lastTheta*573.0))>>8;
+						i2cTxBuff[55] = ((unsigned int)xPos)&0xFF;
+						i2cTxBuff[56] = ((unsigned int)xPos)>>8;
+						i2cTxBuff[57] = ((unsigned int)yPos)&0xFF;
+						i2cTxBuff[58] = ((unsigned int)yPos)>>8;
+
+						TWI_Start_Transceiver_With_Data( i2cTxBuff, 59 );
+
+					}
+
+					/*
+					// Check if the TWI Transceiver has completed an operation.
+					if ( ! TWI_Transceiver_Busy() ) {
+						// Check if the last operation was successful
+						if ( TWI_statusReg.lastTransOK ) {
+							// Check if the last operation was a reception
+							if ( TWI_statusReg.RxDataInBuf ) {
+								TWI_Get_Data_From_Transceiver(i2cRxBuff, 8);
+								// Check if the last operation was a reception as General Call
+								if ( TWI_statusReg.genAddressCall ) {
+
+								} else {// Ends up here if the last operation was a reception as Slave Address Match
+									
+									// Interpret the commands
+									if(i2cRxBuff[3]==0b00001000) {
+										sleep(60);
+									}
+									if(calibrateOdomFlag==0) {
+										speedr = (rfData[4]&0x7F);	// cast the speed to be at most 127, thus the received speed are in the range 0..127 (usually 0..100),
+										speedl = (rfData[5]&0x7F);	// the received speed is then shifted by 3 (x8) in order to have a speed more or less
+										// in the same range of the measured speed that is 0..800.
+										// In order to have greater resolution at lower speed we shift the speed only by 2 (x4),
+										// this means that the range is more or less 0..400.
+
+
+										if((i2cRxBuff[4]&0x80)==0x80) {			// motor right forward
+											pwm_right_desired = speedr; 		// speed received (0..127) is expressed in 1/5 of mm/s (0..635 mm/s)
+											} else {								// backward
+											pwm_right_desired = -(speedr);
+										}
+
+										if((i2cRxBuff[5]&0x80)==0x80) {			// motor left forward
+											pwm_left_desired = speedl;
+											} else {								// backward
+											pwm_left_desired = -(speedl);
+										}
+
+									}
+
+									for(i=0; i<3; i++) {
+										dataLED[i]=i2cRxBuff[i]&0xFF;
+									}
+									pwm_red = MAX_LEDS_PWM-MAX_LEDS_PWM*(dataLED[0]&0xFF)/100;
+									pwm_blue = MAX_LEDS_PWM-MAX_LEDS_PWM*(dataLED[1]&0xFF)/100;
+									pwm_green = MAX_LEDS_PWM-MAX_LEDS_PWM*(dataLED[2]&0xFF)/100;
+									updateRedLed(pwm_red);
+									updateGreenLed(pwm_green);
+									updateBlueLed(pwm_blue);
+
+
+									if((i2cRxBuff[3]&0b00000001)==0b00000001) {	// turn on back IR
+										LED_IR1_LOW;
+										} else {
+										LED_IR1_HIGH;
+									}
+
+									if((i2cRxBuff[3]&0b00000010)==0b00000010) {	// turn on front IRs
+										LED_IR2_LOW;
+										} else {
+										LED_IR2_HIGH;
+									}
+
+									if((i2cRxBuff[3]&0b00000100)==0b00000100) {	// check the 3rd bit to enable/disable the IR receiving
+										irEnabled = 1;
+										} else {
+										irEnabled = 0;
+									}
+
+									if((i2cRxBuff[3]&0b00010000)==0b00010000) {	// check the 5th bit to start calibration of all sensors
+										calibrateSensors();
+										resetOdometry();
+									}
+
+									if((i2cRxBuff[3]&0b01000000)==0b01000000) {	// check the seventh bit to enable/disable obstacle avoidance
+										obstacleAvoidanceEnabled = 1;
+										} else {
+										obstacleAvoidanceEnabled = 0;
+									}
+
+									if((i2cRxBuff[3]&0b10000000)==0b10000000) {	// check the eight bit to enable/disable obstacle avoidance
+										cliffAvoidanceEnabled = 1;
+										} else {
+										cliffAvoidanceEnabled = 0;
+									}
+
+									// handle small green LEDs
+									if(bit_is_set(i2cRxBuff[6], 0) ) {
+										GREEN_LED0_ON;
+									} else {
+										GREEN_LED0_OFF;
+									}
+			
+									if(bit_is_set(i2cRxBuff[6], 1) ) {
+										GREEN_LED1_ON;
+									} else {
+										GREEN_LED1_OFF;
+									}
+			
+									if(bit_is_set(i2cRxBuff[6], 2) ) {
+										GREEN_LED2_ON;
+									} else {
+										GREEN_LED2_OFF;
+									}
+
+									if(bit_is_set(i2cRxBuff[6], 3) ) {
+										GREEN_LED3_ON;
+									} else {
+										GREEN_LED3_OFF;
+									}
+
+									if(bit_is_set(i2cRxBuff[6], 4) ) {
+										GREEN_LED4_ON;
+									} else {
+										GREEN_LED4_OFF;
+									}
+
+									if(bit_is_set(i2cRxBuff[6], 5) ) {
+										GREEN_LED5_ON;
+									} else {
+										GREEN_LED5_OFF;
+									}
+
+									if(bit_is_set(i2cRxBuff[6], 6) ) {
+										GREEN_LED6_ON;
+									} else {
+										GREEN_LED6_OFF;
+									}
+
+									if(bit_is_set(i2cRxBuff[6], 7) ) {
+										GREEN_LED7_ON;
+									} else {
+										GREEN_LED7_OFF;
+									}
+
+									// Prepare the sensors data
+									// Prox
+									i2cTxBuff[0] = proximityResult[0]&0xFF;
+									i2cTxBuff[1] = proximityResult[0]>>8;
+									i2cTxBuff[2] = proximityResult[1]&0xFF;
+									i2cTxBuff[3] = proximityResult[1]>>8;
+									i2cTxBuff[4] = proximityResult[2]&0xFF;
+									i2cTxBuff[5] = proximityResult[2]>>8;
+									i2cTxBuff[6] = proximityResult[3]&0xFF;
+									i2cTxBuff[7] = proximityResult[3]>>8;
+									i2cTxBuff[8] = proximityResult[4]&0xFF;
+									i2cTxBuff[9] = proximityResult[4]>>8;
+									i2cTxBuff[10] = proximityResult[5]&0xFF;
+									i2cTxBuff[11] = proximityResult[5]>>8;
+									i2cTxBuff[12] = proximityResult[6]&0xFF;
+									i2cTxBuff[13] = proximityResult[6]>>8;
+									i2cTxBuff[14] = proximityResult[7]&0xFF;
+									i2cTxBuff[15] = proximityResult[7]>>8;
+									// Prox ambient
+									i2cTxBuff[16] = proximityValue[0]&0xFF;
+									i2cTxBuff[17] = proximityValue[0]>>8;
+									i2cTxBuff[18] = proximityValue[2]&0xFF;
+									i2cTxBuff[19] = proximityValue[2]>>8;
+									i2cTxBuff[20] = proximityValue[4]&0xFF;
+									i2cTxBuff[21] = proximityValue[4]>>8;
+									i2cTxBuff[22] = proximityValue[6]&0xFF;
+									i2cTxBuff[23] = proximityValue[6]>>8;
+									i2cTxBuff[24] = proximityValue[8]&0xFF;
+									i2cTxBuff[25] = proximityValue[8]>>8;
+									i2cTxBuff[26] = proximityValue[10]&0xFF;
+									i2cTxBuff[27] = proximityValue[10]>>8;
+									i2cTxBuff[28] = proximityValue[12]&0xFF;
+									i2cTxBuff[29] = proximityValue[12]>>8;
+									i2cTxBuff[30] = proximityValue[14]&0xFF;
+									i2cTxBuff[31] = proximityValue[14]>>8;
+									// Ground
+									i2cTxBuff[32] = proximityResult[8]&0xFF;
+									i2cTxBuff[33] = proximityResult[8]>>8;
+									i2cTxBuff[34] = proximityResult[9]&0xFF;
+									i2cTxBuff[35] = proximityResult[9]>>8;
+									i2cTxBuff[36] = proximityResult[10]&0xFF;
+									i2cTxBuff[37] = proximityResult[10]>>8;
+									i2cTxBuff[38] = proximityResult[11]&0xFF;
+									i2cTxBuff[39] = proximityResult[11]>>8;
+									// Ground ambient
+									i2cTxBuff[40] = proximityValue[16]&0xFF;
+									i2cTxBuff[41] = proximityValue[16]>>8;
+									i2cTxBuff[42] = proximityValue[18]&0xFF;
+									i2cTxBuff[43] = proximityValue[18]>>8;
+									i2cTxBuff[44] = proximityValue[20]&0xFF;
+									i2cTxBuff[45] = proximityValue[20]>>8;
+									i2cTxBuff[46] = proximityValue[22]&0xFF;
+									i2cTxBuff[47] = proximityValue[22]>>8;
+									// Flags
+									i2cTxBuff[48] = CHARGE_ON | (BUTTON0 << 1) | (CHARGE_STAT << 2);
+									// TV remote
+									i2cTxBuff[49] = irCommand;
+									// Selector
+									i2cTxBuff[50] = currentSelector;
+									// Battery
+									i2cTxBuff[51] = batteryLevel&0xFF;
+									i2cTxBuff[52] = batteryLevel>>8;
+									// Odometry
+									lastTheta = theta;
+									i2cTxBuff[53] = ((signed int)(lastTheta*573.0))&0xFF;	// radians to degrees => 573 = 1800/PI
+									i2cTxBuff[54] = ((signed int)(lastTheta*573.0))>>8;
+									i2cTxBuff[55] = ((unsigned int)xPos)&0xFF;
+									i2cTxBuff[56] = ((unsigned int)xPos)>>8;
+									i2cTxBuff[57] = ((unsigned int)yPos)&0xFF;
+									i2cTxBuff[58] = ((unsigned int)yPos)>>8;
+
+									TWI_Start_Transceiver_With_Data( i2cTxBuff, 59 );
+								}
+							} else { // Ends up here if the last operation was a transmission
+								//asm("nop");   // Put own code here.
+								//TWI_Start_Transceiver();
+							}
+							// Check if the TWI Transceiver has already been started.
+							// If not then restart it to prepare it for new receptions.
+							if ( ! TWI_Transceiver_Busy() ) {
+								TWI_Start_Transceiver();
+							}
+						} else { // Ends up here if the last operation completed unsuccessfully
+							// A failure has occurred, use TWIerrorMsg to determine the nature of the failure
+							// and take appropriate actions.
+							// Se header file for a list of possible failures messages.
+                    
+							// This very simple example puts the error code on PORTB and restarts the transceiver with
+							// all the same data in the transmission buffers.
+							uint8_t TWIerrorMsg = TWI_Get_State_Info();
+							TWI_Start_Transceiver();
+						}
+					}
+					*/
+
 					break;
 
 		}

@@ -50,12 +50,15 @@ void initPeripherals(void) {
 		rfFlags |= 1;
 	}
 	initUsart0();
-	initAccelerometer();
+	//initAccelerometer();
 	init_ir_remote_control();
+	
+	// Initialize TWI module for slave operation. Include address and/or enable General Call.
+	TWI_Slave_Initialise( (unsigned char)((TWI_slaveAddress<<TWI_ADR_BITS) | (TRUE<<TWI_GEN_BIT) ));
 
 	sei();			// enable global interrupts
 
-	
+	TWI_Start_Transceiver();
 }
 
 // used only for wake-up from sleep

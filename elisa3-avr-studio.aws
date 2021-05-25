@@ -1,1 +1,1 @@
-<AVRWorkspace><IOSettings><CurrentRegisters/></IOSettings><part name="ATMEGA2560"/><Files><File00000 Name="H:\lavoro\local-repo\elisaIII-working\ElisaIII-firmware-atmel2560-avrstudio-advanced\variables.c" Position="283 149 1281 522" LineCol="138 28"/></Files></AVRWorkspace>
+<AVRWorkspace><IOSettings><CurrentRegisters/></IOSettings><part name="ATMEGA2560"/><Files><File00000 Name="E:\_projects\elisa3_firmware_advanced\twimaster.c" Position="274 99 1542 655" LineCol="59 32"/></Files></AVRWorkspace>

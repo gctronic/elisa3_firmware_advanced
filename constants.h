@@ -48,6 +48,10 @@
 											// speed updated every SPEED_STEP_FREQ*104 us untill desired
 											// speed reached
 
+#define TWI_BUFFER_SIZE 100 //60      // Reserves memory for the drivers transceiver buffer.
+								// Set this to the largest message size that will be sent including address byte.
+
+
 /***********/
 /*** NRF ***/
 /***********/

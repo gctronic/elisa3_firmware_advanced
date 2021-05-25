@@ -18,7 +18,7 @@ void calibrateSensors() {
 
 
 	// calibrate accelerometer
-
+/*
 	lastTick = getTime100MicroSec();
 	while((getTime100MicroSec() - lastTick) < PAUSE_100_MSEC) {
 		readAccelXYZ();	// get a fresh value from the accelerometer
@@ -107,6 +107,7 @@ void calibrateSensors() {
 		setRightSpeed(0);
 
 	}	
+*/
 
 	startCalibration = 1;
 	calibrationCycle = 0;
@@ -337,7 +338,12 @@ void readAccelXY() {
 }
 
 void readAccelXYZ() {
+	accX = 0;
+	accY = 0;
+	accZ = 0;
+	return;
 
+/*
 	int i = 0;
 	signed char buff[6];
 
@@ -410,7 +416,7 @@ void readAccelXYZ() {
 		accZ = 0;
 
 	}
-
+*/
 }
 
 void readAccelXYZ_1() {
@@ -518,7 +524,8 @@ void readAccelXYZ_2() {
 }
 
 void computeAngle() {
-
+	return;
+/*
 	// check the robot motion plane (horizontal or vertical) based on the Z axes;
 	if(abs(accZ) >= VERTICAL_THRESHOLD) {
 		currPosition = HORIZONTAL_POS;
@@ -542,7 +549,7 @@ void computeAngle() {
 	if(currentAngle < 0) {
 		currentAngle = currentAngle + (signed int)360;	// angles from 0 to 360
 	}
-
+*/
 }
 
 void readTemperature() {

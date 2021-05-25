@@ -174,6 +174,9 @@ unsigned char calibrationWritten = 0;
 unsigned char greenLedState = 0;
 unsigned char rgbLedState = 0;
 uint32_t lastTick = 0;
+unsigned char TWI_slaveAddress = 0x55;
+uint8_t i2cRxBuff[TWI_BUFFER_SIZE];
+uint8_t i2cTxBuff[TWI_BUFFER_SIZE];
 
 /**************************/
 /*** OBSTACLE AVOIDANCE ***/
