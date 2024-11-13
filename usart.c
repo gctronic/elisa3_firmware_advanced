@@ -52,6 +52,15 @@ void usart0Transmit(unsigned char data, unsigned char isBlocking) {
 	}
 }
 
+void usart0PutString(const char* StringPtr)
+{
+	// Every string at the end has a terminator ('\0')
+	while (*StringPtr) {
+		usart0Transmit((unsigned char)(*StringPtr), 1);
+		StringPtr++;
+	}
+}
+
 void usart1Transmit(unsigned char data, unsigned char isBlocking) {
 
 	while (!(UCSR1A & (1<<UDRE1)));		// wait for empty transmit buffer

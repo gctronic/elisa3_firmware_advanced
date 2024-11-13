@@ -103,12 +103,16 @@
 											// speed (0..127) is expressed in 1/5 of mm/s (0..635 mm/s), thus 
 											// 2 means steps of 10 mm/s
 
-/*********************/
-/*** ACCELEROMETER ***/
-/*********************/
+/***********/
+/*** IMU ***/
+/***********/
 #ifndef VERTICAL_THRESHOLD
 #define VERTICAL_THRESHOLD 45				// threshold value to swtich from horizontal to vertical plane
 #endif										// (when Z > threshold then horizontal plane)
+#ifndef VERTICAL_THRESHOLD_LSM6DSUS
+#define VERTICAL_THRESHOLD_LSM6DSUS 13000
+#endif
+
 
 #ifndef SAME_POS_NUM
 #define SAME_POS_NUM 200						// hysteresis value to pass from horizontal to vertical plane and
@@ -141,6 +145,13 @@
 #ifndef USE_NO_ACCEL
 #define USE_NO_ACCEL 2						// for easier code comprehension
 #endif
+
+#ifndef USE_LSM6DS3US
+#define USE_LSM6DS3US 3						// for easier code comprehension
+#endif
+
+#define MAG_CALIB_CHECK_ADDRESS 3938
+#define MAG_CALIB_START_ADDR 3940
 
 /*********************/
 /*** HARDWARE DEFS ***/

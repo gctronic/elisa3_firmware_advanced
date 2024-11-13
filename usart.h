@@ -72,6 +72,8 @@ char usart0InputBufferEmpty();
  */
 unsigned char usart0Receive();
 
+void usart0PutString(const char* StringPtr);
+
 #ifdef __cplusplus
 } // extern "C"
 #endif

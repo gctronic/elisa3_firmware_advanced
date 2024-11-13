@@ -92,6 +92,16 @@ void computeAngle();
 
 void readTemperature();
 
+void readGyroXYZ();
+
+void readGyroZ();
+
+void readMagXYZ(void);
+
+void readAll(void);
+
+void computeHeading(void);
+
 #ifdef __cplusplus
 } // extern "C"
 #endif

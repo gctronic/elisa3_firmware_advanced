@@ -116,9 +116,9 @@ extern unsigned char checkGlitch;
 extern unsigned char behaviorState;
 extern uint32_t lastCmdTime;
 
-/*********************/
-/*** ACCELEROMETER ***/
-/*********************/
+/***********/
+/*** IMU ***/
+/***********/
 extern unsigned char accelAddress;
 extern unsigned char useAccel;
 extern signed int accX;
@@ -126,8 +126,8 @@ extern signed int accY;
 extern signed int accZ;
 extern signed int accOffsetX;
 extern signed int accOffsetY;
-extern signed int accOffsetXSum;
-extern signed int accOffsetYSum;
+extern int32_t accOffsetXSum;
+extern int32_t accOffsetYSum;
 extern signed int accXMax, accXMin, accYMax, accYMin;
 extern signed int currentAngle;
 extern unsigned char currPosition;
@@ -135,6 +135,20 @@ extern unsigned int timesInSamePos;
 extern unsigned char robotPosition;
 extern signed char accBuff[6];
 extern unsigned temperature;
+extern signed int gyroX;
+extern signed int gyroY;
+extern signed int gyroZ;
+extern signed int magX;
+extern signed int magY;
+extern signed int magZ;
+extern signed int heading;
+//extern signed int heading_compensated;
+extern signed int roll;
+extern signed int pitch;
+extern signed int magOffsetMax[];
+extern signed int magOffsetMin[];
+extern signed int magOffset[];
+extern signed int verticalThreshold;
 
 /***************/
 /*** VARIOUS ***/
@@ -159,6 +173,7 @@ extern unsigned char calibrationWritten;
 extern unsigned char greenLedState;
 extern unsigned char rgbLedState;
 extern uint32_t lastTick;
+extern signed int debugValue[];
 
 /**************************/
 /*** OBSTACLE AVOIDANCE ***/

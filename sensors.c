@@ -1,6 +1,6 @@
 
 #include "sensors.h"
-
+#include "lsm6ds3us.h"
 
 void calibrateSensors() {
 
@@ -21,17 +21,17 @@ void calibrateSensors() {
 
 	lastTick = getTime100MicroSec();
 	while((getTime100MicroSec() - lastTick) < PAUSE_100_MSEC) {
-		readAccelXYZ();	// get a fresh value from the accelerometer
+		readAll();	// get a fresh value from the accelerometer
 	}
-	
-	accXMax = -1023;
-	accXMin = 1023;
-	accYMax = -1023;
-	accYMin = 1023;
+
+	accXMax = INT16_MIN;
+	accXMin = INT16_MAX;
+	accYMax = INT16_MIN;
+	accYMin = INT16_MAX;
 	accOffsetXSum = 0;
 	accOffsetYSum = 0;
-
-	if(abs(accZ) >= VERTICAL_THRESHOLD) {
+	
+	if(abs(accZ) >= verticalThreshold) {
 
 		pwm_red = 0;
 		pwm_green = 255;
@@ -45,7 +45,7 @@ void calibrateSensors() {
 
 		while(1) {
 
-			readAccelXYZ();
+			readAll();
 
 			handleMotorsWithNoController();
 
@@ -77,7 +77,7 @@ void calibrateSensors() {
 
 		while(1) {
 
-			readAccelXYZ();
+			readAll();
 
 			handleMotorsWithSpeedController();
 
@@ -189,7 +189,9 @@ void calibrateSensors() {
 void initAccelerometer() {
 
 	unsigned char ret;
-
+    unsigned int temp=0;
+	verticalThreshold = VERTICAL_THRESHOLD;
+    
 	i2c_init();		// init I2C bus
 
 	ret = initMMA7455L();
@@ -197,8 +199,23 @@ void initAccelerometer() {
 	if(ret) {		// MMA7455L doesn't respond, try with ADXL345
 		accelAddress = ADXL345_ADDR;
 		ret = initADXL345();
-		if(ret) {	// accelerometer not available
-			useAccel = USE_NO_ACCEL;
+		if(ret) {
+			ret = LSM6DS3US_CheckManufacturerId();
+			if(ret) {	// accelerometer not available
+				useAccel = USE_NO_ACCEL;
+			} else {									
+				temp = eeprom_read_word((uint16_t*)MAG_CALIB_CHECK_ADDRESS);
+				if(temp==0xAA55) {   // valid calibration data saved in flash, read them
+					readMagCalibFromFlash();
+					LSM6DS3US_InitLIS2MLWithCal();
+				} else {
+					LSM6DS3US_InitLIS2ML(); // Initialization used when user need to calibrate magnetometer
+				}
+				LSM6DS3US_InitAccelerometer();
+				LSM6DS3US_InitGyroscope(0);
+				useAccel = USE_LSM6DS3US;
+				verticalThreshold = VERTICAL_THRESHOLD_LSM6DSUS;
+			}			
 		} else {
 			useAccel = USE_ADXL345;
 		}
@@ -218,7 +235,7 @@ unsigned char initMMA7455L() {
     }else {					// issuing start condition ok, device accessible
         i2c_write(0x16);	// power register
         i2c_write(0x45);	// measurement mode; 2g
-        i2c_stop();			// set stop conditon = release bus
+        i2c_stop();			// set stop condition = release bus
     }
 
 	return 0;				// configuration ok
@@ -327,6 +344,17 @@ void readAccelXY() {
 			accY = ((((int16_t)buff[3])<<6)|(((uint8_t)buff[2])>>2))-accOffsetY;	// Y axis
 		}
 
+	} else if(useAccel == USE_LSM6DS3US) {
+		
+		LSM6DS3US_ReadAccelerationXY(buff);
+		if(startCalibration) {										// if performing the calibration, then return the raw values
+			accX = (int16_t)((uint16_t)buff[1u] << 8u) | buff[0u];	// X axis
+			accY = (int16_t)((uint16_t)buff[3u] << 8u) | buff[2u];	// Y axis
+		} else {													// else return the calibrated values
+			accX = ((int16_t)((uint16_t)buff[1u] << 8u) | buff[0u])-accOffsetX;	// X axis
+			accY = ((int16_t)((uint16_t)buff[3u] << 8u) | buff[2u])-accOffsetY;	// Y axis
+		}
+
 	} else {
 
 		accX = 0;
@@ -403,12 +431,154 @@ void readAccelXYZ() {
 			accZ = (((int16_t)buff[5])<<6)|(((uint8_t)buff[4])>>2);					// Z axis
 		}
 
+	} else if(useAccel == USE_LSM6DS3US) {
+		
+		LSM6DS3US_ReadAcceleration(buff);
+		if(startCalibration) {										// if performing the calibration, then return the raw values
+			accX = (int16_t)((uint16_t)buff[1u] << 8u) | buff[0u];	// X axis
+			accY = (int16_t)((uint16_t)buff[3u] << 8u) | buff[2u];	// Y axis
+			accZ = (int16_t)((uint16_t)buff[5u] << 8u) | buff[4u];	// Z axis
+		} else {													// else return the calibrated values
+			accX = ((int16_t)((uint16_t)buff[1u] << 8u) | buff[0u])-accOffsetX;	// X axis
+			accY = ((int16_t)((uint16_t)buff[3u] << 8u) | buff[2u])-accOffsetY;	// Y axis
+			accZ = (int16_t)((uint16_t)buff[5u] << 8u) | buff[4u];	// Z axis
+		}
+
 	} else {
 
 		accX = 0;
 		accY = 0;
 		accZ = 0;
 
+	}
+
+}
+
+
+void readAll(void) {
+
+	int i = 0;
+	static signed char buff[18];
+
+	if(useAccel == USE_MMAX7455L) {
+
+		// values returned from the accelerometer are signed byte data (2’s complement)
+		// reg 0x00: 10 bits output value X LSB
+		// reg 0x01: 10 bits output value X MSB
+		// reg 0x02: 10 bits output value Y LSB
+		// reg 0x03: 10 bits output value Y MSB
+		// reg 0x04: 10 bits output value Z LSB
+		// reg 0x05: 10 bits output value Z MSB
+		// The sensitivity is 64 LSB/g.
+
+		i2c_start(accelAddress+I2C_WRITE);							// set device address and write mode
+		i2c_write(0x00);											// sends address to read from (X LSB)
+		i2c_rep_start(accelAddress+I2C_READ);						// set device address and read mode
+
+		for(i=0; i<5; i++) {
+			buff[i] = i2c_readAck();								// read one byte at a time
+		}
+		buff[i] = i2c_readNak();									// read last byte sending NACK
+		i2c_stop();													// set stop conditon = release bus
+
+		if(startCalibration) {										// if performing the calibration, then return the raw values
+			accX = ((signed int)buff[1]<<8)|buff[0];    			// X axis
+			accY = ((signed int)buff[3]<<8)|buff[2];    			// Y axis
+			accZ = ((signed int)buff[5]<<8)|buff[4];    			// Z axis
+		} else {													// else return the calibrated values
+			accX = (((signed int)buff[1]<<8)|buff[0])-accOffsetX;	// X axis
+			accY = (((signed int)buff[3]<<8)|buff[2])-accOffsetY;	// Y axis
+			accZ = (((signed int)buff[5]<<8)|buff[4]);				// Z axis
+		}
+		
+		gyroX = 0;
+		gyroY = 0;
+		gyroZ = 0;
+		magX = 0;
+		magY = 0;
+		magZ = 0;
+
+	} else if(useAccel == USE_ADXL345) {
+
+		// values returned from the accelerometer are signed byte data (2’s complement)
+		// reg 0x32: 10 bits output value X LSB
+		// reg 0x33: 10 bits output value X MSB
+		// reg 0x34: 10 bits output value Y LSB
+		// reg 0x35: 10 bits output value Y MSB
+		// reg 0x36: 10 bits output value Z LSB
+		// reg 0x37: 10 bits output value Z MSB
+		// The sensitivity is 256 LSB/g so scale the values to be compatible with the MMA7455.
+
+		i2c_start(accelAddress+I2C_WRITE);							// set device address and write mode
+		i2c_write(0x32);											// sends address to read from (X LSB)
+		i2c_rep_start(accelAddress+I2C_READ);						// set device address and read mode
+
+		for(i=0; i<5; i++) {
+			buff[i] = i2c_readAck();								// read one byte at a time
+		}
+		buff[i] = i2c_readNak();									// read last byte sending NACK
+		i2c_stop();												// set stop conditon = release bus
+
+		if(startCalibration) {										// if performing the calibration, then return the raw values
+			accX = (((int16_t)buff[1])<<6)|(((uint8_t)buff[0])>>2);	// X axis
+			accY = (((int16_t)buff[3])<<6)|(((uint8_t)buff[2])>>2);	// Y axis
+			accZ = (((int16_t)buff[5])<<6)|(((uint8_t)buff[4])>>2);	// Z axis
+		} else {													// else return the calibrated values
+			accX = ((((int16_t)buff[1])<<6)|(((uint8_t)buff[0])>>2))-accOffsetX;	// X axis
+			accY = ((((int16_t)buff[3])<<6)|(((uint8_t)buff[2])>>2))-accOffsetY;	// Y axis
+			accZ = (((int16_t)buff[5])<<6)|(((uint8_t)buff[4])>>2);					// Z axis
+		}
+
+		gyroX = 0;
+		gyroY = 0;
+		gyroZ = 0;
+		magX = 0;
+		magY = 0;
+		magZ = 0;		
+
+	} else if(useAccel == USE_LSM6DS3US) {
+		memset(buff, 0x00, 18);
+		if(LSM6DS3US_ReadAll(buff)) {
+			return;
+		}
+		if(startCalibration) {										// if performing the calibration, then return the raw values
+			gyroX = (((uint16_t)buff[1] << 8u) | (uint8_t)buff[0]);	// X axis
+			gyroY = (((uint16_t)buff[3] << 8u) | (uint8_t)buff[2]);	// Y axis
+			gyroZ = (((uint16_t)buff[5] << 8u) | (uint8_t)buff[4]);	// Z axis
+			
+			accX = (((uint16_t)buff[7] << 8u) | (uint8_t)buff[6]); // X axis
+			accY = (((uint16_t)buff[9] << 8u) | (uint8_t)buff[8]); // Y axis
+			accZ = (((uint16_t)buff[11] << 8u) | (uint8_t)buff[10]); // Z axis
+			
+			magX = (((uint16_t)buff[13] << 8u) | (uint8_t)buff[12]); // X axis
+			magY = (((uint16_t)buff[15] << 8u) | (uint8_t)buff[14]); // Y axis
+			magZ = (((uint16_t)buff[17] << 8u) | (uint8_t)buff[16]); // Z axis
+		} else {													// else return the calibrated values
+			gyroX = (((uint16_t)buff[1] << 8u) | (uint8_t)buff[0]);	// X axis
+			gyroY = (((uint16_t)buff[3] << 8u) | (uint8_t)buff[2]);	// Y axis
+			gyroZ = (((uint16_t)buff[5] << 8u) | (uint8_t)buff[4]);	// Z axis
+			
+			accX = (((uint16_t)buff[7] << 8u) | (uint8_t)buff[6])-accOffsetX; // X axis
+			accY = (((uint16_t)buff[9] << 8u) | (uint8_t)buff[8])-accOffsetY; // Y axis
+			accZ = (((uint16_t)buff[11] << 8u) | (uint8_t)buff[10]); // Z axis
+			
+			magX = (((uint16_t)buff[13] << 8u) | (uint8_t)buff[12]); // X axis
+			magY = (((uint16_t)buff[15] << 8u) | (uint8_t)buff[14]); // Y axis
+			magZ = (((uint16_t)buff[17] << 8u) | (uint8_t)buff[16]); // Z axis						
+		}
+
+	} else {
+
+		accX = 0;
+		accY = 0;
+		accZ = 0;
+		gyroX = 0;
+		gyroY = 0;
+		gyroZ = 0;
+		magX = 0;
+		magY = 0;
+		magZ = 0;
+		
 	}
 
 }
@@ -520,7 +690,7 @@ void readAccelXYZ_2() {
 void computeAngle() {
 
 	// check the robot motion plane (horizontal or vertical) based on the Z axes;
-	if(abs(accZ) >= VERTICAL_THRESHOLD) {
+	if(abs(accZ) >= verticalThreshold) {
 		currPosition = HORIZONTAL_POS;
 	} else {
 		currPosition = VERTICAL_POS;	
@@ -558,3 +728,104 @@ void readTemperature() {
 	}
 }
 
+void readGyroXYZ() {
+	int8_t buff[6];
+	
+	if(useAccel == USE_MMAX7455L) {
+		
+		gyroX = 0;
+		gyroY = 0;
+		gyroZ = 0;
+
+	} else if(useAccel == USE_ADXL345) {
+
+		gyroX = 0;
+		gyroY = 0;
+		gyroZ = 0;
+
+	} else if(useAccel == USE_LSM6DS3US) {
+		
+		LSM6DS3US_ReadAngularVelocity(buff);
+		gyroX = (int16_t)((uint16_t)buff[1u] << 8u) | buff[0u];
+		gyroY = (int16_t)((uint16_t)buff[3u] << 8u) | buff[2u];
+		gyroZ = (int16_t)((uint16_t)buff[5u] << 8u) | buff[4u];
+
+	} else {
+
+		gyroX = 0;
+		gyroY = 0;
+		gyroZ = 0;
+
+	}	
+
+}
+
+void readGyroZ() {
+	int8_t buff[2];
+	
+	if(useAccel == USE_MMAX7455L) {
+
+		gyroZ = 0;
+
+	} else if(useAccel == USE_ADXL345) {
+
+		gyroZ = 0;
+
+	} else if(useAccel == USE_LSM6DS3US) {
+		
+		LSM6DS3US_ReadAngularVelocityZ(buff);
+		gyroZ = (int16_t)((uint16_t)buff[1u] << 8u) | buff[0u];
+
+	} else {
+
+		gyroZ = 0;
+
+	}	
+	
+}
+
+void readMagXYZ(void) {
+
+	signed char buff[6];
+
+	if(useAccel == USE_MMAX7455L) {
+
+		magX = 0;
+		magY = 0;
+		magZ = 0;
+
+	} else if(useAccel == USE_ADXL345) {
+
+		magX = 0;
+		magY = 0;
+		magZ = 0;
+
+	} else if(useAccel == USE_LSM6DS3US) {
+		
+		LSM6DS3US_ReadLIS2ML(buff);
+		magX = (int16_t)((uint16_t)buff[1u] << 8u) | buff[0u];	// X axis
+		magY = (int16_t)((uint16_t)buff[3u] << 8u) | buff[2u];	// Y axis
+		magZ = (int16_t)((uint16_t)buff[5u] << 8u) | buff[4u];	// Z axis
+
+	} else {
+
+		magX = 0;
+		magY = 0;
+		magZ = 0;
+
+	}
+
+}
+
+void computeHeading(void) {
+	// Refer to dt0058-computing-tilt-measurement-and-tiltcompensated-ecompass-stmicroelectronics.pdf
+	heading = atan2(magY, magX)*180/M_PI;
+	if(heading < 0) {
+		heading += 360;
+	}
+	roll = atan2(accY, accZ)*180.0/M_PI;
+	pitch = atan2(accX, accZ)*180.0/M_PI;	
+	//double magX_ = magX*cos(pitch) + magZ*sin(pitch);
+	//double magY_ = magZ*sin(roll) - magY*cos(roll);
+	//heading_compensated = atan2(magY_, magX_)*180/M_PI;
+}

@@ -11,7 +11,9 @@ extern "C" {
 
 void writeCalibrationToFlash();
 void readCalibrationFromFlash();
-
+void writeMagCalibToFlash();
+void readMagCalibFromFlash();
+void resetMagCalib();
 
 #ifdef __cplusplus
 } // extern "C"

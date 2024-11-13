@@ -19,6 +19,7 @@ int main(void) {
 	unsigned int i=0;
 	unsigned int currRand=0, currRand2=0;
 	float targetAngle=0;
+	//unsigned char tempStr[200]; // Used for debug
 
 	initPeripherals();
 
@@ -47,11 +48,11 @@ int main(void) {
 
 	while(1) {
 
-		currentSelector = getSelector();	// update selector position
-
-		readAccelXYZ();						// update accelerometer values to compute the angle
-
-		computeAngle();
+		currentSelector = getSelector();	// update selector position		
+		
+		readAll();			// update IMU values to compute the angle
+		computeAngle();		
+		computeHeading();
 
 		// turn off the rgb leds after one half second in the "charger demo"
 		if(currentSelector==7) {
@@ -1014,11 +1015,86 @@ int main(void) {
 				break;
 
 			case 15:// clock calibration
-					//usart0Transmit(irCommand,1);
-					//currentOsccal = OSCCAL;
-					//usart0Transmit(currentOsccal,1);
-					break;
+				switch(demoState) {
+					case 0:
+						/*
+						// Try magnetometer calibration
+						pwm_red = 0;
+						pwm_green = 255;
+						pwm_blue = 0;
+						updateRedLed(pwm_red);
+						updateGreenLed(pwm_green);
+						updateBlueLed(pwm_blue);
 
+						magOffsetMax[0] = INT16_MIN;
+						magOffsetMax[1] = INT16_MIN;
+						magOffsetMax[2] = INT16_MIN;
+						magOffsetMin[0] = INT16_MAX;
+						magOffsetMin[1] = INT16_MAX;
+						magOffsetMin[2] = INT16_MAX;
+
+						setLeftSpeed(-10);
+						setRightSpeed(10);
+
+						lastTick = getTime100MicroSec();
+
+						while(1) {
+
+							readAll();
+
+							handleMotorsWithSpeedController();
+
+							if((getTime100MicroSec()-lastTick) < PAUSE_4_SEC) {
+								if(magOffsetMax[0] < magX) {
+									magOffsetMax[0] = magX;
+								}
+								if(magOffsetMin[0] > magX) {
+									magOffsetMin[0] = magX;
+								}
+								if(magOffsetMax[1] < magY) {
+									magOffsetMax[1] = magY;
+								}
+								if(magOffsetMin[1] > magY) {
+									magOffsetMin[1] = magY;
+								}
+								if(magOffsetMax[2] < magZ) {
+									magOffsetMax[2] = magZ;
+								}
+								if(magOffsetMin[2] > magZ) {
+									magOffsetMin[2] = magZ;
+								}
+							} else {
+								magOffset[0] = (magOffsetMax[0] + magOffsetMin[0])>>1;
+								magOffset[1] = (magOffsetMax[1] + magOffsetMin[1])>>1;
+								magOffset[2] = (magOffsetMax[2] + magOffsetMin[2])>>1;
+								break;
+							}
+
+						}
+
+						setLeftSpeed(0);
+						setRightSpeed(0);
+						*/
+						demoState = 1;						
+						break;
+						
+					case 1:			
+						usart0Transmit(irCommand,1);
+						currentOsccal = OSCCAL;
+						usart0Transmit(currentOsccal,1);
+						
+						// The following prints are used to debug the LSM6DS3US (acc+gyro) and LIS2MDL (mag) sensors.
+						// The print wiht "Raw..." is used to calibrate the magnetometer thorugh the MotionCal software.
+						//memset(tempStr, 0x00, 200);
+						//sprintf(tempStr, "Raw:%d,%d,%d,%d,%d,%d,%d,%d,%d\r\n", accX, accY, accZ, gyroX, gyroY, gyroZ, magX, magY, magZ); // MotionCal format
+						//sprintf(tempStr, "%+04d,%+04d,%+04d,%+04d\r\n", heading, pitch, roll, heading2);
+						//sprintf(tempStr, "Acc:%+06d,%+06d,%+06d\r\n", accX, accY, accZ);
+						//sprintf(tempStr, "Gyro:%+06d,%+06d,%+06d\r\n", gyroX, gyroY, gyroZ);		
+						//sprintf(tempStr, "Gyro:%+06d,%+06d\r\n", gyroZ, (gyroZ>>6));				
+						//sprintf(tempStr, "Offset: %d, %d, %d\r\n", magOffset[0], magOffset[1], magOffset[2]);
+						//usart0PutString(tempStr);
+					break;
+				}
 		}
 
 		if(currentSelector!=0) {

@@ -294,6 +294,7 @@ void flushTxFifo() {
 void handleRFCommands() {
 
 	unsigned int i=0;
+	static int tempGyroZ = 0;
 	//uint8_t pWidth = 0;
 	//uint8_t pWidthP0 = 0;
 
@@ -576,7 +577,7 @@ void handleRFCommands() {
 					ackPayload[12] = accZ>>8;	
 					ackPayload[13] = batteryLevel&0xFF;
 					ackPayload[14] = batteryLevel>>8;
-					ackPayload[15] = 0;
+					ackPayload[15] = heading>>1; // Values from 0..180 (resolution = 2 degrees)
 					packetId = 7;
 					break;
 
@@ -604,7 +605,15 @@ void handleRFCommands() {
 					//ackPayload[12] = ((unsigned int)xPosOld)>>8;
 					//ackPayload[13] = ((unsigned int)yPosOld)&0xFF;
 					//ackPayload[14] = ((unsigned int)yPosOld)>>8;
-					ackPayload[15] = 0;
+					
+					// Keep 6 LSbits of MSB and 2MSbits of LSB: max rate is +-128dps (0x0FFF*15.625dps), resolution=1 dps (0x003F*15.625dps)
+					tempGyroZ = gyroZ;
+					if(tempGyroZ > 0x1FFF) {
+						tempGyroZ = 0x1FFF;
+					} else if(tempGyroZ < -8192) {
+						tempGyroZ = -8192;
+					}
+					ackPayload[15] = (tempGyroZ>>6);
 					packetId = 3;
 					break;
 

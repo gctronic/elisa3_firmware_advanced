@@ -307,10 +307,16 @@ void handleCalibration() {
 			break;
 		
 		case CALIBRATION_STATE_FIND_THRS_1:	// Find the max and min of the ground sensor value in order to get a threshold to detect 
-											// the black line securily (the threshold will be the average of the min and max).
+											// the black line safely (the threshold will be the average of the min and max).
 			if((getTime100MicroSec() - timeoutOdometry)>PAUSE_1_SEC) { 	// Wait for the current sensor calibration to be terminated 
 																		// (started when calibration is started).
 				if(calibWheel == LEFT_WHEEL_FW_SC) {
+					magOffsetMax[0] = INT16_MIN;
+					magOffsetMax[1] = INT16_MIN;
+					magOffsetMax[2] = INT16_MIN;
+					magOffsetMin[0] = INT16_MAX;
+					magOffsetMin[1] = INT16_MAX;
+					magOffsetMin[2] = INT16_MAX;					
 					pwm_intermediate_right_desired = 0;
 					pwm_intermediate_left_desired = (INDEX_STEP*3)<<2;		// Use a moderate speed.
 	        	} else if(calibWheel == RIGHT_WHEEL_FW_SC) {
@@ -330,8 +336,30 @@ void handleCalibration() {
 			}
 			break;
 
-		case CALIBRATION_STATE_FIND_THRS_2:	// Wait for 5 seconds during which the ground min and max values are saved.
-			if(calibWheel==LEFT_WHEEL_FW_SC || calibWheel==LEFT_WHEEL_BW_SC) {
+		case CALIBRATION_STATE_FIND_THRS_2:	// Wait for 5 seconds during which the ground min and max values are saved. Moreover calibrate also the magnetometer.
+			if(useAccel == USE_LSM6DS3US) {
+				if(calibWheel==LEFT_WHEEL_FW_SC) {
+					if(magOffsetMax[0] < magX) {
+						magOffsetMax[0] = magX;
+					}
+					if(magOffsetMin[0] > magX) {
+						magOffsetMin[0] = magX;
+					}
+					if(magOffsetMax[1] < magY) {
+						magOffsetMax[1] = magY;
+					}
+					if(magOffsetMin[1] > magY) {
+						magOffsetMin[1] = magY;
+					}
+					if(magOffsetMax[2] < magZ) {
+						magOffsetMax[2] = magZ;
+					}
+					if(magOffsetMin[2] > magZ) {
+						magOffsetMin[2] = magZ;
+					}
+				}
+			}
+			if(calibWheel==LEFT_WHEEL_FW_SC || calibWheel==LEFT_WHEEL_BW_SC) { 
 				if(proximityResult[8] < minGround) {
 					minGround = proximityResult[8];
 				}
@@ -345,12 +373,15 @@ void handleCalibration() {
 				if(proximityResult[11] > maxGround) {
 					maxGround = proximityResult[11];
 				}
-			}
+			}			
 			if((getTime100MicroSec() - timeoutOdometry)>PAUSE_5_SEC) {    // the robot seems to be still, go to next velcoity
 				calibrationThr = (minGround + maxGround)>>1;	// Take the average of the 2 as the reference threshold value.
 				//calibrationThrLow = calibrationThr - ((maxGround-minGround)>>2);	// Use an histeresys between max and min (not needed...).
 				//calibrationThrHigh = calibrationThr + ((maxGround-minGround)>>2);
-                calibState = CALIBRATION_STATE_SET_SPEED;
+				magOffset[0] = (magOffsetMax[0] + magOffsetMin[0])>>1;
+				magOffset[1] = (magOffsetMax[1] + magOffsetMin[1])>>1;
+				magOffset[2] = (magOffsetMax[2] + magOffsetMin[2])>>1;				
+                calibState = CALIBRATION_STATE_SET_SPEED;				
 			}
 			break;
 
@@ -472,6 +503,9 @@ void handleCalibration() {
             if(calibVelIndex == 10) {
             	calibVelIndex = 1;
                 if(calibWheel == LEFT_WHEEL_FW_SC) {
+					if(useAccel == USE_LSM6DS3US) {
+						writeMagCalibToFlash();
+					}
                 	calibWheel = LEFT_WHEEL_BW_SC;
 				} else if(calibWheel == RIGHT_WHEEL_FW_SC) {
                 	calibWheel = RIGHT_WHEEL_BW_SC;

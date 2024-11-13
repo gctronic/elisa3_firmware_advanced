@@ -1,0 +1,19 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Atmel Studio Solution File, Format Version 11.00
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "ElisaII-avr-studio", "ElisaII-avr-studio.cproj", "{99DC7177-A107-4379-88FE-F50015B10D10}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		default|AVR = default|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{99DC7177-A107-4379-88FE-F50015B10D10}.default|AVR.ActiveCfg = default|AVR
+		{99DC7177-A107-4379-88FE-F50015B10D10}.default|AVR.Build.0 = default|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
